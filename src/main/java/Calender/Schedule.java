@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule {
-    private List<Appointment> appointments;
+    private final List<Appointment> appointments;
 
     public Schedule() {
         this.appointments = new ArrayList<>();
@@ -29,5 +29,24 @@ public class Schedule {
             sb.append(appointment.toString()).append("\n");
         }
         return sb.toString();
+    }
+
+    public List<Appointment> getAppointmentsByDate(String date) {
+        List<Appointment> appointmentsByDate = new ArrayList<>();
+        for (Appointment appointment : appointments) {
+            if (appointment.getDate().equals(date)) {
+                appointmentsByDate.add(appointment);
+            }
+        }
+        return appointmentsByDate;
+    }
+
+    public Appointment getAppointmentsByDateAndTime(String date, String time) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getDate().equals(date) && appointment.getTime().equals(time)) {
+                return appointment;
+            }
+        }
+        return null;
     }
 }
