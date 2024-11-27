@@ -21,12 +21,13 @@ public class LoginView {
         // Load image into an ImageIcon
         ImageIcon headerImage = new ImageIcon("src/main/resources/header.png"); // Path to your image
 
+
         // Create JLabel to hold the image
         JLabel imageLabel = new JLabel(headerImage);
 
         // Optionally, you can scale the image to fit the header panel size
         Image image = headerImage.getImage();  // Get the Image object from the ImageIcon
-        Image scaledImage = image.getScaledInstance(992, 125, Image.SCALE_SMOOTH); // Resize to fit the panel
+        Image scaledImage = image.getScaledInstance(992, 125, Image.SCALE_AREA_AVERAGING); // Resize to fit the panel
         imageLabel.setIcon(new ImageIcon(scaledImage)); // Set the scaled image
 
         // Add the imageLabel to the headPanel
