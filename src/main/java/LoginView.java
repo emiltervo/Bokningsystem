@@ -12,26 +12,36 @@ public class LoginView {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
-        // Header panel
+        // Header panel (copied from HomePage)
         JPanel headPanel = new JPanel();
         headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));  // Set the header height
         headPanel.setLayout(new BorderLayout()); // Make it easier to add the image
         frame.add(headPanel, BorderLayout.NORTH); // Add header panel to the top
 
-        // Load image into an ImageIcon
-        ImageIcon headerImage = new ImageIcon("src/main/resources/header.png"); // Path to your image
-
-
-        // Create JLabel to hold the image
-        JLabel imageLabel = new JLabel(headerImage);
-
-        // Optionally, you can scale the image to fit the header panel size
+        // Load image into an ImageIcon (copied from HomePage)
+        ImageIcon headerImage = new ImageIcon("src/main/resources/Namnlös.png"); // Path to your image
         Image image = headerImage.getImage();  // Get the Image object from the ImageIcon
-        Image scaledImage = image.getScaledInstance(992, 125, Image.SCALE_AREA_AVERAGING); // Resize to fit the panel
-        imageLabel.setIcon(new ImageIcon(scaledImage)); // Set the scaled image
 
-        // Add the imageLabel to the headPanel
-        headPanel.add(imageLabel, BorderLayout.CENTER); // Add image to the center of the header
+        // Create a custom JPanel to render the image with better quality
+        JPanel imagePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Draw the image scaled to fit the panel
+                g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        // Set the preferred size of the image panel
+        imagePanel.setPreferredSize(new Dimension(1200, 125));
+
+        // Add the image panel to the head panel
+        headPanel.add(imagePanel, BorderLayout.CENTER);
 
         // Main content panel
         JPanel contentPanel = new JPanel();

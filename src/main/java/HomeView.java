@@ -5,7 +5,7 @@ public class HomeView {
 
     public static void main(String[] args) {
         // Create the frame
-        JFrame frame = new JFrame("Login Page");
+        JFrame frame = new JFrame("Home Page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout()); // Use BorderLayout for structured layout
