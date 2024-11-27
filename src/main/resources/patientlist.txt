@@ -1,1 +1,3 @@
-"Johan Eriksson", "Casper Eriksson", "Björn Eriksson"
+Johan,Eriksson,9901010101
+Otto,Doe,9502111010
+Mark,Abbot,9201011092
