@@ -30,7 +30,7 @@ CREATE TABLE appointments(
     patuserID CHAR(10),
     docuserID CHAR(10),
     lengthMinutes INT,
-    room CHAR(6)
+    room CHAR(6),
     FOREIGN KEY(patuserID) REFERENCES patient(userID),
     FOREIGN KEY(docuserID) REFERENCES doctor(userID)
 
