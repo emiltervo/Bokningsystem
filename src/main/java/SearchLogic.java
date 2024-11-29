@@ -62,6 +62,8 @@ public class SearchLogic {
 
         frame.add(topPanel, BorderLayout.NORTH);
 
+        frame.setVisible(true);
+
         okButton.addActionListener(abc -> {
             populatePatient();
         });
@@ -86,7 +88,7 @@ public class SearchLogic {
        populateComboBox(test);
 
 
-        frame.setVisible(true);
+
 
 }
     public static List<List<String>> docuRead(String path){
@@ -157,10 +159,6 @@ public class SearchLogic {
         if (input.matches(".*[a-zA-Z].*") && (input.matches(".*\\d.*"))) {
 
             System.out.println("Both letters & numbers");
-
-            label.setText("Please only enter letters OR numbers");
-            label.setVisible(true);
-            letterSearch(input,patientList);
 
         }
 
