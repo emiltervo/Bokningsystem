@@ -20,7 +20,7 @@ public class SearchLogic {
     private static JLabel firstNameLabel;
     private static final List<List<String>> patientList = new ArrayList<>();
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Login Page");
+        JFrame frame = new JFrame("Search Logic");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout());

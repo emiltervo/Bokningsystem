@@ -1,11 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class HomeView {
+public class HomeViewPatient {
 
     public static void main(String[] args) {
         // Create the frame
-        JFrame frame = new JFrame("Home Page");
+        JFrame frame = new JFrame("Home Page for Patient");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout()); // Use BorderLayout for structured layout
@@ -61,8 +61,8 @@ public class HomeView {
         gbc.insets = new Insets(0, 10, 0, 10); // Add spacing between buttons
         gbc.anchor = GridBagConstraints.CENTER; // Center the buttons
 
-        // Add breadcrumbs to the inner panel
-        String[] breadcrumbTitles = {"Hem", "Boka Tid", "Recept", "Patienter"};
+        // Updated breadcrumb titles
+        String[] breadcrumbTitles = {"Hem", "Boka Tid", "Mitt Recept"};
         for (String title : breadcrumbTitles) {
             JButton breadcrumb = new JButton(title);
             breadcrumb.setFont(new Font("Arial", Font.PLAIN, 18)); // Set font style and size
