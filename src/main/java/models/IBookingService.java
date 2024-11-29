@@ -1,4 +1,4 @@
-package Calender;
+package models;
 
 public interface IBookingService<T> {
     boolean bookAppointment(T appointment);

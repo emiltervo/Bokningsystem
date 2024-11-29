@@ -1,4 +1,6 @@
-public class Patient extends User{
+package models;
+
+public class Patient extends User {
     private String journal;
     public Patient(int userID, String name, String password, String email, String journal){
         super(userID, name, password, email);

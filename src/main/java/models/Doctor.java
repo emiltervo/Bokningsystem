@@ -1,7 +1,9 @@
+package models;
+
 import java.util.List;
 import java.util.ArrayList;
 
-public class Doctor extends User{
+public class Doctor extends User {
     private boolean availability;
     private String specialty;
     private List<String> freetimes;

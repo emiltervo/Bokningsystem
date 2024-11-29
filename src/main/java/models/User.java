@@ -1,3 +1,5 @@
+package models;
+
 abstract public class User {
     // userID is personal number
     private int userID;

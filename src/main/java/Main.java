@@ -1,6 +1,6 @@
-import Calender.Appointment;
-import Calender.BookingService;
-import Calender.AppointmentFactory;
+import models.Appointment;
+import models.BookingService;
+import models.AppointmentFactory;
 
 public class Main {
     public static void main(String[] args) {

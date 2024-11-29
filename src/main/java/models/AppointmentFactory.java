@@ -1,4 +1,4 @@
-package Calender;
+package models;
 
 public class AppointmentFactory {
     public static Appointment createAppointment(String description, String date, String time) {
