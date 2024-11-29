@@ -68,9 +68,7 @@ abstract public class User implements AuthInterface {
     private void setEmail(String input) {
         email = input;
     }
-    private int getUserID() {
-        return userID;
-    }
+    private int getUserID(){ return userID; }
     private String getName() {
         return name;
     }
