@@ -1,8 +1,8 @@
 package calender;
-
 import models.Appointment;
 import models.AppointmentFactory;
 import models.Schedule;
+
 import org.junit.jupiter.api.Test;
 
 public class ScheduleTest {
