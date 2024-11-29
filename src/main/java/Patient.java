@@ -1,7 +1,7 @@
 public class Patient extends User{
     private String journal;
-    public Patient(int userID, String name, String password, String email, String journal){
-        super(userID, name, password, email);
+    public Patient(int userID, String name, String password, String email, String role, String journal){
+        super(userID, name, password, email, role);
         this.journal = journal;
     }
 
