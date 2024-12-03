@@ -1,4 +1,3 @@
-package models;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -54,37 +53,32 @@ abstract public class User implements AuthInterface {
         }
     }
 
-    private void setName(String input) {
-        name = input;
-    }
-
-    private void setPassword(String input) {
-        password = input;
-    }
-
-    private void setEmail(String input) {
-        email = input;
-    }
-
-    private int getUserID() {
-        return userID;
-    }
-
-    private String getName() {
-        return name;
-    }
-
-    private String getPassword() {
-        return password;
-    }
-
-    private String getEmail() {
-        return email;
-    }
+}
 
     private void setUserID(int value) {
         userID = value;
     }
+    
+    private void setName (String input) {
+        name = input;
+    }
+    private void setPassword(String input) {
+        password = input;
+    }
+    private void setEmail(String input) {
+        email = input;
+    }
+    private int getUserID() {
+        return userID;
+    }
+    private String getName() {
+        return name;
+    }
+    private String getPassword() {
+        return password;
+    }
+    private String getEmail() {
+        return email;
+    }
+
 }
-
-
