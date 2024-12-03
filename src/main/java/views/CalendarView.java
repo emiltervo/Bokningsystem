@@ -89,27 +89,59 @@ public class CalendarView {
     private void createSchedule() {
         scheduleWrapper = new JPanel(new BorderLayout());
         scheduleWrapper.setPreferredSize(new Dimension(1200, 525));
-        scheduleWrapper.setBorder(new EmptyBorder(20, 200, 20, 200));
+        scheduleWrapper.setBorder(new EmptyBorder(20, 200, 0, 200));
         scheduleWrapper.setBackground(Color.DARK_GRAY);
+
+        // Create the placeholder panel (red panel)
+        JPanel placeholderPanel = createDatePanel();
 
         // Schedule components
         JPanel daysHeader = createDaysHeader();
         JPanel timeSlots = createTimeSlots();
         JPanel grid = createScheduleGrid();
+        JPanel bookingsPanel = createBookingsPanel();
 
         JPanel timeAndGrid = new JPanel(new BorderLayout());
         timeAndGrid.add(timeSlots, BorderLayout.WEST);
         timeAndGrid.add(grid, BorderLayout.CENTER);
+        timeAndGrid.add(bookingsPanel, BorderLayout.EAST);
 
-        scheduleWrapper.add(daysHeader, BorderLayout.NORTH);
-        scheduleWrapper.add(timeAndGrid, BorderLayout.CENTER);
+        // Add components to the schedule wrapper
+        scheduleWrapper.add(placeholderPanel, BorderLayout.NORTH); // Add the red panel at the top
+        scheduleWrapper.add(daysHeader, BorderLayout.CENTER);
+        scheduleWrapper.add(timeAndGrid, BorderLayout.SOUTH);
 
-        // Bookings Panel
-        JPanel bookingsPanel = createBookingsPanel();
-        scheduleWrapper.add(bookingsPanel, BorderLayout.EAST);
 
         calendarFrame.add(scheduleWrapper, BorderLayout.SOUTH);
     }
+
+    private JPanel createDatePanel() {
+    // Create a panel with a red background
+    JPanel placeholderPanel = new JPanel();
+    placeholderPanel.setPreferredSize(new Dimension(1200, 55)); // Adjust dimensions as necessary
+    placeholderPanel.setBackground(Color.GRAY);
+
+    // Create arrow buttons and week label
+    JButton leftArrow = new JButton("<");
+    JButton rightArrow = new JButton(">");
+    JLabel weekLabel = new JLabel("Week", JLabel.LEFT);
+    weekLabel.setFont(new Font("Arial", Font.BOLD, 16));
+    weekLabel.setForeground(Color.WHITE); // White text for contrast
+
+    // Create date range label
+    JLabel dateRangeLabel = new JLabel("YYYY-MM-DD - YYYY-MM-DD", JLabel.CENTER);
+    dateRangeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+    dateRangeLabel.setForeground(Color.WHITE); // White text for contrast
+
+    // Add components to the panel
+    placeholderPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 13));
+    placeholderPanel.add(leftArrow);
+    placeholderPanel.add(weekLabel);
+    placeholderPanel.add(rightArrow);
+    placeholderPanel.add(dateRangeLabel);
+
+    return placeholderPanel;
+}
 
     private JPanel createBookingsPanel() {
         JPanel bookingsPanel = new JPanel();
@@ -122,18 +154,16 @@ public class CalendarView {
         bookingsTitle = new JLabel("Bookings", JLabel.CENTER);
         bookingsTitle.setFont(new Font("Arial", Font.BOLD, 16));
         bookingsTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        bookingsTitle.setBorder(new EmptyBorder(10, 0, 10, 0));
+        bookingsTitle.setBorder(new EmptyBorder(10, 0, 5, 0));
 
         // Create colored squares and labels for Available and Booked
         JPanel availablePanel = createStatusPanel("Available", Color.GREEN);
         JPanel bookedPanel = createStatusPanel("Booked", Color.RED);
 
         bookingsPanel.add(bookingsTitle);
-        bookingsPanel.add(Box.createVerticalStrut(15)); // Space between elements
+        bookingsPanel.add(Box.createVerticalStrut(5)); // Space between elements
         bookingsPanel.add(availablePanel);
-        bookingsPanel.add(Box.createVerticalStrut(50)); // Space between labels
         bookingsPanel.add(bookedPanel);
-        bookingsPanel.add(Box.createVerticalGlue()); // Spacer
 
         return bookingsPanel;
     }
@@ -162,16 +192,17 @@ public class CalendarView {
 
     private JPanel createDaysHeader() {
         JPanel daysHeader = new JPanel(new GridLayout(1, 10));
-        daysHeader.setPreferredSize(new Dimension(800, 40));
+        daysHeader.setPreferredSize(new Dimension(800, 0));
         daysHeader.setBackground(Color.WHITE);
 
-        String[] days = {"", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "", ""};
+       String[] days = {"", "Mon date", "Tue date", "Wed date", "Thu date", "Fri date", "Sat date", "Sun date", "", ""};
         for (int i = 0; i < days.length; i++) {
             JLabel dayLabel = new JLabel(days[i], JLabel.CENTER);
             dayLabel.setFont(new Font("Arial", Font.BOLD, 14));
             if (i == 0 || i == 8 || i == 9) {
                 dayLabel.setBackground(Color.LIGHT_GRAY);  // Empty slot at the beginning
-            } else {
+            }
+            else {
                 // Alternate row colors for days
                 dayLabel.setBackground(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE);
             }

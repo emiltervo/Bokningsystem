@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoginView {
+    static JTextField usernameField = new JTextField();
+    static JButton loginButton = new JButton("Login");
 
     public static void main(String[] args) {
         // Create the frame
@@ -39,6 +41,7 @@ public class LoginView {
             }
         };
 
+
         // Set the preferred size of the image panel
         imagePanel.setPreferredSize(new Dimension(1200, 125));
 
@@ -54,7 +57,6 @@ public class LoginView {
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
 
-        JTextField usernameField = new JTextField();
         usernameField.setMaximumSize(new Dimension(400, 30)); // Set size for text field
         usernameField.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
 
@@ -65,8 +67,10 @@ public class LoginView {
         passwordField.setMaximumSize(new Dimension(400, 30)); // Set size for password field
         passwordField.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
 
-        JButton loginButton = new JButton("Login");
+
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align the button
+
+
 
         // Add components to the content panel
         contentPanel.add(Box.createVerticalStrut(20)); // Spacer
@@ -85,5 +89,35 @@ public class LoginView {
 
         // Set frame visibility
         frame.setVisible(true);
+
+        loginButton.addActionListener(e -> {
+            usernameCheck();
+        });
+    }
+
+
+    public static void usernameCheck() {
+
+        if (usernameField.getText().matches("[!@#$%&*()_+=|<>?{}~]")||
+                usernameField.getText().contains(" ") ||
+                usernameField.getText().matches(".*[a-zA-Z].*") ||
+                usernameField.getText().length() != 10 && !usernameField.getText().contains("-")
+        ) {
+            System.out.println("Invalid username");
+
+        } else if (usernameField.getText().length() == 10) {
+
+            System.out.println("Valid username:" + " " + usernameField.getText());
+
+        } else if (usernameField.getText().length() == 11 && usernameField.getText().contains("-")) {
+
+            String validUsername;
+            validUsername = usernameField.getText().replace("-", "");
+            System.out.println(validUsername);
+
+        }
     }
 }
+
+
+
