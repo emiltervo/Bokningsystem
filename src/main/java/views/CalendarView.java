@@ -195,7 +195,7 @@ public class CalendarView {
         daysHeader.setPreferredSize(new Dimension(800, 0));
         daysHeader.setBackground(Color.WHITE);
 
-       String[] days = {"", "Mon date", "Tue date", "Wed date", "Thu date", "Fri date", "Sat date", "Sun date", "", ""};
+       String[] days = {"", "Mon date", "Tue date", "Wed date", "Thu date", "Fri date", ""};
         for (int i = 0; i < days.length; i++) {
             JLabel dayLabel = new JLabel(days[i], JLabel.CENTER);
             dayLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -229,11 +229,11 @@ public class CalendarView {
     }
 
     private JPanel createScheduleGrid() {
-        JPanel grid = new JPanel(new GridLayout(10, 7)); // 7 columns, 10 rows
+        JPanel grid = new JPanel(new GridLayout(10, 5)); // 7 columns, 10 rows
         grid.setPreferredSize(new Dimension(800, 400));
 
-        for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 7; col++) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 6; col++) {
                 JPanel slot = new JPanel();
                 slot.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                 slot.setBackground(Color.WHITE);

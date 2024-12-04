@@ -1,10 +1,15 @@
+package views;
+
 import javax.swing.*;
 import java.awt.*;
+import models.Appointment;
+
 
 public class LoginView {
     static JTextField usernameField = new JTextField();
     static JButton loginButton = new JButton("Login");
     static JLabel errorLabel = new JLabel("");
+    static JPasswordField passwordField = new JPasswordField();
 
     public static void main(String[] args) {
         // Create the frame
@@ -14,6 +19,7 @@ public class LoginView {
         frame.setLayout(new BorderLayout()); // Use BorderLayout for structured layout
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+
 
         // Header panel (copied from HomePage)
         JPanel headPanel = new JPanel();
@@ -66,7 +72,7 @@ public class LoginView {
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
 
-        JPasswordField passwordField = new JPasswordField();
+
         passwordField.setMaximumSize(new Dimension(400, 30)); // Set size for password field
         passwordField.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
 
@@ -106,6 +112,7 @@ public class LoginView {
 
         loginButton.addActionListener(e -> {
             usernameCheck();
+            passwordCheck();
         });
     }
 
@@ -132,6 +139,14 @@ public class LoginView {
             String validUsername;
             validUsername = usernameField.getText().replace("-", "");
             System.out.println(validUsername);
+
+        }
+    }
+    public static void passwordCheck() {
+        if (passwordField.getPassword().length == 0 ||
+                passwordField.getPassword().length > 10
+        ) {
+            System.out.println("Please enter a valid password");
 
         }
     }
