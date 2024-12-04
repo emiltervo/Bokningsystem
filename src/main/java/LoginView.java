@@ -4,6 +4,7 @@ import java.awt.*;
 public class LoginView {
     static JTextField usernameField = new JTextField();
     static JButton loginButton = new JButton("Login");
+    static JLabel errorLabel = new JLabel("");
 
     public static void main(String[] args) {
         // Create the frame
@@ -39,7 +40,6 @@ public class LoginView {
             }
         };
 
-
         // Set the preferred size of the image panel
         imagePanel.setPreferredSize(new Dimension(1200, 125));
 
@@ -55,6 +55,11 @@ public class LoginView {
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
 
+
+        JLabel infoLabel = new JLabel("Please enter user as: YYMMDDXXXX");
+        infoLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         usernameField.setMaximumSize(new Dimension(400, 30)); // Set size for text field
         usernameField.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
 
@@ -65,12 +70,20 @@ public class LoginView {
         passwordField.setMaximumSize(new Dimension(400, 30)); // Set size for password field
         passwordField.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
 
+        usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setVisible(false);
+
+
 
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align the button
+        infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
 
         // Add components to the content panel
+        contentPanel.add(Box.createVerticalStrut(20)); // Spacer
+        contentPanel.add(infoLabel);
         contentPanel.add(Box.createVerticalStrut(20)); // Spacer
         contentPanel.add(usernameLabel);
         contentPanel.add(Box.createVerticalStrut(5)); // Spacer
@@ -81,6 +94,9 @@ public class LoginView {
         contentPanel.add(passwordField);
         contentPanel.add(Box.createVerticalStrut(20)); // Spacer
         contentPanel.add(loginButton);
+        contentPanel.add(Box.createVerticalStrut(50)); // Spacer
+        contentPanel.add(errorLabel);
+
 
         // Add content panel to the frame
         frame.add(contentPanel, BorderLayout.CENTER);
@@ -96,16 +112,20 @@ public class LoginView {
 
     public static void usernameCheck() {
 
-        if (usernameField.getText().matches("[!@#$%&*()_+=|<>?{}~]")||
+        if (usernameField.getText().matches(".*[!@#$%&*()_+=|<>?{}~].*") ||
                 usernameField.getText().contains(" ") ||
                 usernameField.getText().matches(".*[a-zA-Z].*") ||
-                usernameField.getText().length() != 10 && !usernameField.getText().contains("-")
+                (usernameField.getText().length() != 10 && !usernameField.getText().contains("-"))
         ) {
-            System.out.println("Invalid username");
+
+            errorLabel.setText("Invalid username...");
+            errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            errorLabel.setVisible(true);
 
         } else if (usernameField.getText().length() == 10) {
 
-            System.out.println("Valid username:" + " " + usernameField.getText());
+            System.out.println("Valid username");
+            errorLabel.setVisible(false);
 
         } else if (usernameField.getText().length() == 11 && usernameField.getText().contains("-")) {
 
