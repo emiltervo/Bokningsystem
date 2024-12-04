@@ -1,41 +1,71 @@
 package models;
 
 public class Appointment {
-    private String description;
+    private String startTime;
     private String date;
-    private String time;
+    private int patuserID;
+    private int docuserID;
+    private int lengthMinutes;
+    private int room;
 
-    public Appointment(String description, String date, String time) {
-        this.description = description;
+    public Appointment(String startTime, String date, int patuserID, int docuserID, int lengthMinutes, int room) {
+        this.startTime = startTime;
         this.date = date;
-        this.time = time;
+        this.patuserID = patuserID;
+        this.docuserID = docuserID;
+        this.lengthMinutes = lengthMinutes;
+        this.room = room;
     }
 
-    public String getDescription() {
-        return description;
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
     public String getDate() {
         return date;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public void setDate(String date) {
         this.date = date;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public int getPatuserID() {
+        return patuserID;
     }
 
-    @Override
+    public void setPatuserID(int patuserID) {
+        this.patuserID = patuserID;
+    }
+
+    public int getDocuserID() {
+        return docuserID;
+    }
+
+    public void setDocuserID(int docuserID) {
+        this.docuserID = docuserID;
+    }
+
+    public int getLengthMinutes() {
+        return lengthMinutes;
+    }
+
+    public void setLengthMinutes(int lengthMinutes) {
+        this.lengthMinutes = lengthMinutes;
+    }
+
+    public int getRoom() {
+        return room;
+    }
+
+    public void setRoom(int room) {
+        this.room = room;
+    }
+
+  /*  @Override
     public String toString() {
         return "Appointment{" +
                 "description='" + description + '\'' +
@@ -43,4 +73,5 @@ public class Appointment {
                 ", time='" + time + '\'' +
                 '}';
     }
+ */
 }

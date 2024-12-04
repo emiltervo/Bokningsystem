@@ -159,3 +159,27 @@ INSERT INTO users (userID, name, password, email, role) VALUES
 ('0803256789', 'Ralph Graham', 'patientPass99', 'ralph.graham@example.com', 'patient'),
 ('0504298765', 'Mildred Sullivan', 'patientPass100', 'mildred.sullivan@example.com', 'patient');
 
+INSERT INTO patient (userID, name, password, email)
+SELECT userID, name, password, email
+FROM users
+WHERE role = 'patient';
+
+INSERT INTO doctor (userID, name, password, email)
+SELECT userID, name, password, email
+FROM users
+WHERE role = 'doctor';
+
+INSERT INTO secretary (userID, name, password, email)
+SELECT userID, name, password, email
+FROM users
+WHERE role = 'secretary';
+
+INSERT INTO appointments (startTime, date, patuserID, docuserID, lengthMinutes, room) VALUES
+('09:00', CURRENT_DATE + INTERVAL '1 day', '0205311234', '1103056789', 30, '0'),
+('10:00', CURRENT_DATE + INTERVAL '2 days', '0304215678', '1103056789', 60, '0'),
+('11:00', CURRENT_DATE + INTERVAL '1 day', '1208154321', '0607182345', 90, '0'),
+('12:00', CURRENT_DATE + INTERVAL '2 days', '0702198765', '0607182345', 30, '0'),
+('13:00', CURRENT_DATE + INTERVAL '1 day', '0610134567', '0909123456', 60, '0'),
+('14:00', CURRENT_DATE + INTERVAL '2 days', '0803256789', '0909123456', 90, '0'),
+('15:00', CURRENT_DATE + INTERVAL '1 day', '0802856789', '0405167890', 30, '0'),
+('16:00', CURRENT_DATE + INTERVAL '2 days', '1108298765', '0405167890', 60, '0');

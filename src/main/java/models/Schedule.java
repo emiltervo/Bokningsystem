@@ -10,6 +10,8 @@ public class Schedule {
         this.appointments = new ArrayList<>();
     }
 
+
+
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
     }
@@ -43,10 +45,13 @@ public class Schedule {
 
     public Appointment getAppointmentsByDateAndTime(String date, String time) {
         for (Appointment appointment : appointments) {
-            if (appointment.getDate().equals(date) && appointment.getTime().equals(time)) {
+            if (appointment.getDate().equals(date) && appointment.getStartTime().equals(time)) {
                 return appointment;
             }
         }
         return null;
     }
+
+
+
 }

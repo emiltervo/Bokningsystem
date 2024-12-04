@@ -24,9 +24,9 @@ abstract public class User implements AuthInterface {
 
     @Override
     public boolean login(int userID, String password) {
-        String url = "jdbc:postgresql://localhost:5432/postgres";
-        String user = "root";
-        String dbPassword = "root";
+        String url = "jdbc:postgresql://localhost:5433/postgres";
+        String user = "postgres";
+        String dbPassword = "postgres";
 
         String sql = "SELECT * FROM users WHERE userID = ? AND password = ?";
 
@@ -42,6 +42,7 @@ abstract public class User implements AuthInterface {
                 this.name = rs.getString("name");
                 this.password = rs.getString("password");
                 this.email = rs.getString("email");
+                this.role = rs.getString("role");
                 return true;
             } else {
                 return false;

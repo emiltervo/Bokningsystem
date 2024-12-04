@@ -9,7 +9,7 @@ public class Patient extends User {
 
     public Patient(int userID, String name, String password, String email, String role, String journal) {
         super(userID, name, password, email, role);
-        this.journal = journal;
+        //this.journal = journal;
         this.prescriptions = new ArrayList<>();
     }
 

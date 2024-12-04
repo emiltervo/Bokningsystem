@@ -1,7 +1,7 @@
 package models;
 
 public class AppointmentFactory {
-    public static Appointment createAppointment(String description, String date, String time) {
-        return new Appointment(description, date, time);
+    public static Appointment createAppointment(String startTime, String date, int patuserID, int docuserID, int lengthMinutes, int room) {
+        return new Appointment(startTime, date, patuserID, docuserID, lengthMinutes, room);
     }
 }

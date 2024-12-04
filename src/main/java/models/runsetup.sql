@@ -10,7 +10,7 @@
 
 -- This script deletes everything in your database
 -- this is the only part of the script you do not need to understand
-\set QUIET true
+\ set QUIET true
 SET client_min_messages TO WARNING; -- Less talk please.
 -- This script deletes everything in your database
 DROP SCHEMA public CASCADE;
@@ -18,14 +18,14 @@ CREATE SCHEMA public;
 GRANT ALL ON SCHEMA public TO CURRENT_USER;
 -- This line makes psql stop on the first error it encounters
 -- You may want to remove this when running tests that are intended to fail
-\set ON_ERROR_STOP ON
+\ set ON_ERROR_STOP ON
 SET client_min_messages TO NOTICE; -- More talk
-\set QUIET false
+\ set QUIET false
 
 
 -- \ir is for include relative, it will run files in the same directory as this file
 -- Note that these are not SQL statements but rather Postgres commands (no terminating semicolon).
-\ir database.sql
+\ ir database.sql
 
 -- Task 3 stuff
 -- \ir triggers.sql
@@ -36,8 +36,18 @@ SET client_min_messages TO NOTICE; -- More talk
 
 -- Tests various queries from the assignment, uncomment these as you make progress
 SELECT *
+FROM patient;
+
+SELECT *
 FROM users
-WHERE role = 'patient';
+WHERE role = 'doctor';
+
+SELECT *
+FROM users
+WHERE role = 'secretary';
+
+SELECT *
+FROM appointments;
 -- SELECT idnr, name, login, program, branch FROM BasicInformation ORDER BY idnr;
 
 -- SELECT student, course, courseName, grade, credits FROM FinishedCourses ORDER BY (student, course);
