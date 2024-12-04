@@ -3,12 +3,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class CalendarPopupView {
-
     private JFrame calendarPopupFrame;
     private boolean isBooked;
 
-    public CalendarPopupView() {
-        isBooked = false; // Initial state: not booked
+    public CalendarPopupView(boolean initialState) {
+        isBooked = initialState; // Set initial state based on parameter
 
         calendarPopupFrame = new JFrame("Room Booking");
         calendarPopupFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -37,7 +36,8 @@ public class CalendarPopupView {
         JButton bookButton = new JButton("Book");
         JButton unbookButton = new JButton("Unbook");
 
-        unbookButton.setVisible(false); // Initially, Unbook button is hidden
+        unbookButton.setVisible(isBooked); // Show Unbook button if initially booked
+        bookButton.setVisible(!isBooked); // Show Book button if not initially booked
 
         bookButton.addActionListener(e -> toggleBooking(bookButton, unbookButton));
         unbookButton.addActionListener(e -> toggleBooking(bookButton, unbookButton));
@@ -83,16 +83,27 @@ public class CalendarPopupView {
     private void toggleBooking(JButton bookButton, JButton unbookButton) {
         if (isBooked) {
             bookButton.setText("Book");
+            bookButton.setEnabled(true); // Enable Book button
             unbookButton.setVisible(false); // Hide Unbook button
             isBooked = false;
         } else {
             bookButton.setText("Booked");
+            bookButton.setEnabled(false); // Disable Book button
             unbookButton.setVisible(true); // Show Unbook button
             isBooked = true;
         }
+        calendarPopupFrame.dispose(); // Close the popup
+    }
+
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public JFrame getFrame() {
+        return calendarPopupFrame;
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(CalendarPopupView::new);
+        SwingUtilities.invokeLater(() -> new CalendarPopupView(false)); // Default to not booked
     }
 }

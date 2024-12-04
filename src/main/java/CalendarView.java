@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CalendarView {
     private JFrame calendarFrame;
@@ -8,6 +10,7 @@ public class CalendarView {
     private JPanel columnPanel;
     private JPanel contentPanel;
     private JPanel scheduleWrapper;
+    private JPanel[][] slots; // 2D array to keep track of slots
 
     // Private member variables for the labels, panels, etc.
     private JLabel bookingsTitle;
@@ -109,37 +112,36 @@ public class CalendarView {
         scheduleWrapper.add(daysHeader, BorderLayout.CENTER);
         scheduleWrapper.add(timeAndGrid, BorderLayout.SOUTH);
 
-
         calendarFrame.add(scheduleWrapper, BorderLayout.SOUTH);
     }
 
     private JPanel createDatePanel() {
-    // Create a panel with a red background
-    JPanel placeholderPanel = new JPanel();
-    placeholderPanel.setPreferredSize(new Dimension(1200, 55)); // Adjust dimensions as necessary
-    placeholderPanel.setBackground(Color.GRAY);
+        // Create a panel with a red background
+        JPanel placeholderPanel = new JPanel();
+        placeholderPanel.setPreferredSize(new Dimension(1200, 55)); // Adjust dimensions as necessary
+        placeholderPanel.setBackground(Color.GRAY);
 
-    // Create arrow buttons and week label
-    JButton leftArrow = new JButton("<");
-    JButton rightArrow = new JButton(">");
-    JLabel weekLabel = new JLabel("Week", JLabel.LEFT);
-    weekLabel.setFont(new Font("Arial", Font.BOLD, 16));
-    weekLabel.setForeground(Color.WHITE); // White text for contrast
+        // Create arrow buttons and week label
+        JButton leftArrow = new JButton("<");
+        JButton rightArrow = new JButton(">");
+        JLabel weekLabel = new JLabel("Week", JLabel.LEFT);
+        weekLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        weekLabel.setForeground(Color.WHITE); // White text for contrast
 
-    // Create date range label
-    JLabel dateRangeLabel = new JLabel("YYYY-MM-DD - YYYY-MM-DD", JLabel.CENTER);
-    dateRangeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-    dateRangeLabel.setForeground(Color.WHITE); // White text for contrast
+        // Create date range label
+        JLabel dateRangeLabel = new JLabel("YYYY-MM-DD - YYYY-MM-DD", JLabel.CENTER);
+        dateRangeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        dateRangeLabel.setForeground(Color.WHITE); // White text for contrast
 
-    // Add components to the panel
-    placeholderPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 13));
-    placeholderPanel.add(leftArrow);
-    placeholderPanel.add(weekLabel);
-    placeholderPanel.add(rightArrow);
-    placeholderPanel.add(dateRangeLabel);
+        // Add components to the panel
+        placeholderPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 13));
+        placeholderPanel.add(leftArrow);
+        placeholderPanel.add(weekLabel);
+        placeholderPanel.add(rightArrow);
+        placeholderPanel.add(dateRangeLabel);
 
-    return placeholderPanel;
-}
+        return placeholderPanel;
+    }
 
     private JPanel createBookingsPanel() {
         JPanel bookingsPanel = new JPanel();
@@ -193,14 +195,13 @@ public class CalendarView {
         daysHeader.setPreferredSize(new Dimension(800, 0));
         daysHeader.setBackground(Color.WHITE);
 
-       String[] days = {"", "Mon date", "Tue date", "Wed date", "Thu date", "Fri date", "Sat date", "Sun date", "", ""};
+        String[] days = {"", "Mon date", "Tue date", "Wed date", "Thu date", "Fri date", "Sat date", "Sun date", "", ""};
         for (int i = 0; i < days.length; i++) {
             JLabel dayLabel = new JLabel(days[i], JLabel.CENTER);
             dayLabel.setFont(new Font("Arial", Font.BOLD, 14));
             if (i == 0 || i == 8 || i == 9) {
                 dayLabel.setBackground(Color.LIGHT_GRAY);  // Empty slot at the beginning
-            }
-            else {
+            } else {
                 // Alternate row colors for days
                 dayLabel.setBackground(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE);
             }
@@ -229,25 +230,33 @@ public class CalendarView {
     private JPanel createScheduleGrid() {
         JPanel grid = new JPanel(new GridLayout(10, 7)); // 7 columns, 10 rows
         grid.setPreferredSize(new Dimension(800, 400));
+        slots = new JPanel[10][7]; // Initialize the slots array
 
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 7; col++) {
                 JPanel slot = new JPanel();
                 slot.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                 slot.setBackground(Color.WHITE);
+                slots[row][col] = slot; // Store the slot in the array
 
-                /* // Adding mouse listener for click events on the grid slots
+                // Adding mouse listener for click events on the grid slots
                 slot.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        // Placeholder event logic when a slot is clicked
-                        // For example, show a dialog to book a time
-                        JOptionPane.showMessageDialog(null, "You clicked on a slot. Book the time here!");
-
-                        // Future: Here you can add your booking logic (e.g. open a booking form, or mark as booked)
-                        // You can use a dialog to confirm the booking or show a date and time selection.
+                        boolean isSlotBooked = slot.getBackground().equals(Color.RED);
+                        CalendarPopupView popup = new CalendarPopupView(isSlotBooked);
+                        popup.getFrame().addWindowListener(new java.awt.event.WindowAdapter() {
+                            @Override
+                            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                                if (popup.isBooked()) {
+                                    slot.setBackground(Color.RED); // Mark slot as booked
+                                } else {
+                                    slot.setBackground(Color.WHITE); // Mark slot as available
+                                }
+                            }
+                        });
                     }
-                }); */
+                });
 
                 grid.add(slot);
             }
@@ -255,7 +264,6 @@ public class CalendarView {
 
         return grid;
     }
-
 
     public static void main(String[] args) {
         new CalendarView();
