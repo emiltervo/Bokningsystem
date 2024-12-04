@@ -1,19 +1,26 @@
 CREATE TABLE users (
-    userID CHAR (10) PRIMARY KEY,
+    userID INT PRIMARY KEY,
     name TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT NOT NULL,
     role TEXT NOT NULL
 );
 CREATE TABLE doctor (
-    userID CHAR (10) PRIMARY KEY,
+    userID INT PRIMARY KEY,
     name TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT NOT NULL,
     FOREIGN KEY (userID) REFERENCES users(userID)
 );
 CREATE TABLE patient (
-    userID CHAR (10) PRIMARY KEY,
+    userID INT PRIMARY KEY,
+    name TEXT NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT NOT NULL,
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
+CREATE TABLE secretary (
+    userID INT PRIMARY KEY,
     name TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT NOT NULL,
@@ -21,16 +28,16 @@ CREATE TABLE patient (
 );
 CREATE TABLE rooms(
     roomNumber INT PRIMARY KEY,
-    roomDoctor CHAR(10) NOT NULL,
+    roomDoctor INT NOT NULL,
     FOREIGN KEY (roomDoctor) REFERENCES doctor(userID)
 );
 CREATE TABLE appointments(
-
+    startTime TEXT,
     date TEXT,
-    patuserID CHAR(10),
-    docuserID CHAR(10),
+    patuserID INT,
+    docuserID INT,
     lengthMinutes INT,
-    room CHAR(6),
+    room INT,
     FOREIGN KEY(patuserID) REFERENCES patient(userID),
     FOREIGN KEY(docuserID) REFERENCES doctor(userID)
 

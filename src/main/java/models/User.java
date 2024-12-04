@@ -55,36 +55,54 @@ abstract public class User implements AuthInterface {
     }
 
     // Setters
-    private void setUserID(int value) {
+    public void setUserID(int value) {
         userID = value;
     }
 
-    private void setName(String input) {
+    public void setName(String input) {
         name = input;
     }
 
-    private void setPassword(String input) {
+    public void setPassword(String input) {
         password = input;
     }
 
-    private void setEmail(String input) {
+    public void setEmail(String input) {
         email = input;
     }
 
     // Getters
-    private int getUserID() {
+    public int getUserID() {
         return userID;
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
-    private String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    private String getEmail() {
+    public String getEmail() {
         return email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+    @Override
+    public String toString() {
+        return "Users{" +
+                "userID=" + userID +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }
