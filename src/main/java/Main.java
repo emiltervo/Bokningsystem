@@ -8,6 +8,7 @@ public class Main {
         BookingService bookingService = BookingService.getInstance();
         bookingService.bookAppointment(appointment);
         UserRepository.getAllUsers();
+        AppointmentFactory.getAllAppointments();
         System.out.println(bookingService.getSchedule());
     }
 }
