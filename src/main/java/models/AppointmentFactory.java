@@ -11,6 +11,25 @@ public class AppointmentFactory {
         return new Appointment(startTime, date, patuserID, docuserID, lengthMinutes, room);
     }
 
+    public static void insertAppointment(Appointment appointment) {
+        String sql = "INSERT INTO appointments (startTime, date, patuserID, docuserID, lengthMinutes, room) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, appointment.getStartTime());
+            pstmt.setString(2, appointment.getDate());
+            pstmt.setInt(3, appointment.getPatuserID());
+            pstmt.setInt(4, appointment.getDocuserID());
+            pstmt.setInt(5, appointment.getLengthMinutes());
+            pstmt.setInt(6, appointment.getRoom());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ArrayList<Appointment> getAllAppointments() {
         ArrayList<Appointment> appointmentList = new ArrayList<>();
 
@@ -28,7 +47,7 @@ public class AppointmentFactory {
                 int room = resultSet.getInt("room");
 
 
-                appointmentList.add(new Appointment (startTime, date, patuserID, docuserID, lengthMinutes, room));
+                appointmentList.add(createAppointment(startTime, date, patuserID, docuserID, lengthMinutes, room));
             }
         } catch (SQLException e) {
             e.printStackTrace();
