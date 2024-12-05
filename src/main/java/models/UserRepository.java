@@ -3,7 +3,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class UserRepository {
-    public ArrayList<User> getAllUsers() {
+    public static ArrayList<User> getAllUsers() {
         ArrayList<User> userList = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -37,7 +37,8 @@ public class UserRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        System.out.println("User list:");
+        System.out.println(userList);
         return userList;
     }
 }

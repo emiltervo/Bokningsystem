@@ -24,13 +24,9 @@ abstract public class User implements AuthInterface {
 
     @Override
     public boolean login(int userID, String password) {
-        String url = "jdbc:postgresql://localhost:5433/postgres";
-        String user = "postgres";
-        String dbPassword = "postgres";
-
         String sql = "SELECT * FROM users WHERE userID = ? AND password = ?";
 
-        try (Connection conn = DriverManager.getConnection(url, user, dbPassword);
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, userID);

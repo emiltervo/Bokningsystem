@@ -7,6 +7,7 @@ public class Main {
         Appointment appointment = AppointmentFactory.createAppointment("10:00", "2021-01-01", 1, 2, 30, 1);
         BookingService bookingService = BookingService.getInstance();
         bookingService.bookAppointment(appointment);
+        UserRepository.getAllUsers();
         System.out.println(bookingService.getSchedule());
     }
 }
