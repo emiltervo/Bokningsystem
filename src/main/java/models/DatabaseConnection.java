@@ -7,7 +7,7 @@ public class DatabaseConnection {
     private static Connection connection;
 
     public static Connection getConnection() throws SQLException {
-        if (connection == null) {
+        if (connection == null || connection.isClosed()) {
             String url = "jdbc:postgresql://localhost:5433/postgres";
             String username = "postgres";
             String password = "postgres";

@@ -93,12 +93,6 @@ abstract public class User implements AuthInterface {
     }
     @Override
     public String toString() {
-        return "Users{" +
-                "userID=" + userID +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", role='" + role + '\'' +
-                '}';
+        return userID + " " + name + " " + password + " " + email + " " + role;
     }
 }

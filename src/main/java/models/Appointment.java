@@ -65,13 +65,8 @@ public class Appointment {
         this.room = room;
     }
 
-  /*  @Override
+    @Override
     public String toString() {
-        return "Appointment{" +
-                "description='" + description + '\'' +
-                ", date='" + date + '\'' +
-                ", time='" + time + '\'' +
-                '}';
+        return startTime + " " + date + " " + patuserID + " " + docuserID + " " + lengthMinutes + " " + room;
     }
- */
 }
