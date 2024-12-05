@@ -74,6 +74,7 @@ public class CalendarView {
 
         columnPanel.add(breadcrumbPanel);
         calendarFrame.add(columnPanel, BorderLayout.CENTER);
+
     }
 
     private void createMainContent() {

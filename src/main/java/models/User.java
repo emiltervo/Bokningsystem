@@ -93,6 +93,7 @@ abstract public class User implements AuthInterface {
     }
     @Override
     public String toString() {
-        return userID + " " + name + " " + password + " " + email + " " + role;
+        return
+                "["+userID+ ", "+name+", "+ password+", " + email+ ", " + role+"]";
     }
 }
