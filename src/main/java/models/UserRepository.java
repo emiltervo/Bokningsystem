@@ -3,15 +3,19 @@ import java.sql.*;
 import java.util.ArrayList;
 /** * Repository class for User objects. */
 public class UserRepository {
-
+    static ArrayList<User> userList = new ArrayList<>();
     /** Returns all users from the database */
-    public static ArrayList<User> getAllUsers() {
-        ArrayList<User> userList = new ArrayList<>();
+    public static void getAllUsers() {
+        // ArrayList<User> userList = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "SELECT userID, name, password, email, role FROM users";
             PreparedStatement statement = conn.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
+
+            if (userList != null) {
+                userList.clear();
+            }
 
             while (resultSet.next()) {
                 int userID = resultSet.getInt("userID");
@@ -19,6 +23,9 @@ public class UserRepository {
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
                 String role = resultSet.getString("role");
+
+
+
 
                 // Create specific objects based on role
                 switch (role.toLowerCase()) {
@@ -41,6 +48,17 @@ public class UserRepository {
         }
         System.out.println("User list:");
         System.out.println(userList);
-        return userList;
     }
+
+    /** Returns a specific user from the database */
+    public static User getUserByID(int userID) {
+        for (User user : userList) {
+            if (user.getUserID() == userID) {
+                return user;
+            }
+        }
+        return null; // Return null if no user is found with the given userID
+    }
+
+
 }

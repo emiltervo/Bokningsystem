@@ -3,6 +3,7 @@ package views;
 import javax.swing.*;
 import java.awt.*;
 import controllers.loginController;
+import models.UserRepository;
 import models.Appointment;
 
 
@@ -12,18 +13,25 @@ public class LoginView {
     private JLabel errorLabel = new JLabel("");
     private JPasswordField passwordField = new JPasswordField();
     private loginController controller;
-
     public void setController(loginController controller) {
         this.controller = controller;
     }
 
-    private void createUI() {
+    public void createUI() {
         JFrame frame = createFrame();
         JPanel headPanel = createHeaderPanel(frame);
         frame.add(headPanel, BorderLayout.NORTH);
         JPanel contentPanel = createContentPanel();
         frame.add(contentPanel, BorderLayout.CENTER);
         frame.setVisible(true);
+
+        loginButton.addActionListener(e -> {
+            int userID = Integer.parseInt(usernameField.getText());
+            String password = new String(passwordField.getPassword());
+            controller.handleLogin(userID, password);
+            System.out.println("Login button pressed");
+
+        });
     }
 
     private JFrame createFrame() {

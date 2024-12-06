@@ -1,4 +1,6 @@
+import controllers.loginController;
 import models.*;
+import views.LoginView;
 
 
 public class Main {
@@ -8,6 +10,10 @@ public class Main {
         BookingService bookingService = BookingService.getInstance();
         bookingService.bookAppointment(appointment);
         UserRepository.getAllUsers();
+        LoginView loginView = new LoginView();
+        loginController loginController = new loginController(loginView);
+        loginView.setController(loginController);
+        loginView.createUI();
         AppointmentFactory.getAllAppointments();
         System.out.println(bookingService.getSchedule());
     }

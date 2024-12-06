@@ -1,6 +1,7 @@
 package controllers;
 
 import models.User;
+import models.UserRepository;
 import views.LoginView;
 
 public class loginController {
@@ -11,6 +12,13 @@ public class loginController {
         this.loginView.setController(this);
     }
 
-
+    public void handleLogin(int userID, String password) {
+        User user = UserRepository.getUserByID(userID);
+        if (user != null && user.login(userID, password)) {
+            loginView.showSuccess();
+        } else {
+            loginView.showError("Invalid userID or password");
+        }
+    }
 
 }
