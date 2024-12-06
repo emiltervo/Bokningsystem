@@ -6,7 +6,6 @@ import controllers.loginController;
 import models.UserRepository;
 import models.Appointment;
 
-
 public class LoginView {
     private JTextField usernameField = new JTextField();
     private JButton loginButton = new JButton("Login");
@@ -103,6 +102,27 @@ public class LoginView {
         contentPanel.add(loginButton);
         contentPanel.add(Box.createVerticalStrut(50));
         contentPanel.add(errorLabel);
+    }
+    public void showSuccessPatient() {
+        JOptionPane.showMessageDialog(null, "Login successful PATIENT");
+        System.out.print("Login Success");
+    }
+    public void showSuccessAdmin() {
+        JOptionPane.showMessageDialog(null, "Login successful ADMIN");
+        System.out.print("Login Success");
+        
+    }
+
+    public void showError(String message) {
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            LoginView loginView = new LoginView();
+            loginView.createUI();
+        });
     }
 }
 
