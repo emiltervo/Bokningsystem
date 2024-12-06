@@ -2,16 +2,104 @@ package views;
 
 import javax.swing.*;
 import java.awt.*;
+import controllers.loginController;
 import models.Appointment;
 
 
 public class LoginView {
-    static JTextField usernameField = new JTextField();
-    static JButton loginButton = new JButton("Login");
-    static JLabel errorLabel = new JLabel("");
-    static JPasswordField passwordField = new JPasswordField();
+    private JTextField usernameField = new JTextField();
+    private JButton loginButton = new JButton("Login");
+    private JLabel errorLabel = new JLabel("");
+    private JPasswordField passwordField = new JPasswordField();
+    private loginController controller;
 
-    public static void main(String[] args) {
+    public void setController(loginController controller) {
+        this.controller = controller;
+    }
+
+    private void createUI() {
+        JFrame frame = createFrame();
+        JPanel headPanel = createHeaderPanel(frame);
+        frame.add(headPanel, BorderLayout.NORTH);
+        JPanel contentPanel = createContentPanel();
+        frame.add(contentPanel, BorderLayout.CENTER);
+        frame.setVisible(true);
+    }
+
+    private JFrame createFrame() {
+        JFrame frame = new JFrame("Login Page");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1200, 750);
+        frame.setLayout(new BorderLayout());
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        return frame;
+    }
+
+    private JPanel createHeaderPanel(JFrame frame) {
+        JPanel headPanel = new JPanel();
+        headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
+        headPanel.setLayout(new BorderLayout());
+        ImageIcon headerImage = new ImageIcon("src/main/resources/Namnlös.png");
+        Image image = headerImage.getImage();
+        JPanel imagePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        imagePanel.setPreferredSize(new Dimension(1200, 125));
+        headPanel.add(imagePanel, BorderLayout.CENTER);
+        return headPanel;
+    }
+
+    private JPanel createContentPanel() {
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        addComponentsToContentPanel(contentPanel);
+        return contentPanel;
+    }
+
+    private void addComponentsToContentPanel(JPanel contentPanel) {
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel infoLabel = new JLabel("Please enter user as: YYMMDDXXXX");
+        infoLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        usernameField.setMaximumSize(new Dimension(400, 30));
+        usernameField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        passwordField.setMaximumSize(new Dimension(400, 30));
+        passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setVisible(false);
+        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        contentPanel.add(Box.createVerticalStrut(20));
+        contentPanel.add(infoLabel);
+        contentPanel.add(Box.createVerticalStrut(20));
+        contentPanel.add(usernameLabel);
+        contentPanel.add(Box.createVerticalStrut(5));
+        contentPanel.add(usernameField);
+        contentPanel.add(Box.createVerticalStrut(20));
+        contentPanel.add(passwordLabel);
+        contentPanel.add(Box.createVerticalStrut(5));
+        contentPanel.add(passwordField);
+        contentPanel.add(Box.createVerticalStrut(20));
+        contentPanel.add(loginButton);
+        contentPanel.add(Box.createVerticalStrut(50));
+        contentPanel.add(errorLabel);
+    }
+}
+
+
+  /*  public static void main(String[] args) {
         // Create the frame
         JFrame frame = new JFrame("Login Page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -151,4 +239,4 @@ public class LoginView {
         }
     }
 }
-
+*/

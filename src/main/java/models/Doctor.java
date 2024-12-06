@@ -3,6 +3,8 @@ package models;
 import java.util.List;
 import java.util.ArrayList;
 
+/** Doctor class that extends User */
+
 public class Doctor extends User {
     private boolean availability;
     private String specialty;

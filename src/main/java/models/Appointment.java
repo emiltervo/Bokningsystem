@@ -1,5 +1,7 @@
 package models;
 
+/** Appointment class */
+
 public class Appointment {
     private String startTime;
     private String date;
@@ -67,6 +69,6 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return startTime + " " + date + " " + patuserID + " " + docuserID + " " + lengthMinutes + " " + room;
+        return "[" + startTime + " " + date + " " + patuserID + " " + docuserID + " " + lengthMinutes + " " + room +"]";
     }
 }

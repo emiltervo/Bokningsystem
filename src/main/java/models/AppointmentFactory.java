@@ -7,10 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class AppointmentFactory {
+    /** Creates an appointment object */
     public static Appointment createAppointment(String startTime, String date, int patuserID, int docuserID, int lengthMinutes, int room) {
         return new Appointment(startTime, date, patuserID, docuserID, lengthMinutes, room);
     }
-
+    /** Inserts appointments into database based on values of the appointment object */
     public static void insertAppointment(Appointment appointment) {
         String sql = "INSERT INTO appointments (startTime, date, patuserID, docuserID, lengthMinutes, room) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -29,7 +30,7 @@ public class AppointmentFactory {
             e.printStackTrace();
         }
     }
-
+    /** Retrieves appointment information from the database and creates objects of type Appointments. */
     public static ArrayList<Appointment> getAllAppointments() {
         ArrayList<Appointment> appointmentList = new ArrayList<>();
 

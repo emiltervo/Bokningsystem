@@ -21,7 +21,7 @@ abstract public class User implements AuthInterface {
         this.email = email;
         this.role = role;
     }
-
+    /** Login functionality for users. */
     @Override
     public boolean login(int userID, String password) {
         String sql = "SELECT * FROM users WHERE userID = ? AND password = ?";

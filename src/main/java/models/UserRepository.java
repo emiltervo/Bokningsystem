@@ -1,8 +1,10 @@
 package models;
 import java.sql.*;
 import java.util.ArrayList;
-
+/** * Repository class for User objects. */
 public class UserRepository {
+
+    /** Returns all users from the database */
     public static ArrayList<User> getAllUsers() {
         ArrayList<User> userList = new ArrayList<>();
 
