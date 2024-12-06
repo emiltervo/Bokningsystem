@@ -1,5 +1,5 @@
 package views;
-
+import views.*;
 import javax.swing.*;
 import java.awt.*;
 import controllers.loginController;
@@ -114,11 +114,15 @@ public class LoginView {
     public void showSuccessPatient() {
         JOptionPane.showMessageDialog(null, "Login successful PATIENT");
         System.out.print("Login Success");
+        HomeViewPatient homeViewPatient = CreateViews.getInstance().getHomeViewPatient();
+        homeViewPatient.setVisible(true);
     }
     public void showSuccessAdmin() {
         JOptionPane.showMessageDialog(null, "Login successful ADMIN");
         System.out.print("Login Success");
-
+        // new HomeView();
+        HomeView homeView = CreateViews.getInstance().getHomeView();
+        homeView.setVisible(true);
     }
 
     public void showError(String message) {
