@@ -1,5 +1,8 @@
 package views;
 
+import models.User;
+import models.UserRepository;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -64,7 +67,15 @@ public class HomeView {
         profileMenu.add(myAccount);
         profileMenu.add(logout);
 
-        myAccount.addActionListener(e -> JOptionPane.showMessageDialog(frame, "My Account clicked!"));
+        myAccount.addActionListener(e -> {
+            int userID = LoginView.getCurrentUser();
+            User user = UserRepository.getUserByID(userID);
+            if (user != null) {
+                JOptionPane.showMessageDialog(frame, "User Info: " + user.toString());
+            } else {
+                JOptionPane.showMessageDialog(frame, "User not found!");
+            }
+        });
         logout.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Logged out!"));
 
         profileButton.addActionListener(e -> profileMenu.show(profileButton, 0, profileButton.getHeight()));
@@ -88,6 +99,7 @@ public class HomeView {
         gbc.anchor = GridBagConstraints.CENTER;
 
         // Updated breadcrumb titles
+        // TODO: Think how we implement this, currently we can not change views from the breadcrumb
         String[] breadcrumbTitles = {"Hem", "Lediga Tider", "Recept", "Patienter"};
         for (String title : breadcrumbTitles) {
             if (title.equals("Hem")) {
@@ -107,7 +119,20 @@ public class HomeView {
                 breadcrumb.setPreferredSize(new Dimension(150, 40)); // Adjusted width
                 breadcrumb.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+                if (title.equals("Recept")) {
+                    breadcrumb.addActionListener(e -> {
+                        JOptionPane.showMessageDialog(frame, "Recept button clicked!");
+                    });
+                }
+
+                if (title.equals("Patienter")) {
+                    breadcrumb.addActionListener(e -> {
+                        JOptionPane.showMessageDialog(frame, "Recept button clicked!");
+                    });
+                }
+
                 breadcrumbPanel.add(breadcrumb, gbc);
+
             }
             gbc.gridx++;
         }
@@ -133,7 +158,8 @@ public class HomeView {
         frame.add(contentPanel, BorderLayout.SOUTH);
     }
 
-    public static void main(String[] args) {
-        new HomeView();
+    public void setVisible(boolean visible) {
+        frame.setVisible(visible);
     }
+
 }

@@ -14,16 +14,6 @@ import java.util.Properties;
 
 
     /** To get getConnection to work the user needs to insert the right credentials in the dbconfig.properties file.*/
-   /* public static Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            String url = "jdbc:postgresql://localhost:5433/postgres";
-            String username = "postgres";
-            String password = "postgres";
-            connection = DriverManager.getConnection(url, username, password);
-        }
-
-        return connection;
-    } */
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             Properties props = new Properties();

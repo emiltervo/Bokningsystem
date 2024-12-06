@@ -133,4 +133,8 @@ public class HomeViewPatient {
     public static void main(String[] args) {
         new HomeView();
     }
+
+    public void setVisible(boolean visible) {
+        frame.setVisible(visible);
+    }
 }

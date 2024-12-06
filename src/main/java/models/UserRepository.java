@@ -60,5 +60,9 @@ public class UserRepository {
         return null; // Return null if no user is found with the given userID
     }
 
+    public static ArrayList<User> getUserList() {
+        return userList;
+    }
+
 
 }
