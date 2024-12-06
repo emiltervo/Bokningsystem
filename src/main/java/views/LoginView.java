@@ -1,6 +1,8 @@
 package views;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import controllers.loginController;
 import models.UserRepository;
@@ -10,8 +12,12 @@ public class LoginView {
     private JTextField usernameField = new JTextField();
     private JButton loginButton = new JButton("Login");
     private JLabel errorLabel = new JLabel("");
+
+    private JLabel errorLabel2 = new JLabel("");
     private JPasswordField passwordField = new JPasswordField();
     private loginController controller;
+
+
     public void setController(loginController controller) {
         this.controller = controller;
     }
@@ -24,7 +30,9 @@ public class LoginView {
         frame.add(contentPanel, BorderLayout.CENTER);
         frame.setVisible(true);
 
+
         loginButton.addActionListener(e -> {
+
             int userID = Integer.parseInt(usernameField.getText());
             String password = new String(passwordField.getPassword());
             controller.handleLogin(userID, password);
@@ -73,6 +81,7 @@ public class LoginView {
         return contentPanel;
     }
 
+
     private void addComponentsToContentPanel(JPanel contentPanel) {
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -87,6 +96,8 @@ public class LoginView {
         passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
         errorLabel.setForeground(Color.RED);
         errorLabel.setVisible(false);
+        errorLabel2.setForeground(Color.RED);
+        errorLabel2.setVisible(false);
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         contentPanel.add(Box.createVerticalStrut(20));
         contentPanel.add(infoLabel);
@@ -102,7 +113,37 @@ public class LoginView {
         contentPanel.add(loginButton);
         contentPanel.add(Box.createVerticalStrut(50));
         contentPanel.add(errorLabel);
+        contentPanel.add(Box.createVerticalStrut(50));
+        contentPanel.add(errorLabel2);
+
+        usernameField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkInput(usernameField.getText());
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkInput(usernameField.getText());
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                checkInput(usernameField.getText());
+            }
+        });
     }
+
+    public void checkInput(String input) {
+        if (input.matches((".*[a-zA-Z].*"))) {
+            errorLabel2.setText("Please enter numbers only");
+            errorLabel2.setVisible(true);
+        } else if (input.matches((".*[a-zA-Z].*")) && (input.matches((".*[a-zA-Z].*")))) {
+            errorLabel2.setText("Please enter numbers only");
+            errorLabel2.setVisible(true);
+        } else if (input.matches("")) {
+            errorLabel2.setVisible(false);
+        }
+    }
+
     public void showSuccessPatient() {
         JOptionPane.showMessageDialog(null, "Login successful PATIENT");
         System.out.print("Login Success");
