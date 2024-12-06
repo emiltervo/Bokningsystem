@@ -110,7 +110,7 @@ public class LoginView {
     public void showSuccessAdmin() {
         JOptionPane.showMessageDialog(null, "Login successful ADMIN");
         System.out.print("Login Success");
-        
+
     }
 
     public void showError(String message) {

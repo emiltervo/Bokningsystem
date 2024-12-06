@@ -15,7 +15,9 @@ public class loginController {
     public void handleLogin(int userID, String password) {
         User user = UserRepository.getUserByID(userID);
         if (user != null && user.login(userID, password)) {
-            loginView.showSuccess();
+            if (user.getRole().equals("doctor") || user.getRole().equals("secretary")) {
+                loginView.showSuccessAdmin();
+            } else {loginView.showSuccessPatient();}
         } else {
             loginView.showError("Invalid userID or password");
         }
