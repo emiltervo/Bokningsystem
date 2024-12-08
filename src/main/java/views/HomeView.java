@@ -1,5 +1,6 @@
 package views;
 
+import controllers.HomeViewController;
 import models.User;
 import models.UserRepository;
 
@@ -11,6 +12,7 @@ public class HomeView {
     private JPanel headPanel;
     private JPanel columnPanel;
     private JPanel contentPanel;
+    private HomeViewController controller;
 
     public HomeView() {
         initializeFrame();
@@ -98,11 +100,9 @@ public class HomeView {
         gbc.insets = new Insets(0, 10, 0, 10);
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Updated breadcrumb titles
-        // TODO: Think how we implement this, currently we can not change views from the breadcrumb
-        String[] breadcrumbTitles = {"Hem", "Lediga Tider", "Recept", "Patienter"};
+        String[] breadcrumbTitles = {"Home", "Calendar", "Recipes", "Patients"};
         for (String title : breadcrumbTitles) {
-            if (title.equals("Hem")) {
+            if (title.equals("Home")) {
                 JLabel activeLabel = new JLabel(title, SwingConstants.CENTER);
                 activeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
                 activeLabel.setOpaque(true);
@@ -119,20 +119,13 @@ public class HomeView {
                 breadcrumb.setPreferredSize(new Dimension(150, 40)); // Adjusted width
                 breadcrumb.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                if (title.equals("Recept")) {
+                if (title.equals("Calendar")) {
                     breadcrumb.addActionListener(e -> {
-                        JOptionPane.showMessageDialog(frame, "Recept button clicked!");
-                    });
-                }
-
-                if (title.equals("Patienter")) {
-                    breadcrumb.addActionListener(e -> {
-                        JOptionPane.showMessageDialog(frame, "Recept button clicked!");
+                        controller.navigateToCalendarView();
                     });
                 }
 
                 breadcrumbPanel.add(breadcrumb, gbc);
-
             }
             gbc.gridx++;
         }
@@ -140,7 +133,6 @@ public class HomeView {
         columnPanel.add(breadcrumbPanel);
         frame.add(columnPanel, BorderLayout.CENTER);
     }
-
 
     private void createMainContent() {
         contentPanel = new JPanel();
@@ -158,8 +150,11 @@ public class HomeView {
         frame.add(contentPanel, BorderLayout.SOUTH);
     }
 
+    public void setController(HomeViewController controller) {
+        this.controller = controller;
+    }
+
     public void setVisible(boolean visible) {
         frame.setVisible(visible);
     }
-
 }

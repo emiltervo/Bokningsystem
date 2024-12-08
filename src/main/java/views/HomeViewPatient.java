@@ -1,5 +1,7 @@
 package views;
 
+import controllers.HomeViewPatientController;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,6 +10,7 @@ public class HomeViewPatient {
     private JPanel headPanel;
     private JPanel columnPanel;
     private JPanel contentPanel;
+    private HomeViewPatientController controller;
 
     public HomeViewPatient() {
         initializeFrame();
@@ -18,7 +21,7 @@ public class HomeViewPatient {
     }
 
     private void initializeFrame() {
-        frame = new JFrame("Home Page");
+        frame = new JFrame("HomeViewPatient");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout());
@@ -87,9 +90,9 @@ public class HomeViewPatient {
         gbc.insets = new Insets(0, 10, 0, 10);
         gbc.anchor = GridBagConstraints.CENTER;
 
-        String[] breadcrumbTitles = {"Hem", "Boka Tid", "Mitt Recept"};
+        String[] breadcrumbTitles = {"Home", "Book time", "My Recipes"};
         for (String title : breadcrumbTitles) {
-            if (title.equals("Hem")) {
+            if (title.equals("Home")) {
                 JLabel activeLabel = new JLabel(title, SwingConstants.CENTER);
                 activeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
                 activeLabel.setOpaque(true);
@@ -105,6 +108,11 @@ public class HomeViewPatient {
                 breadcrumb.setBackground(Color.WHITE);
                 breadcrumb.setPreferredSize(new Dimension(120, 40));
                 breadcrumb.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                breadcrumb.addActionListener(e -> {
+                    if (title.equals("Book time")) {
+                        controller.navigateToCalendarView();
+                    }
+                });
                 breadcrumbPanel.add(breadcrumb, gbc);
             }
             gbc.gridx++;
@@ -130,8 +138,8 @@ public class HomeViewPatient {
         frame.add(contentPanel, BorderLayout.SOUTH);
     }
 
-    public static void main(String[] args) {
-        new HomeView();
+    public void setController(HomeViewPatientController controller) {
+        this.controller = controller;
     }
 
     public void setVisible(boolean visible) {

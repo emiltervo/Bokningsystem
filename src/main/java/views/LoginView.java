@@ -1,12 +1,12 @@
 package views;
-import views.*;
+
+import controllers.loginController;
+
 import javax.swing.*;
 import java.awt.*;
-import controllers.loginController;
-import models.UserRepository;
-import models.Appointment;
 
 public class LoginView {
+    private JFrame frame;
     private JTextField usernameField = new JTextField();
     private JButton loginButton = new JButton("Login");
     private JLabel errorLabel = new JLabel("");
@@ -23,7 +23,7 @@ public class LoginView {
     }
 
     public void createUI() {
-        JFrame frame = createFrame();
+        frame = createFrame();
         JPanel headPanel = createHeaderPanel(frame);
         frame.add(headPanel, BorderLayout.NORTH);
         JPanel contentPanel = createContentPanel();
@@ -37,7 +37,6 @@ public class LoginView {
                 currentUser = userID;
             }
             System.out.println("Login button pressed");
-
         });
     }
 
@@ -111,16 +110,19 @@ public class LoginView {
         contentPanel.add(Box.createVerticalStrut(50));
         contentPanel.add(errorLabel);
     }
+
     public void showSuccessPatient() {
         JOptionPane.showMessageDialog(null, "Login successful PATIENT");
         System.out.print("Login Success");
+        frame.setVisible(false); // Hide the LoginView
         HomeViewPatient homeViewPatient = CreateViews.getInstance().getHomeViewPatient();
         homeViewPatient.setVisible(true);
     }
+
     public void showSuccessAdmin() {
         JOptionPane.showMessageDialog(null, "Login successful ADMIN");
         System.out.print("Login Success");
-        // new HomeView();
+        frame.setVisible(false); // Hide the LoginView
         HomeView homeView = CreateViews.getInstance().getHomeView();
         homeView.setVisible(true);
     }
@@ -129,6 +131,4 @@ public class LoginView {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
     }
-
 }
-
