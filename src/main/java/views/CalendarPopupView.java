@@ -4,19 +4,19 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class CalendarPopupView {
-    private JFrame calendarPopupFrame;
+public class CalendarPopupView extends JDialog {
     private boolean isBooked;
+    private boolean confirmed;
 
     public CalendarPopupView(boolean initialState) {
         isBooked = initialState; // Set initial state based on parameter
 
-        calendarPopupFrame = new JFrame("Room Booking");
-        calendarPopupFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        calendarPopupFrame.setSize(500, 400);
-        calendarPopupFrame.setLayout(new BorderLayout());
-        calendarPopupFrame.setResizable(false);
-        calendarPopupFrame.setLocationRelativeTo(null);
+        setTitle("Room Booking");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(500, 400);
+        setLayout(new BorderLayout());
+        setResizable(false);
+        setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
@@ -74,11 +74,12 @@ public class CalendarPopupView {
         buttonPanel.add(unbookButton);
         mainPanel.add(buttonPanel, gbc);
 
-        calendarPopupFrame.add(mainPanel);
-        calendarPopupFrame.setVisible(true);
+        add(mainPanel);
+        setVisible(true);
     }
 
     private void toggleBooking(JButton bookButton, JButton unbookButton) {
+        confirmed = true;
         if (isBooked) {
             bookButton.setText("Book");
             bookButton.setEnabled(true); // Enable Book button
@@ -90,15 +91,15 @@ public class CalendarPopupView {
             unbookButton.setVisible(true); // Show Unbook button
             isBooked = true;
         }
-        calendarPopupFrame.dispose(); // Close the popup
+        dispose(); // Close the popup
     }
 
     public boolean isBooked() {
         return isBooked;
     }
 
-    public JFrame getFrame() {
-        return calendarPopupFrame;
+    public boolean isConfirmed() {
+        return confirmed;
     }
 
     public static void main(String[] args) {
