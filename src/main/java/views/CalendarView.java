@@ -3,19 +3,22 @@ package views;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import models.User;
+import models.UserRepository;
 
 public class CalendarView {
-    private JFrame calendarFrame;
-    private JPanel headPanel;
-    private JPanel columnPanel;
-    private JPanel contentPanel;
-    private JPanel scheduleWrapper;
-    private JPanel[][] slots;
+
+    private final JFrame calendarFrame;
+    private JButton leftArrow;
+    private JButton rightArrow;
+    private JLabel weekLabel;
+    private JPanel scheduleGrid;
+    private JLabel dateRangeLabel;
 
     public CalendarView() {
-        calendarFrame = new JFrame("Home Page");
+        calendarFrame = new JFrame("Calendar Page");
         calendarFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         calendarFrame.setSize(1200, 750);
         calendarFrame.setLayout(new BorderLayout());
@@ -31,9 +34,8 @@ public class CalendarView {
     }
 
     private void createHeader() {
-        headPanel = new JPanel();
+        JPanel headPanel = new JPanel(null);
         headPanel.setPreferredSize(new Dimension(calendarFrame.getWidth(), 125));
-        headPanel.setLayout(new BorderLayout());
         calendarFrame.add(headPanel, BorderLayout.NORTH);
 
         ImageIcon headerImage = new ImageIcon("src/main/resources/Namnlös.png");
@@ -50,12 +52,55 @@ public class CalendarView {
                 g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        imagePanel.setPreferredSize(new Dimension(1200, 125));
-        headPanel.add(imagePanel, BorderLayout.CENTER);
+        imagePanel.setBounds(0, 0, 1200, 125);
+        headPanel.add(imagePanel);
+
+        JButton profileButton = new JButton();
+        profileButton.setBounds(1090, 0, 110, 125);
+        profileButton.setOpaque(false);
+        profileButton.setContentAreaFilled(false);
+        profileButton.setBorderPainted(false);
+        profileButton.setFocusPainted(false);
+        profileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        JPopupMenu profileMenu = new JPopupMenu();
+        JMenuItem myAccount = new JMenuItem("My Account");
+        JMenuItem logout = new JMenuItem("Logout");
+        myAccount.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        logout.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        profileMenu.add(myAccount);
+        profileMenu.add(logout);
+
+        myAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int userID = LoginView.getCurrentUser();
+                User user = UserRepository.getUserByID(userID);
+                if (user != null) {
+                    JOptionPane.showMessageDialog(calendarFrame, "User Info: " + user.toString());
+                } else {
+                    JOptionPane.showMessageDialog(calendarFrame, "User not found!");
+                }
+            }
+        });
+        logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(calendarFrame, "Logged out!");
+            }
+        });
+
+        profileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                profileMenu.show(profileButton, 0, profileButton.getHeight());
+            }
+        });
+        headPanel.add(profileButton);
     }
 
     private void createBreadcrumbs() {
-        columnPanel = new JPanel();
+        JPanel columnPanel = new JPanel();
         columnPanel.setPreferredSize(new Dimension(1200, 100));
         columnPanel.setBackground(Color.LIGHT_GRAY);
         columnPanel.setLayout(new GridBagLayout());
@@ -74,11 +119,10 @@ public class CalendarView {
 
         columnPanel.add(breadcrumbPanel);
         calendarFrame.add(columnPanel, BorderLayout.CENTER);
-
     }
 
     private void createMainContent() {
-        contentPanel = new JPanel();
+        JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         contentPanel.setPreferredSize(new Dimension(1200, 525));
@@ -86,80 +130,86 @@ public class CalendarView {
     }
 
     private void createSchedule() {
-        scheduleWrapper = new JPanel(new BorderLayout());
+        JPanel scheduleWrapper = new JPanel(new BorderLayout());
         scheduleWrapper.setPreferredSize(new Dimension(1200, 525));
         scheduleWrapper.setBorder(new EmptyBorder(20, 200, 0, 200));
         scheduleWrapper.setBackground(Color.DARK_GRAY);
 
-        JPanel datePanel = createDatePanel();
+        // Create the placeholder panel (red panel)
+        JPanel placeholderPanel = createDatePanel();
 
+        // Schedule components
         JPanel daysHeader = createDaysHeader();
         JPanel timeSlots = createTimeSlots();
         JPanel grid = createScheduleGrid();
+        JPanel bookingsPanel = createBookingsPanel();
 
         JPanel timeAndGrid = new JPanel(new BorderLayout());
         timeAndGrid.add(timeSlots, BorderLayout.WEST);
         timeAndGrid.add(grid, BorderLayout.CENTER);
+        timeAndGrid.add(bookingsPanel, BorderLayout.EAST);
 
-        scheduleWrapper.add(datePanel, BorderLayout.NORTH);
+        // Add components to the schedule wrapper
+        scheduleWrapper.add(placeholderPanel, BorderLayout.NORTH); // Add the red panel at the top
         scheduleWrapper.add(daysHeader, BorderLayout.CENTER);
         scheduleWrapper.add(timeAndGrid, BorderLayout.SOUTH);
 
         calendarFrame.add(scheduleWrapper, BorderLayout.SOUTH);
     }
 
-    private JPanel createDatePanel() {
-        JPanel datePanel = new JPanel();
-        datePanel.setPreferredSize(new Dimension(1200, 55));
-        datePanel.setBackground(Color.GRAY);
+    private JPanel createBookingsPanel() {
+        JPanel bookingsPanel = new JPanel();
+        bookingsPanel.setPreferredSize(new Dimension(160, 0)); // Width for the panel
+        bookingsPanel.setLayout(new BoxLayout(bookingsPanel, BoxLayout.Y_AXIS));
+        bookingsPanel.setBackground(Color.LIGHT_GRAY);
+        bookingsPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
-        // Create arrow buttons and week label
-        JButton leftArrow = new JButton("<");
-        JButton rightArrow = new JButton(">");
-        JLabel weekLabel = new JLabel("Week", JLabel.LEFT);
-        weekLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        weekLabel.setForeground(Color.WHITE); // White text for contrast
+        // Title Label
+        JLabel bookingsTitle = new JLabel("Bookings", JLabel.CENTER);
+        bookingsTitle.setFont(new Font("Arial", Font.BOLD, 16));
+        bookingsTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        bookingsTitle.setBorder(new EmptyBorder(10, 0, 5, 0));
 
-        // Create date range label
-        JLabel dateRangeLabel = new JLabel("YYYY-MM-DD - YYYY-MM-DD", JLabel.CENTER);
-        dateRangeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        dateRangeLabel.setForeground(Color.WHITE); // White text for contrast
+        // Create colored squares and labels for Available and Booked
+        JPanel availablePanel = createStatusPanel("Available", Color.GREEN);
+        JPanel bookedPanel = createStatusPanel("Booked", Color.RED);
 
-        // Create doctor selection dropdown
-        String[] doctors = {"Dr. Smith", "Dr. Johnson", "Dr. Williams"};
-        JComboBox<String> doctorComboBox = new JComboBox<>(doctors);
-        doctorComboBox.setPreferredSize(new Dimension(150, 25)); // Adjust size as necessary
+        bookingsPanel.add(bookingsTitle);
+        bookingsPanel.add(Box.createVerticalStrut(5)); // Space between elements
+        bookingsPanel.add(availablePanel);
+        bookingsPanel.add(bookedPanel);
 
-        // Add components to the panel
-        datePanel.setLayout(new GridLayout(1, 3, 0, 0));
+        return bookingsPanel;
+    }
 
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 13));
-        leftPanel.setOpaque(false); // Make panel transparent
-        leftPanel.add(leftArrow);
-        leftPanel.add(weekLabel);
-        leftPanel.add(rightArrow);
+    // This method creates a panel with a small colored square and text
+    private JPanel createStatusPanel(String text, Color color) {
+        JPanel statusPanel = new JPanel();
+        statusPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));  // Left alignment and space between components
 
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 18));
-        centerPanel.setOpaque(false); // Make panel transparent
-        centerPanel.add(dateRangeLabel);
+        // Create colored square
+        JLabel colorBox = new JLabel();
+        colorBox.setOpaque(true);
+        colorBox.setBackground(color);
+        colorBox.setPreferredSize(new Dimension(15, 15)); // Small square
 
-        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 15));
-        rightPanel.setOpaque(false); // Make panel transparent
-        rightPanel.add(doctorComboBox);
+        // Create text label
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        datePanel.add(leftPanel);
-        datePanel.add(centerPanel);
-        datePanel.add(rightPanel);
+        // Add the color box and label to the status panel
+        statusPanel.add(colorBox);
+        statusPanel.add(label);
 
-        return datePanel;
+        return statusPanel;
     }
 
     private JPanel createDaysHeader() {
-        JPanel daysHeader = new JPanel(new GridLayout(1, 8));
-        daysHeader.setPreferredSize(new Dimension(1200, 0));
+        JPanel daysHeader = new JPanel(new GridLayout(1, 10));
+        daysHeader.setPreferredSize(new Dimension(800, 0));
         daysHeader.setBackground(Color.WHITE);
 
-        String[] days = {"", "Mon date", "Tue date", "Wed date", "Thu date", "Fri date"};
+        String[] days = {"", "Mon date", "Tue date", "Wed date", "Thu date", "Fri date", ""};
         for (int i = 0; i < days.length; i++) {
             JLabel dayLabel = new JLabel(days[i], JLabel.CENTER);
             dayLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -178,7 +228,7 @@ public class CalendarView {
 
     private JPanel createTimeSlots() {
         JPanel timeSlots = new JPanel(new GridLayout(10, 1));
-        timeSlots.setPreferredSize(new Dimension(132, 0));
+        timeSlots.setPreferredSize(new Dimension(80, 0));
 
         String[] times = {"8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"};
         for (String time : times) {
@@ -191,45 +241,76 @@ public class CalendarView {
         return timeSlots;
     }
 
-    private JPanel createScheduleGrid() {
-        JPanel grid = new JPanel(new GridLayout(10, 5)); // 7 columns, 10 rows
-        grid.setPreferredSize(new Dimension(1200, 400));
-        slots = new JPanel[10][5]; // Initialize the slots array
+    public JPanel createDatePanel() {
+        JPanel placeholderPanel = new JPanel();
+        placeholderPanel.setPreferredSize(new Dimension(1200, 55)); // Adjust dimensions as necessary
+        placeholderPanel.setBackground(Color.GRAY);
 
+        // Create arrow buttons and week label
+        leftArrow = new JButton("<");
+        rightArrow = new JButton(">");
+        weekLabel = new JLabel("Week", JLabel.LEFT);
+        weekLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        weekLabel.setForeground(Color.WHITE); // White text for contrast
+
+        // Initialize the date range label
+        dateRangeLabel = new JLabel("YYYY-MM-DD - YYYY-MM-DD", JLabel.CENTER);
+        dateRangeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        dateRangeLabel.setForeground(Color.WHITE); // White text for contrast
+
+        // Add components to the panel
+        placeholderPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 13));
+        placeholderPanel.add(leftArrow);
+        placeholderPanel.add(weekLabel);
+        placeholderPanel.add(rightArrow);
+        placeholderPanel.add(dateRangeLabel);
+
+        return placeholderPanel;
+    }
+
+    public JPanel createScheduleGrid() {
+        scheduleGrid = new JPanel(new GridLayout(10, 5)); // 10 rows, 5 columns
+        scheduleGrid.setPreferredSize(new Dimension(800, 400));
+
+        // TODO: Fetch data from the model and populate the schedule grid so green slots represent available slots and red slots represent booked slots and grey slots represent unavailable slots.
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 5; col++) {
                 JPanel slot = new JPanel();
                 slot.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-                slot.setBackground(Color.WHITE);
-                slots[row][col] = slot; // Store the slot in the array
+                slot.setBackground(Color.green); // Default color for available slots
 
-                // Adding mouse listener for click events on the grid slots
-                slot.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        boolean isSlotBooked = slot.getBackground().equals(Color.RED);
-                        CalendarPopupView popup = new CalendarPopupView(isSlotBooked);
-                        popup.getFrame().addWindowListener(new java.awt.event.WindowAdapter() {
-                            @Override
-                            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                                if (popup.isBooked()) {
-                                    slot.setBackground(Color.RED); // Mark slot as booked
-                                } else {
-                                    slot.setBackground(Color.WHITE); // Mark slot as available
-                                }
-                            }
-                        });
-                    }
-                });
+                // Add an identifier to the slot for debugging
+                slot.setName("Slot: Row " + row + ", Col " + col);
 
-                grid.add(slot);
+                // Ensure slots are accessible by the controller
+                scheduleGrid.add(slot);
             }
         }
-
-        return grid;
+        return scheduleGrid;
     }
 
     public static void main(String[] args) {
         new CalendarView();
+    }
+
+    // Getter for navigation buttons
+    public JButton getLeftArrow() {
+        return leftArrow;
+    }
+
+    public JButton getRightArrow() {
+        return rightArrow;
+    }
+
+    public JLabel getWeekLabel() {
+        return weekLabel;
+    }
+
+    public JPanel getScheduleGrid() {
+        return scheduleGrid;
+    }
+
+    public JLabel getDateRangeLabel() {
+        return dateRangeLabel;
     }
 }

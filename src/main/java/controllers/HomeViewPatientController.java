@@ -4,7 +4,7 @@ import views.CalendarView;
 import views.HomeViewPatient;
 
 public class HomeViewPatientController {
-    private HomeViewPatient homeViewPatient;
+    private final HomeViewPatient homeViewPatient;
 
     public HomeViewPatientController(HomeViewPatient homeViewPatient) {
         this.homeViewPatient = homeViewPatient;

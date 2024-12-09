@@ -1,5 +1,6 @@
 package views;
 
+import controllers.CalendarController;
 import controllers.HomeViewController;
 import controllers.HomeViewPatientController;
 
@@ -59,16 +60,8 @@ public class CreateViews {
     public CalendarView getCalendarView() {
         if (calendarView == null) {
             calendarView = new CalendarView();
+            CalendarController controller = new CalendarController(calendarView);
         }
         return calendarView;
     }
-
-    /*public CalendarPopupView getCalendarPopupView() {
-        if (calendarPopupView == null) {
-            calendarPopupView = new CalendarPopupView();
-        }
-        return calendarPopupView;
-    } */
-
-
 }

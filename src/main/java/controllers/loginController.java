@@ -5,7 +5,7 @@ import models.UserRepository;
 import views.LoginView;
 
 public class loginController {
-    private LoginView loginView;
+    private final LoginView loginView;
 
     public loginController(LoginView loginView) {
         this.loginView = loginView;
