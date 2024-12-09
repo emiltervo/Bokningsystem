@@ -1,5 +1,9 @@
 package views;
 
+import models.Patient;
+import models.User;
+import models.UserRepository;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -14,6 +18,9 @@ import javax.swing.event.DocumentListener;
 public class PatientView {
     static List<String> patientList = new ArrayList<>();
     public static void main(String[] args) {
+
+        // TODO: make code into methods instead of everything in main class
+
         // Main frame
         JFrame frame = new JFrame("Login Page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,24 +37,22 @@ public class PatientView {
 
 
 
-        // Populate the list (from file)
+        // Populate the list From available users
         try {
-            File file = new File("src/main/resources/patientlist.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            UserRepository.getAllUsers();
             comboBox.setEditable(true);
             comboBox.addItem(""); // First item slot is empty, to be able to search straight away
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] patients = line.split(",");
-                for (String patient : patients) {
-                    comboBox.addItem(patient); // Add each patient to the dropdown
-                    patientList.add(patient);
+            ArrayList<User> users = UserRepository.getUserList();
+            for (User user : users) {
+                if (user != null && user.getRole().equals("patient")) {
+                    String patientName = user.getName();
+                    comboBox.addItem(patientName); // Add each patient name to the dropdown
+                    patientList.add(patientName);
                 }
             }
-            reader.close();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(frame, "Error reading file: " + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Error retrieving users: " + e.getMessage());
         }
 
         // Add DocumentListener to the editable part of the JComboBox (JTextField)

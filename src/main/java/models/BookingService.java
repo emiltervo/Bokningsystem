@@ -1,5 +1,8 @@
 package models;
 
+/**
+ *
+ */
 public class BookingService implements IBookingService<Appointment> {
     private static BookingService instance;
     private Schedule schedule;

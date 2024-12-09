@@ -2,7 +2,7 @@ package models;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/** Patient class that extends User */
 public class Patient extends User {
     private String journal;
     private List<Prescription> prescriptions;

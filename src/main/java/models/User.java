@@ -21,16 +21,12 @@ abstract public class User implements AuthInterface {
         this.email = email;
         this.role = role;
     }
-
+    /** Login functionality for users. */
     @Override
     public boolean login(int userID, String password) {
-        String url = "jdbc:postgresql://localhost:5433/postgres";
-        String user = "postgres";
-        String dbPassword = "postgres";
-
         String sql = "SELECT * FROM users WHERE userID = ? AND password = ?";
 
-        try (Connection conn = DriverManager.getConnection(url, user, dbPassword);
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, userID);
@@ -97,12 +93,7 @@ abstract public class User implements AuthInterface {
     }
     @Override
     public String toString() {
-        return "Users{" +
-                "userID=" + userID +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", role='" + role + '\'' +
-                '}';
+        return
+                "["+userID+ ", "+name+", "+ password+", " + email+ ", " + role+"]";
     }
 }

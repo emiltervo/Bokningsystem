@@ -15,11 +15,6 @@ public class CalendarView {
     private JLabel bookingsTitle;
     private JLabel colorBox;
     private JLabel label;
-    private JButton leftArrow;
-    private JButton rightArrow;
-    private JLabel weekLabel;
-    private JLabel dateRangeLabel; // For displaying the date range
-    private JPanel scheduleGrid;
 
     public CalendarView() {
         calendarFrame = new JFrame("Home Page");
@@ -119,8 +114,8 @@ public class CalendarView {
 
         calendarFrame.add(scheduleWrapper, BorderLayout.SOUTH);
     }
-    /*
-    public JPanel createDatePanel() {
+
+    private JPanel createDatePanel() {
     // Create a panel with a red background
     JPanel placeholderPanel = new JPanel();
     placeholderPanel.setPreferredSize(new Dimension(1200, 55)); // Adjust dimensions as necessary
@@ -146,8 +141,8 @@ public class CalendarView {
     placeholderPanel.add(dateRangeLabel);
 
     return placeholderPanel;
-    }
-    */
+}
+
     private JPanel createBookingsPanel() {
         JPanel bookingsPanel = new JPanel();
         bookingsPanel.setPreferredSize(new Dimension(160, 0)); // Width for the panel
@@ -233,73 +228,36 @@ public class CalendarView {
         return timeSlots;
     }
 
-    public JPanel createDatePanel() {
-        JPanel placeholderPanel = new JPanel();
-        placeholderPanel.setPreferredSize(new Dimension(1200, 55)); // Adjust dimensions as necessary
-        placeholderPanel.setBackground(Color.GRAY);
+    private JPanel createScheduleGrid() {
+        JPanel grid = new JPanel(new GridLayout(10, 5)); // 7 columns, 10 rows
+        grid.setPreferredSize(new Dimension(800, 400));
 
-        // Create arrow buttons and week label
-        leftArrow = new JButton("<");
-        rightArrow = new JButton(">");
-        weekLabel = new JLabel("Week", JLabel.LEFT);
-        weekLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        weekLabel.setForeground(Color.WHITE); // White text for contrast
-
-        // Initialize the date range label
-        dateRangeLabel = new JLabel("YYYY-MM-DD - YYYY-MM-DD", JLabel.CENTER);
-        dateRangeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        dateRangeLabel.setForeground(Color.WHITE); // White text for contrast
-
-        // Add components to the panel
-        placeholderPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 13));
-        placeholderPanel.add(leftArrow);
-        placeholderPanel.add(weekLabel);
-        placeholderPanel.add(rightArrow);
-        placeholderPanel.add(dateRangeLabel);
-
-        return placeholderPanel;
-    }
-
-
-    public JPanel createScheduleGrid() {
-        scheduleGrid = new JPanel(new GridLayout(10, 5)); // 10 rows, 5 columns
-        scheduleGrid.setPreferredSize(new Dimension(800, 400));
-
-        for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 5; col++) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 6; col++) {
                 JPanel slot = new JPanel();
                 slot.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                 slot.setBackground(Color.WHITE);
 
-                // Add an identifier to the slot for debugging
-                slot.setName("Slot: Row " + row + ", Col " + col);
+                /* // Adding mouse listener for click events on the grid slots
+                slot.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        // Placeholder event logic when a slot is clicked
+                        // For example, show a dialog to book a time
+                        JOptionPane.showMessageDialog(null, "You clicked on a slot. Book the time here!");
 
-                // Ensure slots are accessible by the controller
-                scheduleGrid.add(slot);
+                        // Future: Here you can add your booking logic (e.g. open a booking form, or mark as booked)
+                        // You can use a dialog to confirm the booking or show a date and time selection.
+                    }
+                }); */
+
+                grid.add(slot);
             }
         }
-        return scheduleGrid;
-    }
-    // Getter for navigation buttons
-    public JButton getLeftArrow() {
-        return leftArrow;
+
+        return grid;
     }
 
-    public JButton getRightArrow() {
-        return rightArrow;
-    }
-
-    public JLabel getWeekLabel() {
-        return weekLabel;
-    }
-
-    public JPanel getScheduleGrid() {
-        return scheduleGrid;
-    }
-
-    public JLabel getDateRangeLabel() {
-        return dateRangeLabel;
-    }
 
     public static void main(String[] args) {
         new CalendarView();
