@@ -41,12 +41,6 @@ public class SearchLogic2 {
 
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new SearchLogic2();
-        });
-    }
-//
     private void initializeAll() {
 
         comboBox = new JComboBox<>();
