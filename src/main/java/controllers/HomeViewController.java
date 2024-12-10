@@ -12,6 +12,7 @@ public class HomeViewController {
 
     public void navigateToCalendarView() {
         homeView.setVisible(false); // Hide the current view
-        new CalendarView(); // Open the CalendarView
+        CalendarView view = new CalendarView(); // Open the CalendarView
+        new CalendarController(view);
     }
 }

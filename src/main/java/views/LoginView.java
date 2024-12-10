@@ -84,7 +84,7 @@ public class LoginView {
     private void addComponentsToContentPanel(JPanel contentPanel) {
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JLabel infoLabel = new JLabel("Please enter user as: YYMMDDXXXX");
+        JLabel infoLabel = new JLabel("Please enter user as: YYYYMMDDXXXX");
         infoLabel.setFont(new Font("Arial", Font.BOLD, 20));
         infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         usernameField.setMaximumSize(new Dimension(400, 30));

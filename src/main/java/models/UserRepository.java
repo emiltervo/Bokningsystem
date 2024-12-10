@@ -1,13 +1,13 @@
 package models;
+
 import java.sql.*;
 import java.util.ArrayList;
-/** * Repository class for User objects. */
+
 public class UserRepository {
     static ArrayList<User> userList = new ArrayList<>();
+
     /** Returns all users from the database */
     public static void getAllUsers() {
-        // ArrayList<User> userList = new ArrayList<>();
-
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "SELECT userID, name, password, email, role FROM users";
             PreparedStatement statement = conn.prepareStatement(sql);
@@ -24,24 +24,7 @@ public class UserRepository {
                 String email = resultSet.getString("email");
                 String role = resultSet.getString("role");
 
-
-
-
-                // Create specific objects based on role
-                switch (role.toLowerCase()) {
-                    case "doctor":
-                        userList.add(new Doctor(userID, name, password, email, role));
-                        break;
-                    case "patient":
-                        userList.add(new Patient(userID, name, password, email, role));
-                        break;
-                    case "secretary":
-                        userList.add(new Secretary(userID, name, password, email, role));
-                        break;
-                    default:
-                        System.out.println("Unknown role: " + role);
-                        break;
-                }
+                userList.add(UserFactory.createUser(userID, name, password, email, role));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,6 +43,7 @@ public class UserRepository {
         return null; // Return null if no user is found with the given userID
     }
 
+    /** Adds a new user to the database and userList */
     public static void addUser(ArrayList<String> userParams) {
         long userID = Long.parseLong(userParams.get(0));
         String name = userParams.get(1);
@@ -67,21 +51,7 @@ public class UserRepository {
         String email = userParams.get(3);
         String role = userParams.get(4);
 
-        // Create specific user object based on role
-        User newUser;
-        switch (role.toLowerCase()) {
-            case "doctor":
-                newUser = new Doctor(userID, name, password, email, role);
-                break;
-            case "patient":
-                newUser = new Patient(userID, name, password, email, role);
-                break;
-            case "secretary":
-                newUser = new Secretary(userID, name, password, email, role);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown role: " + role);
-        }
+        User newUser = UserFactory.createUser(userID, name, password, email, role);
 
         // Add user to the userList
         userList.add(newUser);
@@ -118,6 +88,4 @@ public class UserRepository {
     public static ArrayList<User> getUserList() {
         return userList;
     }
-
-
 }
