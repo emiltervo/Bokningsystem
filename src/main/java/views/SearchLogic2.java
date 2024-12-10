@@ -15,6 +15,13 @@ public class SearchLogic2 {
 
     static JComboBox<String> comboBox = new JComboBox<>();
 
+    static JDialog popup;
+
+    static  JPanel contentPanel = new JPanel();
+
+    static JLabel errorMessage = new JLabel();
+
+
     private static JLabel nameLabel = new JLabel("");
 
     private static JLabel userIDLabel = new JLabel("");
@@ -217,100 +224,190 @@ public class SearchLogic2 {
         frame.add(columnPanel, BorderLayout.CENTER);
     }
 
+    private static void successConfirmation() {
+
+        contentPanel.setLayout(new BorderLayout());
+
+        JPanel overlayPanel = new JPanel();
+        overlayPanel.setBackground(Color.GRAY);
+        overlayPanel.setOpaque(true);
+
+        contentPanel.add(overlayPanel, BorderLayout.CENTER);
+
+        overlayPanel.setVisible(true);
+
+        JButton fuckOffButton = new JButton();
+        fuckOffButton.setText("OK");
+        overlayPanel.add(fuckOffButton);
+        fuckOffButton.addActionListener(e -> popup.dispose());
+
+
+    }
+
+
+
+
+
     private static void createPopup(JFrame frame) {
-        // Create the popup dialog
-        JDialog popup = new JDialog(frame, "User Details", true);
-        popup.setSize(300, 600);
+
+        JDialog popup = new JDialog(frame, "Create new user", true);
+        popup.setSize(400, 300);
         popup.setResizable(false);
         popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        // Center the popup relative to the parent frame
+
         popup.setLocationRelativeTo(frame);
 
-        // Add content to the popup
-        JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10)); // Padding
 
-        // Use GridBagConstraints for precise layout
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(2, 2, 2, 2);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Add fields
-        // First Name
-        gbc.gridx = 0; gbc.gridy = 0;
-        contentPanel.add(new JLabel("First Name:"), gbc);
-        gbc.gridx = 1; gbc.gridy = 0;
+        JLabel headLabel = new JLabel();
+        headLabel.setText("New user");
+        headLabel.setFont(new Font("Content", Font.BOLD, 20));
+        contentPanel.add(headLabel);
+
+
+
+        gbc.gridx = 0; gbc.gridy = 1;
+
+        contentPanel.add(new JLabel("First name"), gbc);
+        contentPanel.setFont(new Font("Content", Font.BOLD, 20));
+
+        gbc.gridx = 1; gbc.gridy = 1;
         JTextField firstNameField = new JTextField(15);
         contentPanel.add(firstNameField, gbc);
 
-        // Surname
-        gbc.gridx = 0; gbc.gridy = 1;
-        contentPanel.add(new JLabel("Surname:"), gbc);
-        gbc.gridx = 1; gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 2;
+        contentPanel.add(new JLabel("Surname"), gbc);
+        gbc.gridx = 1; gbc.gridy = 2;
         JTextField surnameField = new JTextField(15);
         contentPanel.add(surnameField, gbc);
 
-        // User ID
-        gbc.gridx = 0; gbc.gridy = 2;
-        contentPanel.add(new JLabel("User ID:"), gbc);
-        gbc.gridx = 1; gbc.gridy = 2;
+        gbc.gridx = 0; gbc.gridy = 3;
+        contentPanel.add(new JLabel("Personnummer"), gbc);
+        gbc.gridx = 1; gbc.gridy = 3;
         JTextField userIDField = new JTextField(15);
         contentPanel.add(userIDField, gbc);
 
-        // Email
-        gbc.gridx = 0; gbc.gridy = 3;
-        contentPanel.add(new JLabel("Email:"), gbc);
-        gbc.gridx = 1; gbc.gridy = 3;
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        contentPanel.add(new JLabel("Email"), gbc);
+        gbc.gridx = 1; gbc.gridy = 4;
         JTextField emailField = new JTextField(15);
         contentPanel.add(emailField, gbc);
 
-        // Role
-        gbc.gridx = 0; gbc.gridy = 4;
-        contentPanel.add(new JLabel("Role:"), gbc);
-        gbc.gridx = 1; gbc.gridy = 4;
-        JTextField roleField = new JTextField(15);
-        contentPanel.add(roleField, gbc);
 
-        // Add Submit and Cancel buttons
+        gbc.gridx = 0; gbc.gridy = 5;
+        contentPanel.add(new JLabel("Role"), gbc);
+        gbc.gridx = 1; gbc.gridy = 5;
+
+        JComboBox roleBox = new JComboBox();
+        roleBox.addItem("patient");
+        roleBox.addItem("doctor");
+        contentPanel.add(roleBox, gbc);
+
         JPanel buttonPanel = new JPanel();
         JButton submitButton = new JButton("Submit");
         JButton cancelButton = new JButton("Cancel");
         buttonPanel.add(submitButton);
         buttonPanel.add(cancelButton);
 
-        gbc.gridx = 0; gbc.gridy = 5;
+        errorMessage.setText("");
+        errorMessage.setVisible(false);
+
+        gbc.gridx = 0; gbc.gridy = 7;
+        gbc.gridwidth = 2; // Span across both columns
+        gbc.anchor = GridBagConstraints.CENTER;
+        contentPanel.add(errorMessage, gbc);
+
+
+        gbc.gridx = 0; gbc.gridy = 6;
         gbc.gridwidth = 2; // Span across both columns
         gbc.anchor = GridBagConstraints.CENTER;
         contentPanel.add(buttonPanel, gbc);
 
-        // Add action listeners for buttons
         submitButton.addActionListener(e -> {
-            String firstName = firstNameField.getText();
-            String surname = surnameField.getText();
-            String userID = userIDField.getText();
-            String email = emailField.getText();
-            String role = roleField.getText();
 
-            JOptionPane.showMessageDialog(popup,
-                    "Submitted Info:\nFirst Name: " + firstName +
-                            "\nSurname: " + surname +
-                            "\nUser ID: " + userID +
-                            "\nEmail: " + email +
-                            "\nRole: " + role);
+            String name =  firstNameField.getText();
+            String surname = surnameField.getText();
+            String personnummer = userIDField.getText();
+            String email = emailField.getText();
+            String role = roleBox.getSelectedItem().toString();
+
+            isValid(name, surname, personnummer, email, role);
+
         });
 
         cancelButton.addActionListener(e -> popup.dispose());
 
-        // Add the content panel to the dialog
         popup.add(contentPanel);
 
-        // Display the popup
         popup.setVisible(true);
     }
 
+    private static void shipNewUser(String name, String surname, String personnummer, String email, String role) {
+        ArrayList<String> userToShip = new ArrayList<>();
 
+        userToShip.add(personnummer);
+        userToShip.add(name + " " + surname);
+        userToShip.add(email);
+        userToShip.add(role);
+
+        System.out.println("Ready to add to database:" + " " + userToShip);
+        successConfirmation();
+
+
+
+    }
+
+    private static void isValid(String name, String surname, String personnummer, String email, String role) {
+
+        String validName = null;
+        String validSurname = null;
+        String validPersonnummer = null;
+        String validEmail = null;
+        String validRole = null;
+
+        if (!name.isEmpty() && (name.matches("[a-zA-Z]+"))) {
+
+            validName = name;
+        }
+
+        if (!surname.isEmpty() && (name.matches("[a-zA-Z]+"))) {
+
+            validSurname = surname;
+        }
+
+        if ((personnummer.length() == 10) && (personnummer.matches(("\\d+")))) {
+
+            validPersonnummer = personnummer;
+        }
+
+        if (email.contains("@")) {
+
+            validEmail = email;
+        }
+
+        if (!role.isEmpty()) {
+
+            validRole = role;
+
+        }
+
+        if (validName != null && validSurname != null && validPersonnummer != null
+                && validEmail != null && validRole != null) {
+            shipNewUser(validName, validSurname, validPersonnummer, validEmail, validRole);
+        } else {
+            errorMessage.setText("Some entries are invalid. Try again!");
+            errorMessage.setFont(new Font("Arial", Font.PLAIN, 15));
+            errorMessage.setVisible(true);
+        }
+    }
 
 
     private static void createSearchPanel() {
