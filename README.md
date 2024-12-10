@@ -6,7 +6,7 @@ Bokningsystem is a booking system designed to manage patient appointments at a m
 
 - **User Authentication**: Secure login system for users.
 - **Booking Management**: Book and cancel patient appointments with ease.
-- **Data Persistence**: Save and retrieve booking and facility data between sessions using JSON files.
+- **Data Persistence**: Save and retrieve booking and facility data between sessions using SQL files.
 - **Validation**: Ensure data integrity through comprehensive input validation.
 
 ## Technical Specifications
@@ -30,18 +30,19 @@ Bokningsystem is a booking system designed to manage patient appointments at a m
 git clone https://github.com/emiltervo/Bokningsystem.git
 ```
 2. **Open the project**: Open the project in your IDE.
-3. **Set up the database**: Create a new database in PostgresSQL. Update the database connection details in the `DatabaseConnection` class.
-4. **Run the application**: Run the `Main` class to start the application.
-5. **Login**: Use the following credentials to log in.
+3. **Set up the database**: Create a new database in PostgresSQL. Update the database connection details in the `dbconfig.properties` class.
+4. **Build the database**: Run the database by running this file `database.sql`.
+5. **Run the application**: Run the `Main` class to start the application.
+6. **Login**: Use the following credentials to log in.
    - Secretary
-     - Username: secretary
-     - Password: secretary
+     - Username: 198707912345
+     - Password: patientPass93
    - Doctor
-     - Username: doctor
-     - Password: doctor
+     - Username: 197607182345
+     - Password: patientPass6
    - Patient
-     - Username: patient
-     - Password: patient
+     - Username: 198008056789
+     - Password: patientPass19
 6. **Enjoy!**: You can now use the booking system.
 
 
