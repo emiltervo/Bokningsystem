@@ -5,12 +5,12 @@ package models;
 public class Appointment {
     private String startTime;
     private String date;
-    private int patuserID;
-    private int docuserID;
-    private int lengthMinutes;
-    private int room;
+    private long patuserID;
+    private long docuserID;
+    private long lengthMinutes;
+    private long room;
 
-    public Appointment(String startTime, String date, int patuserID, int docuserID, int lengthMinutes, int room) {
+    public Appointment(String startTime, String date, long patuserID, long docuserID, long lengthMinutes, long room) {
         this.startTime = startTime;
         this.date = date;
         this.patuserID = patuserID;
@@ -35,23 +35,23 @@ public class Appointment {
         this.date = date;
     }
 
-    public int getPatuserID() {
+    public long getPatuserID() {
         return patuserID;
     }
 
-    public void setPatuserID(int patuserID) {
+    public void setPatuserID(long patuserID) {
         this.patuserID = patuserID;
     }
 
-    public int getDocuserID() {
+    public long getDocuserID() {
         return docuserID;
     }
 
-    public void setDocuserID(int docuserID) {
+    public void setDocuserID(long docuserID) {
         this.docuserID = docuserID;
     }
 
-    public int getLengthMinutes() {
+    public long getLengthMinutes() {
         return lengthMinutes;
     }
 
@@ -59,7 +59,7 @@ public class Appointment {
         this.lengthMinutes = lengthMinutes;
     }
 
-    public int getRoom() {
+    public long getRoom() {
         return room;
     }
 

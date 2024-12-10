@@ -28,7 +28,7 @@ CREATE TABLE secretary (
 );
 CREATE TABLE rooms(
     roomNumber INT PRIMARY KEY,
-    roomDoctor INT NOT NULL,
+    roomDoctor BIGINT NOT NULL,
     FOREIGN KEY (roomDoctor) REFERENCES doctor(userID)
 );
 CREATE TABLE appointments(
@@ -78,8 +78,8 @@ INSERT INTO users (userID, name, password, email, role) VALUES
     ('198008109876', 'Daniel Anderson', 'patientPass9', 'daniel.anderson@example.com', 'patient'),
     ('197505134567', 'Laura Thomas', 'patientPass10', 'laura.thomas@example.com', 'patient'),
     ('196501198765', 'Robert Jackson', 'patientPass11', 'robert.jackson@example.com', 'patient'),
-    ('197703176543', 'Linda White', 'patientPass12', 'linda.white@example.com', 'patient'),
-    ('198707212345', 'William Harris', 'patientPass13', 'william.harris@example.com', 'patient'),
+    ('197703166543', 'Linda White', 'patientPass12', 'linda.white@example.com', 'patient'),
+    ('198707242345', 'William Harris', 'patientPass13', 'william.harris@example.com', 'patient'),
     ('198512156789', 'Barbara Martin', 'patientPass14', 'barbara.martin@example.com', 'patient'),
     ('198611198765', 'Richard Thompson', 'patientPass15', 'richard.thompson@example.com', 'patient'),
     ('197606234567', 'Susan Garcia', 'patientPass16', 'susan.garcia@example.com', 'patient'),
@@ -88,8 +88,8 @@ INSERT INTO users (userID, name, password, email, role) VALUES
     ('198008056789', 'Charles Clark', 'patientPass19', 'charles.clark@example.com', 'patient'),
     ('197505098765', 'Nancy Rodriguez', 'patientPass20', 'nancy.rodriguez@example.com', 'patient'),
     ('196501134567', 'Thomas Lewis', 'patientPass21', 'thomas.lewis@example.com', 'patient'),
-    ('197704176543', 'Betty Lee', 'patientPass22', 'betty.lee@example.com', 'patient'),
-    ('198711312345', 'Christopher Walker', 'patientPass23', 'christopher.walker@example.com', 'patient'),
+    ('197703176543', 'Betty Lee', 'patientPass22', 'betty.lee@example.com', 'patient'),
+    ('198707212345', 'Christopher Walker', 'patientPass23', 'christopher.walker@example.com', 'patient'),
     ('198512256789', 'Sandra Hall', 'patientPass24', 'sandra.hall@example.com', 'patient'),
     ('198611298765', 'Matthew Allen', 'patientPass25', 'matthew.allen@example.com', 'patient'),
     ('197606334567', 'Ashley Young', 'patientPass26', 'ashley.young@example.com', 'patient'),

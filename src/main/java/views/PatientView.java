@@ -63,13 +63,11 @@ public class PatientView {
                 // Called when text is inserted (e.g., user types something)
                 textAreaListener(comboBox);
             }
-
             @Override
             public void removeUpdate(DocumentEvent e) {
                 // Called when text is removed (e.g., user deletes something)
                 textAreaListener(comboBox);
             }
-
             @Override
             public void changedUpdate(DocumentEvent e) {
                 // This method is used for styled text (rarely used with plain text)

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class AppointmentFactory {
     /** Creates an appointment object */
-    public static Appointment createAppointment(String startTime, String date, int patuserID, int docuserID, int lengthMinutes, int room) {
+    public static Appointment createAppointment(String startTime, String date, long patuserID, long docuserID, long lengthMinutes, long room) {
         return new Appointment(startTime, date, patuserID, docuserID, lengthMinutes, room);
     }
     /** Inserts appointments into database based on values of the appointment object */
@@ -20,10 +20,10 @@ public class AppointmentFactory {
 
             pstmt.setString(1, appointment.getStartTime());
             pstmt.setString(2, appointment.getDate());
-            pstmt.setInt(3, appointment.getPatuserID());
-            pstmt.setInt(4, appointment.getDocuserID());
-            pstmt.setInt(5, appointment.getLengthMinutes());
-            pstmt.setInt(6, appointment.getRoom());
+            pstmt.setLong(3, appointment.getPatuserID());
+            pstmt.setLong(4, appointment.getDocuserID());
+            pstmt.setLong(5, appointment.getLengthMinutes());
+            pstmt.setLong(6, appointment.getRoom());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -42,10 +42,10 @@ public class AppointmentFactory {
             while (resultSet.next()) {
                 String startTime = resultSet.getString("startTime");
                 String date = resultSet.getString("date");
-                int patuserID = resultSet.getInt("patuserID");
-                int docuserID = resultSet.getInt("docuserID");
-                int lengthMinutes = resultSet.getInt("lengthminutes");
-                int room = resultSet.getInt("room");
+                long patuserID = resultSet.getLong("patuserID");
+                long docuserID = resultSet.getLong("docuserID");
+                long lengthMinutes = resultSet.getLong("lengthminutes");
+                long room = resultSet.getLong("room");
 
 
                 appointmentList.add(createAppointment(startTime, date, patuserID, docuserID, lengthMinutes, room));

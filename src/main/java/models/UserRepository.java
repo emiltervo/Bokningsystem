@@ -61,7 +61,7 @@ public class UserRepository {
     }
 
     public static void addUser(ArrayList<String> userParams) {
-        int userID = Integer.parseInt(userParams.get(0));
+        long userID = Long.parseLong(userParams.get(0));
         String name = userParams.get(1);
         String password = userParams.get(2);
         String email = userParams.get(3);
@@ -90,7 +90,7 @@ public class UserRepository {
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "INSERT INTO users (userID, name, password, email, role) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setInt(1, userID);
+                pstmt.setLong(1, userID);
                 pstmt.setString(2, name);
                 pstmt.setString(3, password);
                 pstmt.setString(4, email);
@@ -102,7 +102,7 @@ public class UserRepository {
             String roleTable = role.toLowerCase();
             sql = "INSERT INTO " + roleTable + " (userID, name, password, email, role) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setInt(1, userID);
+                pstmt.setLong(1, userID);
                 pstmt.setString(2, name);
                 pstmt.setString(3, password);
                 pstmt.setString(4, email);

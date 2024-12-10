@@ -5,16 +5,16 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 public class Booking {
-    private int id;
+    private long id;
     private Date date;
     private Time time;
-    private int doctorId;
-    private int userId;
-    private int secretaryId;
+    private long doctorId;
+    private long userId;
+    private long secretaryId;
     private Timestamp createdAt;
 
     // Constructors, getters, and setters
-    public Booking(int id, Date date, Time time, int doctorId, int userId, int secretaryId, Timestamp createdAt) {
+    public Booking(long id, Date date, Time time, long doctorId, long userId, long secretaryId, Timestamp createdAt) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -25,11 +25,11 @@ public class Booking {
     }
 
     // Getters and setters
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -49,27 +49,27 @@ public class Booking {
         this.time = time;
     }
 
-    public int getDoctorId() {
+    public long getDoctorId() {
         return doctorId;
     }
 
-    public void setDoctorId(int doctorId) {
+    public void setDoctorId(long doctorId) {
         this.doctorId = doctorId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public int getSecretaryId() {
+    public long getSecretaryId() {
         return secretaryId;
     }
 
-    public void setSecretaryId(int secretaryId) {
+    public void setSecretaryId(long secretaryId) {
         this.secretaryId = secretaryId;
     }
 
