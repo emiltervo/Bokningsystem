@@ -2,5 +2,5 @@ package models;
 
 
 public interface AuthInterface {
-    boolean login(int userID, String password);
+    boolean login(long userID, String password);
 }

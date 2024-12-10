@@ -12,9 +12,9 @@ public class LoginView {
     private JLabel errorLabel = new JLabel("");
     private JPasswordField passwordField = new JPasswordField();
     private loginController controller;
-    protected static int currentUser;
+    protected static long currentUser;
 
-    public static int getCurrentUser() {
+    public static long getCurrentUser() {
         return currentUser;
     }
 
@@ -31,7 +31,7 @@ public class LoginView {
         frame.setVisible(true);
 
         loginButton.addActionListener(e -> {
-            int userID = Integer.parseInt(usernameField.getText());
+            long userID = Long.parseLong(usernameField.getText());
             String password = new String(passwordField.getPassword());
             if (controller.handleLogin(userID, password)) {
                 currentUser = userID;

@@ -12,7 +12,7 @@ public class loginController {
         this.loginView.setController(this);
     }
 
-    public boolean handleLogin(int userID, String password) {
+    public boolean handleLogin(long userID, String password) {
         User user = UserRepository.getUserByID(userID);
         if (user != null && user.login(userID, password)) {
             if (user.getRole().equals("doctor") || user.getRole().equals("secretary")) {

@@ -18,7 +18,7 @@ public class UserRepository {
             }
 
             while (resultSet.next()) {
-                int userID = resultSet.getInt("userID");
+                long userID = resultSet.getLong("userID");
                 String name = resultSet.getString("name");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
@@ -51,7 +51,7 @@ public class UserRepository {
     }
 
     /** Returns a specific user from the database */
-    public static User getUserByID(int userID) {
+    public static User getUserByID(long userID) {
         for (User user : userList) {
             if (user.getUserID() == userID) {
                 return user;

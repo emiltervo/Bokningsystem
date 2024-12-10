@@ -165,7 +165,7 @@ public class SearchLogic2 {
         profileMenu.add(logout);
 
         myAccount.addActionListener(e -> {
-            int userID = LoginView.getCurrentUser();
+            long userID = LoginView.getCurrentUser();
             User user = UserRepository.getUserByID(userID);
             if (user != null) {
                 JOptionPane.showMessageDialog(frame, "User Info: " + user.toString());
@@ -510,8 +510,8 @@ public class SearchLogic2 {
 
         for (User user : users) {
             String fullName = user.getName();
-            int userID = user.getUserID();
-            String userIDToString = Integer.toString(userID);
+            long userID = user.getUserID();
+            String userIDToString = Long.toString(userID);
 
             nameAndId.add(fullName + " " + userIDToString);
         }
@@ -526,7 +526,7 @@ public class SearchLogic2 {
         for (User user : users) {
 
             String fullName = user.getName();
-            int userID = user.getUserID();
+            long userID = user.getUserID();
             comboBox.addItem(fullName + " " + userID);
 
         }

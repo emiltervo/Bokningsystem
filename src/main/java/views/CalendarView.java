@@ -74,7 +74,7 @@ public class CalendarView {
         myAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int userID = LoginView.getCurrentUser();
+                long userID = LoginView.getCurrentUser();
                 User user = UserRepository.getUserByID(userID);
                 if (user != null) {
                     JOptionPane.showMessageDialog(calendarFrame, "User Info: " + user.toString());

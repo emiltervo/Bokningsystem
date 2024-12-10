@@ -10,7 +10,7 @@ public class Doctor extends User {
     private String specialty;
     private List<String> freetimes;
 
-    public Doctor(int userID, String name, String password, String email, String role/* ,String specialty*/) {
+    public Doctor(long userID, String name, String password, String email, String role/* ,String specialty*/) {
         super(userID, name, password, email, role);
         this.specialty = specialty;
         this.freetimes = new ArrayList<>();

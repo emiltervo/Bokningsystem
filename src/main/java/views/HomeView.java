@@ -70,7 +70,7 @@ public class HomeView {
         profileMenu.add(logout);
 
         myAccount.addActionListener(e -> {
-            int userID = LoginView.getCurrentUser();
+            long userID = LoginView.getCurrentUser();
             User user = UserRepository.getUserByID(userID);
             if (user != null) {
                 JOptionPane.showMessageDialog(frame, "User Info: " + user.toString());

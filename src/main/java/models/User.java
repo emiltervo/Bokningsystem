@@ -8,13 +8,13 @@ import java.sql.SQLException;
 
 abstract public class User implements AuthInterface {
     // userID is personal number
-    private int userID;
+    private long userID;
     private String name;
     private String password;
     private String email;
     private String role;
 
-    public User(int userID, String name, String password, String email, String role) {
+    public User(long userID, String name, String password, String email, String role) {
         this.userID = userID;
         this.name = name;
         this.password = password;
@@ -23,18 +23,18 @@ abstract public class User implements AuthInterface {
     }
     /** Login functionality for users. */
     @Override
-    public boolean login(int userID, String password) {
+    public boolean login(long userID, String password) {
         String sql = "SELECT * FROM users WHERE userID = ? AND password = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, userID);
+            pstmt.setLong(1, userID);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                this.userID = rs.getInt("userID");
+                this.userID = rs.getLong("userID");
                 this.name = rs.getString("name");
                 this.password = rs.getString("password");
                 this.email = rs.getString("email");
@@ -51,7 +51,7 @@ abstract public class User implements AuthInterface {
     }
 
     // Setters
-    public void setUserID(int value) {
+    public void setUserID(long value) {
         userID = value;
     }
 
@@ -68,7 +68,7 @@ abstract public class User implements AuthInterface {
     }
 
     // Getters
-    public int getUserID() {
+    public long getUserID() {
         return userID;
     }
 
