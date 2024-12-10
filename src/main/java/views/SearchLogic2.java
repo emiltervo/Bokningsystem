@@ -53,7 +53,7 @@ public class SearchLogic2 {
         populateBox();
 
     }
-
+//
     private void initializeAll() {
 
         comboBox = new JComboBox<>();
