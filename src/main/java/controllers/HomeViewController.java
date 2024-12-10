@@ -1,6 +1,7 @@
 package controllers;
 
 import views.CalendarView;
+import views.CreateViews;
 import views.HomeView;
 
 public class HomeViewController {
@@ -11,7 +12,7 @@ public class HomeViewController {
     }
 
     public void navigateToCalendarView() {
-        homeView.setVisible(false); // Hide the current view
-        new CalendarView(); // Open the CalendarView
+        //homeView.setVisible(false); // Hide the current view
+        //CreateViews.getInstance().getCalendarView().setVisible(true); // Open the CalendarView
     }
 }

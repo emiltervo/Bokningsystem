@@ -100,25 +100,7 @@ public class CalendarView {
     }
 
     private void createBreadcrumbs() {
-        JPanel columnPanel = new JPanel();
-        columnPanel.setPreferredSize(new Dimension(1200, 100));
-        columnPanel.setBackground(Color.LIGHT_GRAY);
-        columnPanel.setLayout(new GridBagLayout());
-
-        JPanel breadcrumbPanel = new JPanel();
-        breadcrumbPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        breadcrumbPanel.setBackground(Color.WHITE);
-        breadcrumbPanel.setPreferredSize(new Dimension(600, 50));
-
-        String[] breadcrumbTitles = {"Hem", "Lediga Tider", "Recept", "Patienter"};
-        for (String title : breadcrumbTitles) {
-            JLabel breadcrumb = new JLabel(title);
-            breadcrumb.setFont(new Font("Arial", Font.PLAIN, 18));
-            breadcrumbPanel.add(breadcrumb);
-        }
-
-        columnPanel.add(breadcrumbPanel);
-        calendarFrame.add(columnPanel, BorderLayout.CENTER);
+        ViewUtils.createBreadcrumbs(calendarFrame);
     }
 
     private void createMainContent() {
@@ -312,5 +294,10 @@ public class CalendarView {
 
     public JLabel getDateRangeLabel() {
         return dateRangeLabel;
+    }
+
+    public void setVisible(boolean visible) {
+        calendarFrame.setVisible(visible);
+
     }
 }

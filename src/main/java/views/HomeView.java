@@ -5,6 +5,7 @@ import models.User;
 import models.UserRepository;
 
 import javax.swing.*;
+import javax.swing.text.View;
 import java.awt.*;
 
 public class HomeView {
@@ -84,54 +85,8 @@ public class HomeView {
         headPanel.add(profileButton);
     }
 
-    private void createBreadcrumbs() {
-        columnPanel = new JPanel();
-        columnPanel.setPreferredSize(new Dimension(1200, 100));
-        columnPanel.setBackground(Color.LIGHT_GRAY);
-        columnPanel.setLayout(new GridBagLayout());
-
-        JPanel breadcrumbPanel = new JPanel(new GridBagLayout());
-        breadcrumbPanel.setBackground(Color.WHITE);
-        breadcrumbPanel.setPreferredSize(new Dimension(800, 50)); // Adjusted width for four boxes
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(0, 10, 0, 10);
-        gbc.anchor = GridBagConstraints.CENTER;
-
-        String[] breadcrumbTitles = {"Home", "Calendar", "Recipes", "Patients"};
-        for (String title : breadcrumbTitles) {
-            if (title.equals("Home")) {
-                JLabel activeLabel = new JLabel(title, SwingConstants.CENTER);
-                activeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-                activeLabel.setOpaque(true);
-                activeLabel.setBackground(new Color(173, 216, 230)); // Light blue background for active
-                activeLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-                activeLabel.setPreferredSize(new Dimension(150, 40)); // Adjusted width
-                breadcrumbPanel.add(activeLabel, gbc);
-            } else {
-                JButton breadcrumb = new JButton(title);
-                breadcrumb.setFont(new Font("Arial", Font.PLAIN, 18));
-                breadcrumb.setFocusPainted(false);
-                breadcrumb.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                breadcrumb.setBackground(Color.WHITE);
-                breadcrumb.setPreferredSize(new Dimension(150, 40)); // Adjusted width
-                breadcrumb.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-                if (title.equals("Calendar")) {
-                    breadcrumb.addActionListener(e -> {
-                        controller.navigateToCalendarView();
-                    });
-                }
-
-                breadcrumbPanel.add(breadcrumb, gbc);
-            }
-            gbc.gridx++;
-        }
-
-        columnPanel.add(breadcrumbPanel);
-        frame.add(columnPanel, BorderLayout.CENTER);
+    private JPanel createBreadcrumbs() {
+        return ViewUtils.createBreadcrumbs(frame);
     }
 
     private void createMainContent() {

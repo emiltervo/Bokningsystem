@@ -118,7 +118,7 @@ public class SearchLogic2 {
 
 
     private static void initializeFrame() {
-        frame = new JFrame("Home Page");
+        frame = new JFrame("Patient Page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout());
@@ -199,23 +199,9 @@ public class SearchLogic2 {
         for (String title : breadcrumbTitles) {
             if (title.equals("Home")) {
                 JLabel activeLabel = new JLabel(title, SwingConstants.CENTER);
-                activeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-                activeLabel.setOpaque(true);
-                activeLabel.setBackground(new Color(173, 216, 230)); // Light blue background for active
-                activeLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-                activeLabel.setPreferredSize(new Dimension(150, 40)); // Adjusted width
-                breadcrumbPanel.add(activeLabel, gbc);
+                ViewUtils.setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
             } else {
-                JButton breadcrumb = new JButton(title);
-                breadcrumb.setFont(new Font("Arial", Font.PLAIN, 18));
-                breadcrumb.setFocusPainted(false);
-                breadcrumb.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                breadcrumb.setBackground(Color.WHITE);
-                breadcrumb.setPreferredSize(new Dimension(150, 40)); // Adjusted width
-                breadcrumb.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-
-                breadcrumbPanel.add(breadcrumb, gbc);
+                ViewUtils.SetBreadcrumbButton(breadcrumbPanel, gbc, title);
             }
             gbc.gridx++;
         }
@@ -594,6 +580,10 @@ public class SearchLogic2 {
             }
             comboBox.showPopup();
         }
+    }
+
+    public void setVisible(boolean visible) {
+        frame.setVisible(visible);
     }
 }
 
