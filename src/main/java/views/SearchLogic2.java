@@ -349,6 +349,7 @@ public class SearchLogic2 {
 
 
 
+
     }
 
     private static void isValid(String name, String surname, String personnummer, String email, String role) {

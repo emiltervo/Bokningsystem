@@ -23,7 +23,7 @@ public class HomeView {
         frame.setVisible(true);
     }
 
-    private void initializeFrame() {
+    public void initializeFrame() {
         frame = new JFrame("Home Page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);

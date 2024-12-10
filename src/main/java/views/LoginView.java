@@ -30,6 +30,7 @@ public class LoginView {
         frame.add(contentPanel, BorderLayout.CENTER);
         frame.setVisible(true);
 
+
         loginButton.addActionListener(e -> {
             long userID = Long.parseLong(usernameField.getText());
             String password = new String(passwordField.getPassword());
@@ -40,7 +41,7 @@ public class LoginView {
         });
     }
 
-    private JFrame createFrame() {
+    public JFrame createFrame() {
         JFrame frame = new JFrame("Login Page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
@@ -83,7 +84,7 @@ public class LoginView {
     private void addComponentsToContentPanel(JPanel contentPanel) {
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JLabel infoLabel = new JLabel("Please enter user as: YYMMDDXXXX");
+        JLabel infoLabel = new JLabel("Please enter user as: YYYYMMDDXXXX");
         infoLabel.setFont(new Font("Arial", Font.BOLD, 20));
         infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         usernameField.setMaximumSize(new Dimension(400, 30));

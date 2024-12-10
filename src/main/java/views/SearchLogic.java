@@ -68,29 +68,15 @@ public class SearchLogic {
             populatePatient();
         });
 
-        searchText.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                searchBoxChecker(searchText.getText());
-            }
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                searchBoxChecker(searchText.getText());
-            }
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                searchBoxChecker(searchText.getText());
-            }
-        });
 
 
-       List<List<String>> test = docuRead("src/main/resources/patientlist.txt");
-       populateComboBox(test);
+        List<List<String>> test = docuRead("src/main/resources/patientlist.txt");
+        populateComboBox(test);
 
 
 
 
-}
+    }
     public static List<List<String>> docuRead(String path){
 
         try {
