@@ -32,26 +32,19 @@ public class SearchLogic2 {
 
     public SearchLogic2() {
 
-        initializeFrame();
-        createHeader();
         initializeAll();
+        addUserInterface();
         startListeners();
-        createBreadcrumbs();
-        createSearchPanel();
-        createUserPanel();
-
-        initializeFrame();
-        createHeader();
-        createBreadcrumbs();
-        createSearchPanel();
-        framer();
-
-        frame.setLayout(new FlowLayout());
-        setVisible();
 
         getAllUsers();
         populateBox();
 
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new SearchLogic2();
+        });
     }
 //
     private void initializeAll() {
@@ -118,12 +111,14 @@ public class SearchLogic2 {
         }
     }
     private void initializeFrame() {
-        frame = new JFrame("Home Page");
+        frame = new JFrame("Patient page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout());
+        frame.setLayout(new FlowLayout());
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
     private void createHeader() {
         headPanel = new JPanel(null);
@@ -146,6 +141,7 @@ public class SearchLogic2 {
         };
         imagePanel.setBounds(0, 0, 1200, 125);
         headPanel.add(imagePanel);
+
 
         JButton profileButton = new JButton();
         profileButton.setBounds(1090, 0, 110, 125);
@@ -176,6 +172,7 @@ public class SearchLogic2 {
 
         profileButton.addActionListener(e -> profileMenu.show(profileButton, 0, profileButton.getHeight()));
         headPanel.add(profileButton);
+        headPanel.setVisible(true);
     }
     private void createBreadcrumbs() {
         columnPanel = new JPanel();
@@ -223,12 +220,11 @@ public class SearchLogic2 {
     }
     private void createPopup(JFrame frame) {
 
-        JDialog popup = new JDialog(frame, "Create new user", true);
+
+        popup = new JDialog(frame, "Create new user", true); // Use the field, not a local variable
         popup.setSize(400, 300);
         popup.setResizable(false);
         popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-
         popup.setLocationRelativeTo(frame);
 
         contentPanel.setLayout(new GridBagLayout());
@@ -286,6 +282,7 @@ public class SearchLogic2 {
         JComboBox roleBox = new JComboBox();
         roleBox.addItem("patient");
         roleBox.addItem("doctor");
+        roleBox.addItem("secretary");
         contentPanel.add(roleBox, gbc);
 
         JPanel buttonPanel = new JPanel();
@@ -294,23 +291,8 @@ public class SearchLogic2 {
         buttonPanel.add(submitButton);
         buttonPanel.add(cancelButton);
 
-        errorMessage.setText("");
-        errorMessage.setVisible(false);
-
-        gbc.gridx = 0; gbc.gridy = 7;
-        gbc.gridwidth = 2; // Span across both columns
-        gbc.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(errorMessage, gbc);
-
-
-        gbc.gridx = 0; gbc.gridy = 7;
-        gbc.gridwidth = 2; // Span across both columns
-        gbc.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(buttonPanel, gbc);
-
         submitButton.addActionListener(e -> {
-
-            String name =  firstNameField.getText();
+            String name = firstNameField.getText();
             String surname = surnameField.getText();
             String personnummer = userIDField.getText();
             String password = passwordField.getText();
@@ -318,17 +300,28 @@ public class SearchLogic2 {
             String role = roleBox.getSelectedItem().toString();
 
             isValid(name, surname, personnummer, password, email, role);
-
         });
 
-        cancelButton.addActionListener(e -> popup.dispose());
+        errorMessage.setText("");
+        errorMessage.setVisible(false);
+
+        gbc.gridx = 0; gbc.gridy = 8;
+        gbc.gridwidth = 2; // Span across both columns
+        gbc.anchor = GridBagConstraints.CENTER;
+        contentPanel.add(errorMessage, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 7;
+        gbc.gridwidth = 2; // Span across both columns
+        gbc.anchor = GridBagConstraints.CENTER;
+        contentPanel.add(buttonPanel, gbc);
 
         popup.add(contentPanel);
 
+        cancelButton.addActionListener(e -> popup.dispose());
+
         popup.setVisible(true);
     }
-
-    private static void shipNewUser(String name, String surname, String personnummer, String password, String email, String role) {
+    private void shipNewUser(String name, String surname, String personnummer, String password, String email, String role) {
         ArrayList<String> userToShip = new ArrayList<>();
 
         userToShip.add(personnummer);
@@ -338,13 +331,7 @@ public class SearchLogic2 {
         userToShip.add(role);
 
         System.out.println("Ready to add to database:" + " " + userToShip);
-        addUser(userToShip);
-
-
-
-
     }
-
     private void isValid(String name, String surname, String personnummer, String password, String email, String role) {
 
         String validName = null;
@@ -394,6 +381,18 @@ public class SearchLogic2 {
             errorMessage.setVisible(true);
         }
     }
+    private void addUserInterface() {
+
+
+        initializeFrame();
+        createHeader();
+        createBreadcrumbs();
+        createSearchPanel();
+        createUserPanel();
+
+        frame.setVisible(true);
+
+    }
 
 
     private void createSearchPanel() {
@@ -412,6 +411,7 @@ public class SearchLogic2 {
         gbc.insets = new Insets(10, 10, 10, 10); // Adding some padding around components
         gbc.anchor = GridBagConstraints.WEST;
         searchPanel.add(searchLabel, gbc);
+        searchPanel.setVisible(true);
 
         // Set the text field at the next grid position
         gbc.gridx = 1;
@@ -432,6 +432,7 @@ public class SearchLogic2 {
         gbc.gridy = 0;
         searchPanel.add(newUser, gbc);
 
+
         // Add the searchPanel to the frame
         frame.add(searchPanel, BorderLayout.CENTER);
     }
@@ -443,7 +444,6 @@ public class SearchLogic2 {
 
 
     public void framer() {
-        // Don't create a new frame; use the existing frame
         JPanel userPanel = createUserPanel();
         frame.add(userPanel);  // Add the user panel to the existing frame
         frame.revalidate();  // Ensure the frame updates its layout
