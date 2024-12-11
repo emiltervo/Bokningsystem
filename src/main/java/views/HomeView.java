@@ -18,7 +18,7 @@ public class HomeView {
     public HomeView() {
         initializeFrame();
         createHeader();
-        createBreadcrumbs();
+        this.columnPanel = createBreadcrumbs();
         createMainContent();
         frame.setVisible(true);
     }
