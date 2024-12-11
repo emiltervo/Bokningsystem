@@ -2,96 +2,90 @@ package views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import models.*;
-
+import static models.UserRepository.*;
 import static models.UserRepository.*;
 
 public class SearchLogic2 {
+    private JComboBox<String> comboBox;
+    private JDialog popup;
+    private  JPanel contentPanel;
+    private JLabel errorMessage;
+    private JLabel nameLabel;
+    private JLabel userIDLabel;
+    private JLabel emailLabel;
+    private JLabel roleLabel;
+    private JFrame frame;
+    private JPanel headPanel;
+    private JPanel columnPanel;
+    private JLabel searchLabel;
+    private JTextField searchText;
+    private JButton button;
+    private JButton newUser;
+    private JPanel searchPanel;
 
-    static JComboBox<String> comboBox = new JComboBox<>();
+    public SearchLogic2() {
 
-    static JDialog popup;
-
-    static  JPanel contentPanel = new JPanel();
-
-    static JLabel errorMessage = new JLabel();
-
-
-    private static JLabel nameLabel = new JLabel("");
-
-    private static JLabel userIDLabel = new JLabel("");
-
-    private static JLabel emailLabel = new JLabel("");
-    private static JLabel roleLabel = new JLabel("");
-
-    private static JFrame frame;
-    private static JPanel headPanel;
-    private static JPanel columnPanel;
-    private static JLabel searchLabel = new JLabel("Sök:");
-    private static JTextField searchText = new JTextField(20);
-    private static JButton button = new JButton("GO");
-
-    private static JButton newUser = new JButton("New user");
-    private static JPanel searchPanel;
-
-    public static void main(String[] args) {
-
-
-        initializeFrame();
-        createHeader();
-        createBreadcrumbs();
-        createSearchPanel();
-        framer();
-
-
-        frame.setLayout(new FlowLayout());
-
-        frame.setVisible(true);
-
-        searchText.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                checkInput(searchText.getText());
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                checkInput(searchText.getText());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                checkInput(searchText.getText());
-            }
-
-
-        });
-
-        button.addActionListener(abc -> {
-
-            populatePatient(comboBox.getSelectedItem().toString());
-
-
-        });
-
-        newUser.addActionListener(abc -> {
-
-            createPopup(frame);
-
-
-        });
+        initializeAll();
+        addUserInterface();
+        startListeners();
 
         getAllUsers();
         populateBox();
 
     }
 
-    public static void populatePatient(String selectedItem) {
+    private void initializeAll() {
+
+        comboBox = new JComboBox<>();
+        popup = new JDialog();
+        contentPanel = new JPanel();
+        errorMessage = new JLabel();
+        nameLabel = new JLabel("");
+        userIDLabel = new JLabel("");
+        emailLabel = new JLabel("");
+        roleLabel = new JLabel("");
+        frame = new JFrame("");
+        headPanel = new JPanel();
+        columnPanel = new JPanel();
+        searchLabel = new JLabel("Sök");
+        searchText = new JTextField(20);
+        button = new JButton("Go");
+        newUser = new JButton("New user");
+        searchPanel = new JPanel();
+
+    }
+
+    private void startListeners() {
+        searchText.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkInput(searchText.getText());
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkInput(searchText.getText());
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                checkInput(searchText.getText());
+            }
+        });
+        button.addActionListener(abc -> {
+            populatePatient(comboBox.getSelectedItem().toString());
+        });
+        newUser.addActionListener(abc -> {
+            createPopup(frame);
+        });
+    }
+
+    public void populatePatient(String selectedItem) {
         ArrayList<User> users = UserRepository.getUserList();
         String[] parts = selectedItem.split(" ");
         String selectedID = parts[parts.length - 1];
@@ -107,26 +101,20 @@ public class SearchLogic2 {
                 roleLabel.setText(who.getRole());
 
                 return;
-
             }
         }
-
-
-
     }
-
-
-
-    private static void initializeFrame() {
-        frame = new JFrame("Patient Page");
+    private void initializeFrame() {
+        frame = new JFrame("Patient page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout());
+        frame.setLayout(new FlowLayout());
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
-
-    private static void createHeader() {
+    private void createHeader() {
         headPanel = new JPanel(null);
         headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
         frame.add(headPanel, BorderLayout.NORTH);
@@ -147,6 +135,7 @@ public class SearchLogic2 {
         };
         imagePanel.setBounds(0, 0, 1200, 125);
         headPanel.add(imagePanel);
+
 
         JButton profileButton = new JButton();
         profileButton.setBounds(1090, 0, 110, 125);
@@ -177,9 +166,9 @@ public class SearchLogic2 {
 
         profileButton.addActionListener(e -> profileMenu.show(profileButton, 0, profileButton.getHeight()));
         headPanel.add(profileButton);
+        headPanel.setVisible(true);
     }
-
-    private static void createBreadcrumbs() {
+    private void createBreadcrumbs() {
         columnPanel = new JPanel();
         columnPanel.setPreferredSize(new Dimension(1200, 50));
         columnPanel.setBackground(Color.white);
@@ -199,9 +188,23 @@ public class SearchLogic2 {
         for (String title : breadcrumbTitles) {
             if (title.equals("Home")) {
                 JLabel activeLabel = new JLabel(title, SwingConstants.CENTER);
-                ViewUtils.setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
+                activeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+                activeLabel.setOpaque(true);
+                activeLabel.setBackground(new Color(173, 216, 230)); // Light blue background for active
+                activeLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+                activeLabel.setPreferredSize(new Dimension(150, 40)); // Adjusted width
+                breadcrumbPanel.add(activeLabel, gbc);
             } else {
-                ViewUtils.SetBreadcrumbButton(breadcrumbPanel, gbc, title);
+                JButton breadcrumb = new JButton(title);
+                breadcrumb.setFont(new Font("Arial", Font.PLAIN, 18));
+                breadcrumb.setFocusPainted(false);
+                breadcrumb.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                breadcrumb.setBackground(Color.WHITE);
+                breadcrumb.setPreferredSize(new Dimension(150, 40)); // Adjusted width
+                breadcrumb.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+
+                breadcrumbPanel.add(breadcrumb, gbc);
             }
             gbc.gridx++;
         }
@@ -209,39 +212,13 @@ public class SearchLogic2 {
         columnPanel.add(breadcrumbPanel);
         frame.add(columnPanel, BorderLayout.CENTER);
     }
-
-    private static void successConfirmation() {
-
-        contentPanel.setLayout(new BorderLayout());
-
-        JPanel overlayPanel = new JPanel();
-        overlayPanel.setBackground(Color.GRAY);
-        overlayPanel.setOpaque(true);
-
-        contentPanel.add(overlayPanel, BorderLayout.CENTER);
-
-        overlayPanel.setVisible(true);
-
-        JButton fuckOffButton = new JButton();
-        fuckOffButton.setText("OK");
-        overlayPanel.add(fuckOffButton);
-        fuckOffButton.addActionListener(e -> popup.dispose());
+    private void createPopup(JFrame frame) {
 
 
-    }
-
-
-
-
-
-    private static void createPopup(JFrame frame) {
-
-        JDialog popup = new JDialog(frame, "Create new user", true);
+        popup = new JDialog(frame, "Create new user", true); // Use the field, not a local variable
         popup.setSize(400, 300);
         popup.setResizable(false);
         popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-
         popup.setLocationRelativeTo(frame);
 
         contentPanel.setLayout(new GridBagLayout());
@@ -256,8 +233,6 @@ public class SearchLogic2 {
         headLabel.setText("New user");
         headLabel.setFont(new Font("Content", Font.BOLD, 20));
         contentPanel.add(headLabel);
-
-
 
         gbc.gridx = 0; gbc.gridy = 1;
 
@@ -280,21 +255,28 @@ public class SearchLogic2 {
         JTextField userIDField = new JTextField(15);
         contentPanel.add(userIDField, gbc);
 
-
         gbc.gridx = 0; gbc.gridy = 4;
-        contentPanel.add(new JLabel("Email"), gbc);
+        contentPanel.add(new JLabel("Password"), gbc);
         gbc.gridx = 1; gbc.gridy = 4;
+        JTextField passwordField = new JTextField(15);
+        contentPanel.add(passwordField, gbc);
+
+
+        gbc.gridx = 0; gbc.gridy = 5;
+        contentPanel.add(new JLabel("Email"), gbc);
+        gbc.gridx = 1; gbc.gridy = 5;
         JTextField emailField = new JTextField(15);
         contentPanel.add(emailField, gbc);
 
 
-        gbc.gridx = 0; gbc.gridy = 5;
+        gbc.gridx = 0; gbc.gridy = 6;
         contentPanel.add(new JLabel("Role"), gbc);
-        gbc.gridx = 1; gbc.gridy = 5;
+        gbc.gridx = 1; gbc.gridy = 6;
 
         JComboBox roleBox = new JComboBox();
         roleBox.addItem("patient");
         roleBox.addItem("doctor");
+        roleBox.addItem("secretary");
         contentPanel.add(roleBox, gbc);
 
         JPanel buttonPanel = new JPanel();
@@ -303,60 +285,53 @@ public class SearchLogic2 {
         buttonPanel.add(submitButton);
         buttonPanel.add(cancelButton);
 
+        submitButton.addActionListener(e -> {
+            String name = firstNameField.getText();
+            String surname = surnameField.getText();
+            String personnummer = userIDField.getText();
+            String password = passwordField.getText();
+            String email = emailField.getText();
+            String role = roleBox.getSelectedItem().toString();
+
+            isValid(name, surname, personnummer, password, email, role);
+        });
+
         errorMessage.setText("");
         errorMessage.setVisible(false);
 
-        gbc.gridx = 0; gbc.gridy = 7;
+        gbc.gridx = 0; gbc.gridy = 8;
         gbc.gridwidth = 2; // Span across both columns
         gbc.anchor = GridBagConstraints.CENTER;
         contentPanel.add(errorMessage, gbc);
 
-
-        gbc.gridx = 0; gbc.gridy = 6;
+        gbc.gridx = 0; gbc.gridy = 7;
         gbc.gridwidth = 2; // Span across both columns
         gbc.anchor = GridBagConstraints.CENTER;
         contentPanel.add(buttonPanel, gbc);
 
-        submitButton.addActionListener(e -> {
-
-            String name =  firstNameField.getText();
-            String surname = surnameField.getText();
-            String personnummer = userIDField.getText();
-            String email = emailField.getText();
-            String role = roleBox.getSelectedItem().toString();
-
-            isValid(name, surname, personnummer, email, role);
-
-        });
+        popup.add(contentPanel);
 
         cancelButton.addActionListener(e -> popup.dispose());
 
-        popup.add(contentPanel);
-
         popup.setVisible(true);
     }
-
-    private static void shipNewUser(String name, String surname, String personnummer, String email, String role) {
+    private void shipNewUser(String name, String surname, String personnummer, String password, String email, String role) {
         ArrayList<String> userToShip = new ArrayList<>();
 
         userToShip.add(personnummer);
         userToShip.add(name + " " + surname);
+        userToShip.add(password);
         userToShip.add(email);
         userToShip.add(role);
 
         System.out.println("Ready to add to database:" + " " + userToShip);
-        successConfirmation();
-
-
-
-
     }
-
-    private static void isValid(String name, String surname, String personnummer, String email, String role) {
+    private void isValid(String name, String surname, String personnummer, String password, String email, String role) {
 
         String validName = null;
         String validSurname = null;
         String validPersonnummer = null;
+        String validPassword = null;
         String validEmail = null;
         String validRole = null;
 
@@ -370,7 +345,7 @@ public class SearchLogic2 {
             validSurname = surname;
         }
 
-        if ((personnummer.length() == 10) && (personnummer.matches(("\\d+")))) {
+        if ((personnummer.length() == 12) && (personnummer.matches(("\\d+")))) {
 
             validPersonnummer = personnummer;
         }
@@ -380,6 +355,11 @@ public class SearchLogic2 {
             validEmail = email;
         }
 
+        if (!name.isEmpty()) {
+
+            validPassword = password;
+        }
+
         if (!role.isEmpty()) {
 
             validRole = role;
@@ -387,17 +367,29 @@ public class SearchLogic2 {
         }
 
         if (validName != null && validSurname != null && validPersonnummer != null
-                && validEmail != null && validRole != null) {
-            shipNewUser(validName, validSurname, validPersonnummer, validEmail, validRole);
+                && validEmail != null && validRole != null && validPassword != null) {
+            shipNewUser(validName, validSurname, validPersonnummer, validPassword, validEmail, validRole);
         } else {
             errorMessage.setText("Some entries are invalid. Try again!");
             errorMessage.setFont(new Font("Arial", Font.PLAIN, 15));
             errorMessage.setVisible(true);
         }
     }
+    private void addUserInterface() {
 
 
-    private static void createSearchPanel() {
+        initializeFrame();
+        createHeader();
+        createBreadcrumbs();
+        createSearchPanel();
+        createUserPanel();
+
+        frame.setVisible(true);
+
+    }
+
+
+    private void createSearchPanel() {
         searchPanel = new JPanel();
         searchPanel.setPreferredSize(new Dimension(1200, 100));
         searchPanel.setBackground(Color.white);
@@ -413,6 +405,7 @@ public class SearchLogic2 {
         gbc.insets = new Insets(10, 10, 10, 10); // Adding some padding around components
         gbc.anchor = GridBagConstraints.WEST;
         searchPanel.add(searchLabel, gbc);
+        searchPanel.setVisible(true);
 
         // Set the text field at the next grid position
         gbc.gridx = 1;
@@ -433,21 +426,25 @@ public class SearchLogic2 {
         gbc.gridy = 0;
         searchPanel.add(newUser, gbc);
 
+
         // Add the searchPanel to the frame
         frame.add(searchPanel, BorderLayout.CENTER);
     }
 
+    private void setVisible() {
+        frame.setVisible(true);
+    }
 
 
-    public static void framer() {
-        // Don't create a new frame; use the existing frame
+
+    public void framer() {
         JPanel userPanel = createUserPanel();
         frame.add(userPanel);  // Add the user panel to the existing frame
         frame.revalidate();  // Ensure the frame updates its layout
         frame.repaint();  // Refresh the frame
     }
 
-    private static JPanel createUserPanel() {
+    private JPanel createUserPanel() {
         JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(1200, 120));
         panel.setLayout(new GridBagLayout());  // GridBagLayout allows for precise control over positioning
@@ -491,7 +488,7 @@ public class SearchLogic2 {
         return panel;
     }
 
-    private static ArrayList<String> extractBoth() {
+    private ArrayList<String> extractBoth() {
         ArrayList<User> users = getUserList();
         ArrayList<String> nameAndId = new ArrayList<>();
 
@@ -506,7 +503,7 @@ public class SearchLogic2 {
 
     }
 
-    public static void populateBox() {
+    public void populateBox() {
 
         ArrayList<User> users = UserRepository.getUserList();
 
@@ -520,7 +517,7 @@ public class SearchLogic2 {
     }
 
 
-    public static void checkInput(String input) {
+    public void checkInput(String input) {
 
 
         if (input.matches(".*[a-zA-Z].*") && (input.matches(".*\\d.*"))) {
@@ -542,7 +539,7 @@ public class SearchLogic2 {
         }
     }
 
-    public static void letterCheck(String input) {
+    public void letterCheck(String input) {
         ArrayList<String> matches = new ArrayList<>();
         ArrayList<String> nameAndId = extractBoth();
 
@@ -555,7 +552,7 @@ public class SearchLogic2 {
         updateComboBox(matches);
     }
 
-    public static void numberCheck(String input) {
+    public void numberCheck(String input) {
         ArrayList<String> matches = new ArrayList<>();
         ArrayList<String> nameAndId = extractBoth();
 
@@ -570,7 +567,7 @@ public class SearchLogic2 {
         updateComboBox(matches);
     }
 
-    public static void updateComboBox(ArrayList<String> matching) {
+    public void updateComboBox(ArrayList<String> matching) {
 
         comboBox.removeAllItems();
         if (matching.isEmpty()) {
@@ -582,9 +579,6 @@ public class SearchLogic2 {
             comboBox.showPopup();
         }
     }
-
-    public void setVisible(boolean visible) {
-        frame.setVisible(visible);
-    }
 }
+
 
