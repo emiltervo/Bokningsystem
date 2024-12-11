@@ -431,8 +431,8 @@ public class SearchLogic2 {
         frame.add(searchPanel, BorderLayout.CENTER);
     }
 
-    private void setVisible() {
-        frame.setVisible(true);
+    public void setVisible(boolean visible) {
+        frame.setVisible(visible);
     }
 
 
