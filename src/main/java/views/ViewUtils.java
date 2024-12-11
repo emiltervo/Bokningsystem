@@ -29,7 +29,7 @@ public class ViewUtils {
                 if (title == "Home") {
                     gbc.gridx++;
                 } else {
-                    SetBreadcrumbButton(breadcrumbPanel, gbc, title);
+                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
                     columnPanel.add(breadcrumbPanel);
                     frame.add(columnPanel, BorderLayout.CENTER);
 
@@ -47,7 +47,7 @@ public class ViewUtils {
                     setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
                     gbc.gridx++;
                 } else {
-                    SetBreadcrumbButton(breadcrumbPanel, gbc, title);
+                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
                     columnPanel.add(breadcrumbPanel);
                     frame.add(columnPanel, BorderLayout.CENTER);
                     gbc.gridx++;
@@ -62,7 +62,7 @@ public class ViewUtils {
                 if (title == "Recipes") {
                     continue;
                 } else {
-                    SetBreadcrumbButton(breadcrumbPanel, gbc, title);
+                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
                     columnPanel.add(breadcrumbPanel);
                     frame.add(columnPanel, BorderLayout.CENTER);
                     gbc.gridx++;
@@ -76,7 +76,7 @@ public class ViewUtils {
                 if (title == "Patients") {
                     gbc.gridx++;
                 } else {
-                    SetBreadcrumbButton(breadcrumbPanel, gbc, title);
+                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
                     columnPanel.add(breadcrumbPanel);
                     frame.add(columnPanel, BorderLayout.CENTER);
                     gbc.gridx++;
@@ -86,7 +86,7 @@ public class ViewUtils {
         return columnPanel;
     }
 
-    static void SetBreadcrumbButton(JPanel breadcrumbPanel, GridBagConstraints gbc, String title) {
+    static void SetBreadcrumbButton(JPanel breadcrumbPanel, GridBagConstraints gbc, String title, JFrame frame) {
         JButton breadcrumb = new JButton(title);
         breadcrumb.setFont(new Font("Arial", Font.PLAIN, 18));
         breadcrumb.setFocusPainted(false);
@@ -97,15 +97,18 @@ public class ViewUtils {
         breadcrumb.addActionListener(e -> {
             if(title == "Home") {
                 CreateViews.getInstance().getHomeView().setVisible(true);
+                frame.setVisible(false);
             }
             else if(title == "Calendar") {
                 CreateViews.getInstance().getCalendarView().setVisible(true);
+                frame.setVisible(false);
             }
             else if(title == "Recipes") {
 
             }
             else if(title == "Patients") {
                 CreateViews.getInstance().getSearchLogicView().setVisible(true);
+                frame.setVisible(false);
             }
         });
 

@@ -1,6 +1,7 @@
 package views;
 
 import controllers.loginController;
+import models.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +36,7 @@ public class LoginView {
             long userID = Long.parseLong(usernameField.getText());
             String password = new String(passwordField.getPassword());
             if (controller.handleLogin(userID, password)) {
-                currentUser = userID;
+                setCurrentUser(userID);
             }
             System.out.println("Login button pressed");
         });
@@ -131,5 +132,20 @@ public class LoginView {
     public void showError(String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
+    }
+
+    public void setCurrentUser(long  userID) {
+        currentUser = userID;
+    }
+
+    public void logoutCurrentUser() {
+        currentUser = 0;
+        usernameField.setText(null);
+        passwordField.setText(null);
+    }
+
+
+    public void setVisible(boolean visible) {
+        frame.setVisible(visible);
     }
 }

@@ -99,8 +99,8 @@ public class CalendarView {
         headPanel.add(profileButton);
     }
 
-    private void createBreadcrumbs() {
-        ViewUtils.createBreadcrumbs(calendarFrame);
+    private JPanel createBreadcrumbs() {
+        return ViewUtils.createBreadcrumbs(calendarFrame);
     }
 
     private void createMainContent() {
