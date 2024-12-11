@@ -12,7 +12,6 @@ public class CreateViews {
     private PatientView patientView;
     private CalendarView calendarView;
     private CalendarPopupView calendarPopupView;
-    private SearchLogic2 searchlogic;
 
     private CreateViews() {
         // Private constructor to prevent instantiation
@@ -65,10 +64,10 @@ public class CreateViews {
         }
         return calendarView;
     }
-    public SearchLogic2 getSearchLogicView() {
-        if (searchlogic == null) {
-            searchlogic = new SearchLogic2();
+    public PatientView getSearchLogicView() {
+        if (patientView == null) {
+            patientView = new PatientView();
         }
-        return searchlogic;
+        return patientView;
     }
 }
