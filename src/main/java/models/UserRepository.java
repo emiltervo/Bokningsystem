@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 public class UserRepository {
     static ArrayList<User> userList = new ArrayList<>();
+    static ArrayList<Patient> patientList = new ArrayList<>();
+    static ArrayList<Doctor> doctorList = new ArrayList<>();
+    static ArrayList<Secretary> secretaryList = new ArrayList<>();
 
     /** Returns all users from the database */
     public static void getAllUsers() {
@@ -16,6 +19,15 @@ public class UserRepository {
             if (userList != null) {
                 userList.clear();
             }
+            if (patientList != null) {
+                patientList.clear();
+            }
+            if (doctorList != null) {
+                doctorList.clear();
+            }
+            if (secretaryList != null) {
+                secretaryList.clear();
+            }
 
             while (resultSet.next()) {
                 long userID = resultSet.getLong("userID");
@@ -24,7 +36,17 @@ public class UserRepository {
                 String email = resultSet.getString("email");
                 String role = resultSet.getString("role");
 
-                userList.add(UserFactory.createUser(userID, name, password, email, role));
+                User user = UserFactory.createUser(userID, name, password, email, role);
+                userList.add(user);
+                if (user instanceof Patient) {
+                    patientList.add((Patient) user);
+                }
+                if (user instanceof Doctor) {
+                    doctorList.add((Doctor) user);
+                }
+                if (user instanceof Secretary) {
+                    secretaryList.add((Secretary) user);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,6 +54,8 @@ public class UserRepository {
         System.out.println("User list:");
         System.out.println(userList);
     }
+
+
 
     /** Returns a specific user from the database */
     public static User getUserByID(long userID) {
@@ -55,6 +79,15 @@ public class UserRepository {
 
         // Add user to the userList
         userList.add(newUser);
+        if (newUser instanceof Patient) {
+            patientList.add((Patient) newUser);
+        }
+        if (newUser instanceof Doctor) {
+            doctorList.add((Doctor) newUser);
+        }
+        if (newUser instanceof Secretary) {
+            secretaryList.add((Secretary) newUser);
+        }
 
         // Insert user into the database
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -87,5 +120,17 @@ public class UserRepository {
 
     public static ArrayList<User> getUserList() {
         return userList;
+    }
+
+    public static ArrayList<Patient> getPatientList(){
+        return patientList;
+    }
+
+    public static ArrayList<Doctor> getDoctorList(){
+        return doctorList;
+    }
+
+    public static ArrayList<Secretary> getSecretaryList(){
+        return secretaryList;
     }
 }
