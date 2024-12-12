@@ -10,7 +10,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import models.*;
 import static models.UserRepository.*;
-import static models.UserRepository.*;
+import controllers.*;
 
 public class PatientView {
     private JComboBox<String> comboBox;
@@ -23,13 +23,26 @@ public class PatientView {
     private JLabel roleLabel;
     private JFrame frame;
     private JPanel headPanel;
+    private JButton submitButton;
+    private JComboBox<String> roleBox;
     private JPanel columnPanel;
     private JLabel searchLabel;
     private JTextField searchText;
     private JButton button;
     private JButton newUser;
     private JPanel searchPanel;
-    private UserValidator userValidator;
+    private JTextField passwordField;
+    private JTextField firstNameField;
+    private JTextField surnameField;
+    private JTextField userIDField;
+    private JTextField emailField;
+    private PatientViewController patientController;
+
+
+
+
+
+
 
     public PatientView() {
 
@@ -39,9 +52,8 @@ public class PatientView {
         addUserInterface();
         startListeners();
 
-        userValidator = new UserValidator();
+        patientController = new PatientViewController(this);
 
-        getAllUsers();
         populateBox();
 
     }
@@ -64,6 +76,14 @@ public class PatientView {
         button = new JButton("Go");
         newUser = new JButton("New user");
         searchPanel = new JPanel();
+        roleBox = new JComboBox<>();
+        firstNameField = new JTextField(15);
+        surnameField = new JTextField(15);
+        userIDField = new JTextField(15);
+        passwordField = new JTextField(15);
+        emailField = new JTextField(15);
+        submitButton = new JButton("Submit");
+
 
     }
 
@@ -88,6 +108,30 @@ public class PatientView {
         newUser.addActionListener(abc -> {
             createPopup(frame);
         });
+
+
+        submitButton.addActionListener(zu -> {
+            String name = firstNameField.getText();
+            String surname = surnameField.getText();
+            String personnummer = userIDField.getText();
+            String password = passwordField.getText();
+            String email = emailField.getText();
+            String role = roleBox.getSelectedItem().toString();
+
+            String validationMessage = patientController.inputFromUser(name, surname, personnummer, password, email, role);
+
+            // Returns valid = it's ready to be shipped to database.
+
+            if (validationMessage.equals("Valid")) {
+
+            } else {
+
+                // If not valid, it will inform the user what is wrong with the input.
+                // Allows user to correct mistakes & try again.
+                showErrorMessage(validationMessage);
+            }
+        });
+
     }
 
     public void populatePatient(String selectedItem) {
@@ -109,6 +153,13 @@ public class PatientView {
             }
         }
     }
+
+    public void showErrorMessage(String errorMessage) {
+        this.errorMessage.setText(errorMessage);
+        this.errorMessage.setFont(new Font("Arial", Font.PLAIN, 15));
+        this.errorMessage.setVisible(true);
+    }
+
     private void initializeFrame() {
         frame = new JFrame("Patient page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,7 +171,6 @@ public class PatientView {
         frame.setVisible(true);
     }
     private void createHeader() {
-        headPanel = new JPanel(null);
         headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
         frame.add(headPanel, BorderLayout.NORTH);
 
@@ -198,38 +248,34 @@ public class PatientView {
         headLabel.setFont(new Font("Content", Font.BOLD, 20));
         contentPanel.add(headLabel);
 
+        setRoleBox();
+
         gbc.gridx = 0; gbc.gridy = 1;
 
         contentPanel.add(new JLabel("First name"), gbc);
-        contentPanel.setFont(new Font("Content", Font.BOLD, 20));
 
         gbc.gridx = 1; gbc.gridy = 1;
-        JTextField firstNameField = new JTextField(15);
         contentPanel.add(firstNameField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 2;
         contentPanel.add(new JLabel("Surname"), gbc);
         gbc.gridx = 1; gbc.gridy = 2;
-        JTextField surnameField = new JTextField(15);
         contentPanel.add(surnameField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 3;
         contentPanel.add(new JLabel("Personnummer"), gbc);
         gbc.gridx = 1; gbc.gridy = 3;
-        JTextField userIDField = new JTextField(15);
         contentPanel.add(userIDField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 4;
         contentPanel.add(new JLabel("Password"), gbc);
         gbc.gridx = 1; gbc.gridy = 4;
-        JTextField passwordField = new JTextField(15);
         contentPanel.add(passwordField, gbc);
 
 
         gbc.gridx = 0; gbc.gridy = 5;
         contentPanel.add(new JLabel("Email"), gbc);
         gbc.gridx = 1; gbc.gridy = 5;
-        JTextField emailField = new JTextField(15);
         contentPanel.add(emailField, gbc);
 
 
@@ -237,31 +283,15 @@ public class PatientView {
         contentPanel.add(new JLabel("Role"), gbc);
         gbc.gridx = 1; gbc.gridy = 6;
 
-        JComboBox roleBox = new JComboBox();
-        roleBox.addItem("patient");
-        roleBox.addItem("doctor");
-        roleBox.addItem("secretary");
+
         contentPanel.add(roleBox, gbc);
 
         JPanel buttonPanel = new JPanel();
-        JButton submitButton = new JButton("Submit");
         JButton cancelButton = new JButton("Cancel");
         buttonPanel.add(submitButton);
         buttonPanel.add(cancelButton);
 
-        submitButton.addActionListener(e -> {
-            String name = firstNameField.getText();
-            String surname = surnameField.getText();
-            String personnummer = userIDField.getText();
-            String password = passwordField.getText();
-            String email = emailField.getText();
-            String role = roleBox.getSelectedItem().toString();
-
-            isValid(name, surname, personnummer, password, email, role);
-        });
-
-        errorMessage.setText("");
-        errorMessage.setVisible(false);
+        // Logic for checking before shipping user to database.
 
         gbc.gridx = 0; gbc.gridy = 8;
         gbc.gridwidth = 2; // Span across both columns
@@ -279,58 +309,14 @@ public class PatientView {
 
         popup.setVisible(true);
     }
-    public void isValid(String name, String surname, String personnummer, String password, String email, String role) {
 
-        String validName = null;
-        String validSurname = null;
-        String validPersonnummer = null;
-        String validPassword = null;
-        String validEmail = null;
-        String validRole = null;
+    private void setRoleBox() {
 
-        if (!name.isEmpty() && (name.matches("[a-zA-Z]+"))) {
-
-            validName = name;
-        }
-
-        if (!surname.isEmpty() && (name.matches("[a-zA-Z]+"))) {
-
-            validSurname = surname;
-        }
-
-        if ((personnummer.length() == 12) && (personnummer.matches(("\\d+")))) {
-
-            validPersonnummer = personnummer;
-        }
-
-        if (email.contains("@")) {
-
-            validEmail = email;
-        }
-
-        if (!name.isEmpty()) {
-
-            validPassword = password;
-        }
-
-        if (!role.isEmpty()) {
-
-            validRole = role;
-
-        }
-
-        if (validName != null && validSurname != null && validPersonnummer != null
-                && validEmail != null && validRole != null && validPassword != null) {
-            userValidator.shipNewUser(validName, validSurname, validPersonnummer, validPassword, validEmail, validRole);
-        } else {
-            errorMessage.setText("Some entries are invalid. Try again!");
-            errorMessage.setFont(new Font("Arial", Font.PLAIN, 15));
-            errorMessage.setVisible(true);
-        }
+        roleBox.addItem("patient");
+        roleBox.addItem("doctor");
+        roleBox.addItem("secretary");
     }
-
     private void addUserInterface() {
-
 
         initializeFrame();
         createHeader();
@@ -344,16 +330,15 @@ public class PatientView {
 
 
     private void createSearchPanel() {
-        searchPanel = new JPanel();
         searchPanel.setPreferredSize(new Dimension(1200, 100));
         searchPanel.setBackground(Color.white);
 
-        // Use GridBagLayout for better component arrangement
+
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
         searchPanel.setLayout(layout);
 
-        // Adjust GridBagConstraints for proper spacing
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10); // Adding some padding around components
@@ -361,17 +346,15 @@ public class PatientView {
         searchPanel.add(searchLabel, gbc);
         searchPanel.setVisible(true);
 
-        // Set the text field at the next grid position
+
         gbc.gridx = 1;
         gbc.gridy = 0;
         searchPanel.add(searchText, gbc);
 
-        // Set the combo box to the next grid position
         gbc.gridx = 2;
         gbc.gridy = 0;
         searchPanel.add(comboBox, gbc);
 
-        // Set the button to the next grid position
         gbc.gridx = 3;
         gbc.gridy = 0;
         searchPanel.add(button, gbc);
@@ -381,7 +364,6 @@ public class PatientView {
         searchPanel.add(newUser, gbc);
 
 
-        // Add the searchPanel to the frame
         frame.add(searchPanel, BorderLayout.CENTER);
     }
 
@@ -389,56 +371,46 @@ public class PatientView {
         frame.setVisible(visible);
     }
 
-
-
-    public void framer() {
-        JPanel userPanel = createUserPanel();
-        frame.add(userPanel);  // Add the user panel to the existing frame
-        frame.revalidate();  // Ensure the frame updates its layout
-        frame.repaint();  // Refresh the frame
-    }
-
     private JPanel createUserPanel() {
         JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(1200, 120));
-        panel.setLayout(new GridBagLayout());  // GridBagLayout allows for precise control over positioning
+        panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10);  // Add some padding around components
+        gbc.insets = new Insets(5, 10, 5, 10);
 
-        // Create the big labels (first name, surname)
+        // Create the big labels (first name+surname)
         nameLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-        gbc.gridx = 0;  // Place the name label in the first column
-        gbc.gridy = 0;  // Place the name label in the first row
-        gbc.anchor = GridBagConstraints.WEST;  // Align to the left of the cell
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
         panel.add(nameLabel, gbc);
 
-        // Create the user ID label and set a smaller font
-        userIDLabel.setFont(new Font("Arial", Font.PLAIN, 14));  // Regular font for UserID
-        userIDLabel.setForeground(Color.BLACK);  // Black color for text
-        userIDLabel.setHorizontalAlignment(JLabel.LEFT);  // Align text to the left within the label
-        gbc.gridx = 0;  // Place the user ID label under the name
-        gbc.gridy = 1;  // Place it in the second row
-        gbc.gridwidth = 2;  // Span across both columns (first name and surname)
-        gbc.anchor = GridBagConstraints.WEST;  // Align to the left of the cell
+        userIDLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        userIDLabel.setForeground(Color.BLACK);
+        userIDLabel.setHorizontalAlignment(JLabel.LEFT);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.WEST;
         panel.add(userIDLabel, gbc);
 
         emailLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        gbc.gridx = 0;  // Place the user ID label under the name
-        gbc.gridy = 2;  // Place it in the second row
-        gbc.gridwidth = 2;  // Span across both columns (first name and surname)
-        gbc.anchor = GridBagConstraints.WEST;  // Align to the left of the cell
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.WEST;
         panel.add(emailLabel, gbc);
 
         roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        gbc.gridx = 0;  // Place the user ID label under the name
-        gbc.gridy = 3;  // Place it in the second row
-        gbc.gridwidth = 2;  // Span across both columns (first name and surname)
-        gbc.anchor = GridBagConstraints.WEST;  // Align to the left of the cell
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.WEST;
         panel.add(roleLabel, gbc);
-        // Ensure that the panel doesn't expand in width too much and forces left alignment
-        panel.setMaximumSize(new Dimension(1200, 100));  // Set the max size for the panel
 
-        // Return the constructed panel
+        panel.setMaximumSize(new Dimension(1200, 100));
+
+
         return panel;
     }
 
@@ -469,7 +441,6 @@ public class PatientView {
 
         }
     }
-
 
     public void checkInput(String input) {
 
