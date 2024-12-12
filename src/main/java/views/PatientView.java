@@ -37,16 +37,11 @@ public class PatientView {
     private JTextField userIDField;
     private JTextField emailField;
     private PatientViewController patientController;
-
-
-
-
-
-
+    private UserServices userServices;
 
     public PatientView() {
 
-
+        userServices = new UserServices();
 
         initializeAll();
         addUserInterface();
@@ -54,7 +49,7 @@ public class PatientView {
 
         patientController = new PatientViewController(this);
 
-        populateBox();
+        patientController.populateComboBox();
 
     }
 
@@ -134,25 +129,31 @@ public class PatientView {
 
     }
 
-    public void populatePatient(String selectedItem) {
-        ArrayList<User> users = UserRepository.getUserList();
-        String[] parts = selectedItem.split(" ");
-        String selectedID = parts[parts.length - 1];
-        for(User who : users) {
-            if (String.valueOf(who.getUserID()).equals(selectedID)) {
-                nameLabel.setText(who.getName());
+    private void populatePatient(String selectedItem) {
+        User user = userServices.getPatientDetails(selectedItem);
 
-                String userID = String.valueOf(who.getUserID());
-                userIDLabel.setText(userID);
+        if (user != null) {
+            nameLabel.setText(user.getName());
+            userIDLabel.setText(String.valueOf(user.getUserID())); //Shit solution
+            emailLabel.setText(user.getEmail());
+            roleLabel.setText(user.getRole());
+        } else {
+            //Hi
+        }
 
-                emailLabel.setText(who.getEmail());
 
-                roleLabel.setText(who.getRole());
 
-                return;
-            }
+    }
+
+
+    // Improved & connected to controller now.
+    public void populateComboBox(ArrayList<String> patients) {
+        comboBox.removeAllItems();
+        for (String userInfo : patients) {
+            comboBox.addItem(userInfo);
         }
     }
+
 
     public void showErrorMessage(String errorMessage) {
         this.errorMessage.setText(errorMessage);
@@ -414,33 +415,6 @@ public class PatientView {
         return panel;
     }
 
-    private ArrayList<String> extractBoth() {
-        ArrayList<User> users = getUserList();
-        ArrayList<String> nameAndId = new ArrayList<>();
-
-        for (User user : users) {
-            String fullName = user.getName();
-            long userID = user.getUserID();
-            String userIDToString = Long.toString(userID);
-
-            nameAndId.add(fullName + " " + userIDToString);
-        }
-        return nameAndId;
-
-    }
-
-    public void populateBox() {
-
-        ArrayList<User> users = UserRepository.getUserList();
-
-        for (User user : users) {
-
-            String fullName = user.getName();
-            long userID = user.getUserID();
-            comboBox.addItem(fullName + " " + userID);
-
-        }
-    }
 
     public void checkInput(String input) {
 
@@ -458,15 +432,15 @@ public class PatientView {
             numberCheck(input);
 
         } else if (input.matches("")) {
-            comboBox.removeAllItems();
-            populateBox();
+            patientController.populateComboBox();
             comboBox.hidePopup();
         }
     }
 
     public void letterCheck(String input) {
+
         ArrayList<String> matches = new ArrayList<>();
-        ArrayList<String> nameAndId = extractBoth();
+        ArrayList<String> nameAndId = userServices.extractBoth();
 
         for (int abc = 0; abc < nameAndId.size(); abc++) {
             String fullNameAndId = nameAndId.get(abc);
@@ -478,8 +452,9 @@ public class PatientView {
     }
 
     public void numberCheck(String input) {
+
         ArrayList<String> matches = new ArrayList<>();
-        ArrayList<String> nameAndId = extractBoth();
+        ArrayList<String> nameAndId = userServices.extractBoth();
 
         for (String fullNameAndId : nameAndId) {
             String[] iWantTheID = fullNameAndId.split(" ");
