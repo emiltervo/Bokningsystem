@@ -29,12 +29,17 @@ public class PatientView {
     private JButton button;
     private JButton newUser;
     private JPanel searchPanel;
+    private UserValidator userValidator;
 
     public PatientView() {
+
+
 
         initializeAll();
         addUserInterface();
         startListeners();
+
+        userValidator = new UserValidator();
 
         getAllUsers();
         populateBox();
@@ -274,18 +279,7 @@ public class PatientView {
 
         popup.setVisible(true);
     }
-    private void shipNewUser(String name, String surname, String personnummer, String password, String email, String role) {
-        ArrayList<String> userToShip = new ArrayList<>();
-
-        userToShip.add(personnummer);
-        userToShip.add(name + " " + surname);
-        userToShip.add(password);
-        userToShip.add(email);
-        userToShip.add(role);
-
-        System.out.println("Ready to add to database:" + " " + userToShip);
-    }
-    private void isValid(String name, String surname, String personnummer, String password, String email, String role) {
+    public void isValid(String name, String surname, String personnummer, String password, String email, String role) {
 
         String validName = null;
         String validSurname = null;
@@ -327,13 +321,14 @@ public class PatientView {
 
         if (validName != null && validSurname != null && validPersonnummer != null
                 && validEmail != null && validRole != null && validPassword != null) {
-            shipNewUser(validName, validSurname, validPersonnummer, validPassword, validEmail, validRole);
+            userValidator.shipNewUser(validName, validSurname, validPersonnummer, validPassword, validEmail, validRole);
         } else {
             errorMessage.setText("Some entries are invalid. Try again!");
             errorMessage.setFont(new Font("Arial", Font.PLAIN, 15));
             errorMessage.setVisible(true);
         }
     }
+
     private void addUserInterface() {
 
 
