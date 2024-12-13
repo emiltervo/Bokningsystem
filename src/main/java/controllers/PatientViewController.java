@@ -21,7 +21,7 @@ public class PatientViewController {
 
         if (validationMessage.equals("Valid")) {
 
-            userValidator.shipNewUser(name, surname, personnummer, password, email, role);
+            userValidator.shipNewUser(Long.valueOf(name), surname, personnummer, password, email, role);
         } else {
 
             view.showErrorMessage(validationMessage);
