@@ -68,12 +68,7 @@ public class UserRepository {
     }
 
     /** Adds a new user to the database and userList */
-    public static void addUser(ArrayList<String> userParams) {
-        long userID = Long.parseLong(userParams.get(0));
-        String name = userParams.get(1);
-        String password = userParams.get(2);
-        String email = userParams.get(3);
-        String role = userParams.get(4);
+    public static void addUser(long userID, String name, String password, String email, String role) {
 
         User newUser = UserFactory.createUser(userID, name, password, email, role);
 
