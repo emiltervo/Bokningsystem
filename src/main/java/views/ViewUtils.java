@@ -26,7 +26,7 @@ public class ViewUtils {
             createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Home");
         } else if (frame.getTitle().equals("Calendar Page")) {
             createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Calendar");
-        } else if (frame.getTitle().equals("Recipes")) {
+        } else if (frame.getTitle().equals("Recipe Page")) {
             createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Recipes");
         } else if (frame.getTitle().equals("Patient page")) {
             createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Patients");
@@ -51,7 +51,8 @@ public class ViewUtils {
                 CreateViews.getInstance().getCalendarView().setVisible(true);
                 frame.setVisible(false);
             } else if (title == "Recipes") {
-
+                CreateViews.getInstance().getRecipeView().setVisible(true);
+                frame.setVisible(false);
             } else if (title == "Patients") {
                 CreateViews.getInstance().getSearchLogicView().setVisible(true);
                 frame.setVisible(false);

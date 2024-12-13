@@ -9,6 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         UserRepository.getAllUsers();
+        RecipeRepository.getAllRecipes();
         CreateViews createviews = CreateViews.getInstance();
         LoginView loginView = createviews.getLoginView();
         LoginController loginController = new LoginController(loginView);

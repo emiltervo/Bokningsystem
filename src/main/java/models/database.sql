@@ -182,6 +182,15 @@ SELECT userID, name, password, email
 FROM users
 WHERE role = 'secretary';
 
+CREATE TABLE recipes (
+     recipeID SERIAL PRIMARY KEY,
+     userID BIGINT NOT NULL,
+     content TEXT NOT NULL,
+     FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+
+
 INSERT INTO appointments (startTime, date, patuserID, docuserID, lengthMinutes, room) VALUES
 ('09:00', CURRENT_DATE + INTERVAL '1 day', '197505898765', '198711056789', 30, '0'),
 ('10:00', CURRENT_DATE + INTERVAL '2 days', '198008385678', '198711056789', 60, '0'),
@@ -191,3 +200,15 @@ INSERT INTO appointments (startTime, date, patuserID, docuserID, lengthMinutes, 
 ('14:00', CURRENT_DATE + INTERVAL '2 days', '198611898765', '198909123456', 90, '0'),
 ('15:00', CURRENT_DATE + INTERVAL '1 day', '198512856789', '198404167890', 30, '0'),
 ('16:00', CURRENT_DATE + INTERVAL '2 days', '198707812345', '198404167890', 60, '0');
+
+INSERT INTO recipes (userID, content) VALUES
+                                          ('198304218734', 'Prescription for John Doe'),
+                                          ('199003215678', 'Prescription for Jane Smith'),
+                                          ('198512158432', 'Prescription for Michael Johnson'),
+                                          ('197002198765', 'Prescription for Emily Davis'),
+                                          ('198711056789', 'Prescription for David Brown'),
+                                          ('197607182345', 'Prescription for Sarah Wilson'),
+                                          ('198909123456', 'Prescription for James Taylor'),
+                                          ('198404167890', 'Prescription for Jessica Martinez'),
+                                          ('198008109876', 'Prescription for Daniel Anderson'),
+                                          ('197505134567', 'Prescription for Laura Thomas');

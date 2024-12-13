@@ -11,6 +11,7 @@ public class CreateViews {
     private LoginView loginView;
     private PatientView patientView;
     private CalendarView calendarView;
+    private RecipeView recipeView;
     private CalendarPopupView calendarPopupView;
 
     private CreateViews() {
@@ -31,6 +32,13 @@ public class CreateViews {
             homeView.setController(controller);
         }
         return homeView;
+    }
+
+    public RecipeView getRecipeView() {
+        if (recipeView == null) {
+            recipeView = new RecipeView();
+        }
+        return recipeView;
     }
 
 
