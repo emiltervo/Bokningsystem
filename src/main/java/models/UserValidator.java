@@ -2,6 +2,7 @@ package models;
 
 import java.awt.*;
 import java.util.ArrayList;
+import models.*;
 
 public class UserValidator {
 
@@ -42,15 +43,12 @@ public class UserValidator {
         return "Valid";
     }
 
-    public void shipNewUser(String name, String surname, String personnummer, String password, String email, String role) {
-        ArrayList<String> userToShip = new ArrayList<>();
+    public void shipNewUser(Long personnummer, String name, String surname, String password, String email, String role) {
 
-        userToShip.add(personnummer);
-        userToShip.add(name + " " + surname);
-        userToShip.add(password);
-        userToShip.add(email);
-        userToShip.add(role);
 
-        System.out.println("Ready to add to database:" + " " + userToShip);
+        String fullName = name + " " + surname;
+
+        UserRepository.addUser(personnummer, fullName, password, email, role);
+        System.out.println("Ready to add to database:" + " " + name);
     }
 }
