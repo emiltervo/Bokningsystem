@@ -100,17 +100,24 @@ public class HomeView {
     }
 
     private void createMainContent() {
+        // Skapa huvudpanelen
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setPreferredSize(new Dimension(1200, 525));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 0, 200));
         contentPanel.setBackground(Color.WHITE);
 
-        // Example of a green panel for content
-        JPanel greenPanel = new JPanel();
-        greenPanel.setPreferredSize(new Dimension(1100, 150)); // Adjust width to fit content
-        greenPanel.setBackground(Color.DARK_GRAY);
-        contentPanel.add(greenPanel);
+        JPanel grayPanel = new JPanel();
+        grayPanel.setPreferredSize(new Dimension(1100, 150));
+        grayPanel.setBackground(Color.DARK_GRAY);
+        grayPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
+
+        JLabel test = new JLabel("Välkommen");
+        test.setFont(new Font("Arial", Font.BOLD, 24));
+        test.setForeground(Color.WHITE);
+        grayPanel.add(test);
+
+        contentPanel.add(grayPanel);
 
         frame.add(contentPanel, BorderLayout.SOUTH);
     }

@@ -68,13 +68,12 @@ public class ViewUtils {
                     gbc.gridx++;
                 }
             }
-        } else if (frame.getTitle().equals("Patient Page")) {
-            JLabel activeLabel = new JLabel("Patients", SwingConstants.CENTER);
-            setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
+        } else if (frame.getTitle().equals("Patient page")) {
 
             for (String title : breadcrumbTitles) {
                 if (title == "Patients") {
-                    gbc.gridx++;
+                    JLabel activeLabel = new JLabel("Patients", SwingConstants.CENTER);
+                    setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
                 } else {
                     SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
                     columnPanel.add(breadcrumbPanel);
