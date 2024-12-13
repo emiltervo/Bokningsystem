@@ -1,31 +1,30 @@
 package views;
 
-import controllers.loginController;
-import models.User;
-
+import views.IHandleLogin;
 import javax.swing.*;
 import java.awt.*;
 
 public class LoginView {
     private JFrame frame;
-    private JTextField usernameField = new JTextField();
-    private JButton loginButton = new JButton("Login");
-    private JLabel errorLabel = new JLabel("");
-    private JPasswordField passwordField = new JPasswordField();
-    private loginController controller;
+    private final JTextField usernameField = new JTextField();
+    private final JButton loginButton = new JButton("Login");
+    private final JLabel errorLabel = new JLabel("");
+    private final JPasswordField passwordField = new JPasswordField();
     protected static long currentUser;
+    private IHandleLogin loginHandler;
 
     public static long getCurrentUser() {
         return currentUser;
     }
 
-    public void setController(loginController controller) {
-        this.controller = controller;
+    public void setLoginHandler(IHandleLogin loginHandler) {
+        this.loginHandler = loginHandler;
     }
+
 
     public void createUI() {
         frame = createFrame();
-        JPanel headPanel = createHeaderPanel(frame);
+        JPanel headPanel = ViewUtils.createHeaderPanel(frame);
         frame.add(headPanel, BorderLayout.NORTH);
         JPanel contentPanel = createContentPanel();
         frame.add(contentPanel, BorderLayout.CENTER);
@@ -35,7 +34,7 @@ public class LoginView {
         loginButton.addActionListener(e -> {
             long userID = Long.parseLong(usernameField.getText());
             String password = new String(passwordField.getPassword());
-            if (controller.handleLogin(userID, password)) {
+            if (loginHandler.handleLogin(userID, password)) {
                 setCurrentUser(userID);
             }
             System.out.println("Login button pressed");
@@ -52,27 +51,7 @@ public class LoginView {
         return frame;
     }
 
-    private JPanel createHeaderPanel(JFrame frame) {
-        JPanel headPanel = new JPanel();
-        headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
-        headPanel.setLayout(new BorderLayout());
-        ImageIcon headerImage = new ImageIcon("src/main/resources/Namnlös.png");
-        Image image = headerImage.getImage();
-        JPanel imagePanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-        imagePanel.setPreferredSize(new Dimension(1200, 125));
-        headPanel.add(imagePanel, BorderLayout.CENTER);
-        return headPanel;
-    }
+
 
     private JPanel createContentPanel() {
         JPanel contentPanel = new JPanel();

@@ -33,6 +33,7 @@ public class CreateViews {
         return homeView;
     }
 
+
     public HomeViewPatient getHomeViewPatient() {
         if (homeViewPatient == null) {
             homeViewPatient = new HomeViewPatient();

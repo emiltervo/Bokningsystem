@@ -83,11 +83,16 @@ public class CalendarView {
                 }
             }
         });
-        logout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(calendarFrame, "Logged out!");
-            }
+        logout.addActionListener(e -> {
+            // Clear the current user session
+            CreateViews.getInstance().getLoginView().logoutCurrentUser();
+
+            // Show a logout successful message
+            JOptionPane.showMessageDialog(calendarFrame, "Logout successful!");
+
+            // Redirect to the login screen
+            calendarFrame.setVisible(false);
+            CreateViews.getInstance().getLoginView().setVisible(true);
         });
 
         profileButton.addActionListener(new ActionListener() {

@@ -1,7 +1,7 @@
 package models;
 
 public class UserFactory {
-    /** Creates a user object based on role */
+    /** Creates a user object based on role using Factory Pattern */
     public static User createUser(long userID, String name, String password, String email, String role) {
         switch (role.toLowerCase()) {
             case "doctor":

@@ -10,6 +10,7 @@ public class Appointment {
     private long lengthMinutes;
     private long room;
 
+    // Constructor
     public Appointment(String startTime, String date, long patuserID, long docuserID, long lengthMinutes, long room) {
         this.startTime = startTime;
         this.date = date;
@@ -18,6 +19,8 @@ public class Appointment {
         this.lengthMinutes = lengthMinutes;
         this.room = room;
     }
+
+    // Getters and setters
 
     public String getStartTime() {
         return startTime;
@@ -67,6 +70,7 @@ public class Appointment {
         this.room = room;
     }
 
+    // toString method for formatting output
     @Override
     public String toString() {
         return "[" + startTime + " " + date + " " + patuserID + " " + docuserID + " " + lengthMinutes + " " + room +"]";

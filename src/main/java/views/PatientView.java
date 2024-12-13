@@ -172,6 +172,7 @@ public class PatientView {
         frame.setVisible(true);
     }
     private void createHeader() {
+        headPanel = new JPanel(null);
         headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
         frame.add(headPanel, BorderLayout.NORTH);
 
@@ -218,8 +219,17 @@ public class PatientView {
                 JOptionPane.showMessageDialog(frame, "User not found!");
             }
         });
-        logout.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Logged out!"));
+        logout.addActionListener(e -> {
+            // Clear the current user session
+            CreateViews.getInstance().getLoginView().logoutCurrentUser();
 
+            // Show a logout successful message
+            JOptionPane.showMessageDialog(frame, "Logout successful!");
+
+            // Redirect to the login screen
+            frame.setVisible(false);
+            CreateViews.getInstance().getLoginView().setVisible(true);
+        });
         profileButton.addActionListener(e -> profileMenu.show(profileButton, 0, profileButton.getHeight()));
         headPanel.add(profileButton);
         headPanel.setVisible(true);

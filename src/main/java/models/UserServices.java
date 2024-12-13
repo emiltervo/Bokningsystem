@@ -5,7 +5,11 @@ import java.util.List;
 
 import static models.UserRepository.getUserList;
 
+/** UserServices class that contains methods for populating a box with user names and extracting user names and IDs */
+
 public class UserServices {
+
+    // Method for populating a box with user names and IDs
     public ArrayList<String> populateBox() {
 
         ArrayList<User> users = UserRepository.getUserList();
@@ -22,6 +26,7 @@ public class UserServices {
         return fullNamePlusID;
     }
 
+    // Method for extracting user names and IDs
     public ArrayList<String> extractBoth() {
         ArrayList<User> users = getUserList();
         ArrayList<String> nameAndId = new ArrayList<>();
@@ -36,7 +41,7 @@ public class UserServices {
         // Shipping >>> view.
         return nameAndId;
     }
-
+    // Method for getting patient details
     public User getPatientDetails(String selectedItem) {
         ArrayList<User> users = UserRepository.getUserList();
         String[] parts = selectedItem.split(" ");

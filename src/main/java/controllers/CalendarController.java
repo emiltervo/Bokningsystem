@@ -1,5 +1,7 @@
 package controllers;
 
+/** Controller for the CalendarView */
+
 import views.CalendarPopupView;
 import views.CalendarView;
 

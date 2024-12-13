@@ -55,6 +55,7 @@ public class AppointmentRepository {
         return appointmentList;
     }
 
+    // Retrieves appointment information from the database and creates objects of type Appointments based on the user ID.
     public static ArrayList<Appointment> getAllAppointmentsByUserID(long userID) {
         ArrayList<Appointment> appointmentListByUserID = new ArrayList<>();
 

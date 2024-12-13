@@ -33,7 +33,7 @@ public class HomeView {
     }
 
     private void createHeader() {
-        headPanel = new JPanel(null);
+        JPanel headPanel = new JPanel(null);
         headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
         frame.add(headPanel, BorderLayout.NORTH);
 

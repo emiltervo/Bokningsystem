@@ -21,66 +21,16 @@ public class ViewUtils {
         gbc.anchor = GridBagConstraints.CENTER;
 
         String[] breadcrumbTitles = {"Home", "Calendar", "Recipes", "Patients"};
+
         if (frame.getTitle().equals("Home Page")) {
-            JLabel activeLabel = new JLabel("Home", SwingConstants.CENTER);
-            setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
-
-            for (String title : breadcrumbTitles) {
-                if (title == "Home") {
-                    gbc.gridx++;
-                } else {
-                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
-                    columnPanel.add(breadcrumbPanel);
-                    frame.add(columnPanel, BorderLayout.CENTER);
-
-                    gbc.gridx++;
-                }
-            }
-
-
+            createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Home");
         } else if (frame.getTitle().equals("Calendar Page")) {
-
-
-            for (String title : breadcrumbTitles) {
-                if (title == "Calendar") {
-                    JLabel activeLabel = new JLabel("Calendar", SwingConstants.CENTER);
-                    setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
-                    gbc.gridx++;
-                } else {
-                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
-                    columnPanel.add(breadcrumbPanel);
-                    frame.add(columnPanel, BorderLayout.CENTER);
-                    gbc.gridx++;
-                }
-            }
-
+            createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Calendar");
         } else if (frame.getTitle().equals("Recipes")) {
-            JLabel activeLabel = new JLabel("Recipes", SwingConstants.CENTER);
-            setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
-
-            for (String title : breadcrumbTitles) {
-                if (title == "Recipes") {
-                    continue;
-                } else {
-                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
-                    columnPanel.add(breadcrumbPanel);
-                    frame.add(columnPanel, BorderLayout.CENTER);
-                    gbc.gridx++;
-                }
-            }
+            createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Recipes");
         } else if (frame.getTitle().equals("Patient page")) {
+            createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Patients");
 
-            for (String title : breadcrumbTitles) {
-                if (title == "Patients") {
-                    JLabel activeLabel = new JLabel("Patients", SwingConstants.CENTER);
-                    setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
-                } else {
-                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
-                    columnPanel.add(breadcrumbPanel);
-                    frame.add(columnPanel, BorderLayout.CENTER);
-                    gbc.gridx++;
-                }
-            }
         }
         return columnPanel;
     }
@@ -94,18 +44,15 @@ public class ViewUtils {
         breadcrumb.setPreferredSize(new Dimension(150, 40)); // Adjusted width
         breadcrumb.setCursor(new Cursor(Cursor.HAND_CURSOR));
         breadcrumb.addActionListener(e -> {
-            if(title == "Home") {
+            if (title == "Home") {
                 CreateViews.getInstance().getHomeView().setVisible(true);
                 frame.setVisible(false);
-            }
-            else if(title == "Calendar") {
+            } else if (title == "Calendar") {
                 CreateViews.getInstance().getCalendarView().setVisible(true);
                 frame.setVisible(false);
-            }
-            else if(title == "Recipes") {
+            } else if (title == "Recipes") {
 
-            }
-            else if(title == "Patients") {
+            } else if (title == "Patients") {
                 CreateViews.getInstance().getSearchLogicView().setVisible(true);
                 frame.setVisible(false);
             }
@@ -124,5 +71,60 @@ public class ViewUtils {
         breadcrumbPanel.add(activeLabel, gbc);
     }
 
+    public static JPanel createHeaderPanel(JFrame frame) {
+        JPanel headPanel = new JPanel();
+        headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
+        headPanel.setLayout(new BorderLayout());
+        ImageIcon headerImage = new ImageIcon("src/main/resources/Namnlös.png");
+        Image image = headerImage.getImage();
+        JPanel imagePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        imagePanel.setPreferredSize(new Dimension(1200, 125));
+        headPanel.add(imagePanel, BorderLayout.CENTER);
+        return headPanel;
+    }
 
+    private static void createBreadCrumbsForViews(JFrame frame, JPanel columnPanel, JPanel breadcrumbPanel, GridBagConstraints gbc, String[] breadcrumbTitles, String ViewCalled) {
+        if (ViewCalled.equals("Patients")) {
+            for (String title : breadcrumbTitles) {
+                if (title.equals(ViewCalled)) {
+                    JLabel activeLabel = new JLabel(ViewCalled, SwingConstants.CENTER);
+                    setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
+
+                } else {
+                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
+                    columnPanel.add(breadcrumbPanel);
+                    frame.add(columnPanel, BorderLayout.CENTER);
+
+                    gbc.gridx++;
+                }
+            }
+        } else {
+            for (String title : breadcrumbTitles) {
+
+                if (title.equals(ViewCalled)) {
+                    JLabel activeLabel = new JLabel(ViewCalled, SwingConstants.CENTER);
+                    setActiveLabelFont(breadcrumbPanel, gbc, activeLabel);
+                    gbc.gridx++;
+                } else {
+                    SetBreadcrumbButton(breadcrumbPanel, gbc, title, frame);
+                    columnPanel.add(breadcrumbPanel);
+                    frame.add(columnPanel, BorderLayout.CENTER);
+
+                    gbc.gridx++;
+                }
+            }
+        }
+
+
+    }
 }

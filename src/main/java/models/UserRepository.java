@@ -4,10 +4,10 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class UserRepository {
-    static ArrayList<User> userList = new ArrayList<>();
-    static ArrayList<Patient> patientList = new ArrayList<>();
-    static ArrayList<Doctor> doctorList = new ArrayList<>();
-    static ArrayList<Secretary> secretaryList = new ArrayList<>();
+    private static ArrayList<User> userList = new ArrayList<>();
+    private static ArrayList<Patient> patientList = new ArrayList<>();
+    private static ArrayList<Doctor> doctorList = new ArrayList<>();
+    private static ArrayList<Secretary> secretaryList = new ArrayList<>();
 
     /** Returns all users from the database */
     public static void getAllUsers() {

@@ -3,7 +3,7 @@ package models;
 import java.awt.*;
 import java.util.ArrayList;
 import models.*;
-
+/** UserValidator class that validates user input */
 public class UserValidator {
 
     public String isValid(String name, String surname, String personnummer, String password, String email, String role) {
@@ -42,7 +42,7 @@ public class UserValidator {
 
         return "Valid";
     }
-
+    /** Method to ship new user to database */
     public void shipNewUser(Long personnummer, String name, String surname, String password, String email, String role) {
 
 

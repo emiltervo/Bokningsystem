@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/** * Database connection class,  */
+/** * Handles Database Connection,  */
 
  public class DatabaseConnection {
     private static Connection connection;

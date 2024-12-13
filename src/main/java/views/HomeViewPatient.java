@@ -68,7 +68,17 @@ public class HomeViewPatient {
         profileMenu.add(logout);
 
         myAccount.addActionListener(e -> JOptionPane.showMessageDialog(frame, "My Account clicked!"));
-        logout.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Logged out!"));
+        logout.addActionListener(e -> {
+            // Clear the current user session
+            CreateViews.getInstance().getLoginView().logoutCurrentUser();
+
+            // Show a logout successful message
+            JOptionPane.showMessageDialog(frame, "Logout successful!");
+
+            // Redirect to the login screen
+            frame.setVisible(false);
+            CreateViews.getInstance().getLoginView().setVisible(true);
+        });
 
         profileButton.addActionListener(e -> profileMenu.show(profileButton, 0, profileButton.getHeight()));
         headPanel.add(profileButton);
@@ -109,9 +119,6 @@ public class HomeViewPatient {
                 breadcrumb.setPreferredSize(new Dimension(120, 40));
                 breadcrumb.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 breadcrumb.addActionListener(e -> {
-                    if (title.equals("Book time")) {
-                        controller.navigateToCalendarView();
-                    }
                 });
                 breadcrumbPanel.add(breadcrumb, gbc);
             }

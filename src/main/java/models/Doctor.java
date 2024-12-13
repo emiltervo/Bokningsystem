@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /** Doctor class that extends User */
+// TODO: Consider if methods here that are not used should be removed
 
 public class Doctor extends User {
     private boolean availability;

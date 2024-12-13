@@ -6,16 +6,21 @@ import views.PatientView;
 
 import java.util.ArrayList;
 
+//** Controller for the PatientView */
+
 public class PatientViewController {
     private PatientView view;
     private UserValidator userValidator;
     private UserServices userServices;
 
+    //Constructor
     public PatientViewController(PatientView view) {
         this.view = view;
         this.userValidator = new UserValidator();
         this.userServices = new UserServices();
     }
+
+    // Method send input from user to UserValidator in models
     public String inputFromUser(String name, String surname, String personnummer, String password, String email, String role) {
         String validationMessage = userValidator.isValid(name, surname, personnummer, password, email, role);
 
@@ -30,6 +35,7 @@ public class PatientViewController {
         return validationMessage;
     }
 
+    // Method to populate the combobox with patients
     public void populateComboBox() {
         ArrayList<String> patients = userServices.populateBox();
         view.populateComboBox(patients);

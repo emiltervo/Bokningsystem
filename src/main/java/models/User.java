@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/** Abstract superclass for users */
+
 abstract public class User implements AuthInterface {
     // userID is personal number
     private long userID;
@@ -14,6 +16,7 @@ abstract public class User implements AuthInterface {
     private String email;
     private String role;
 
+    // Constructor
     public User(long userID, String name, String password, String email, String role) {
         this.userID = userID;
         this.name = name;
@@ -21,7 +24,7 @@ abstract public class User implements AuthInterface {
         this.email = email;
         this.role = role;
     }
-    /** Login functionality for users. */
+    /** Login functionality for users that conntects to the database */
     @Override
     public boolean login(long userID, String password) {
         String sql = "SELECT * FROM users WHERE userID = ? AND password = ?";
@@ -91,9 +94,9 @@ abstract public class User implements AuthInterface {
     public void setRole(String role) {
         this.role = role;
     }
+    // toString method for User
     @Override
     public String toString() {
-        return
-                "["+userID+ ", "+name+", "+ password+", " + email+ ", " + role+"]";
+        return "Username: " + userID + "\nName: " + name + "\nPassword: " + password + "\nEmail: " + email + "\nRole: " + role + "";
     }
 }

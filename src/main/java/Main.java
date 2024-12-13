@@ -1,9 +1,8 @@
-import controllers.CalendarController;
-import controllers.loginController;
+
 import models.*;
-import views.CalendarView;
 import views.CreateViews;
 import views.LoginView;
+import controllers.LoginController;
 
 
 public class Main {
@@ -12,7 +11,7 @@ public class Main {
         UserRepository.getAllUsers();
         CreateViews createviews = CreateViews.getInstance();
         LoginView loginView = createviews.getLoginView();
-        loginController loginController = new loginController(loginView);
+        LoginController loginController = new LoginController(loginView);
         loginView.createUI();
 
 

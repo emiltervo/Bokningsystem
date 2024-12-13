@@ -2,6 +2,8 @@ package models;
 
 import java.util.Date;
 
+/** Prescription class that contains medication name, dosage, start date and end date */
+
 public class Prescription {
     private String medicationName;
     private String dosage;

@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 /** Patient class that extends User */
+// TODO: Journal is not used, will try adding it by end of Sunday (15/12/2024) (David)
 public class Patient extends User {
     private String journal;
     private List<Prescription> prescriptions;
