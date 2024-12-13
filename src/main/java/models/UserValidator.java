@@ -46,6 +46,7 @@ public class UserValidator {
     public void shipNewUser(Long personnummer, String name, String surname, String password, String email, String role) {
 
 
+
         String fullName = name + " " + surname;
 
         UserRepository.addUser(personnummer, fullName, password, email, role);
