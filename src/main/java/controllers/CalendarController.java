@@ -121,11 +121,17 @@ public class CalendarController {
     private void addListeners() {
         calendarView.getLeftArrow().addActionListener(e -> changeWeek(-1)); // Navigate back
         calendarView.getRightArrow().addActionListener(e -> changeWeek(1)); // Navigate forward
+
+        // Add listener to the doctor dropdown
+        calendarView.getDoctorDropdown().addActionListener(e -> {
+            String selectedDoctor = (String) calendarView.getDoctorDropdown().getSelectedItem();
+            initializeData(selectedDoctor);
+        });
+
         // Add listeners to schedule grid slots
         JPanel scheduleGrid = calendarView.getScheduleGrid();
         for (Component component : scheduleGrid.getComponents()) {
             if (component instanceof JPanel slot) {
-
                 // Attach mouse listener
                 slot.addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
