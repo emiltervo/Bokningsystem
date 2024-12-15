@@ -55,8 +55,6 @@ public class UserRepository {
         System.out.println(userList);
     }
 
-
-
     /** Returns a specific user from the database */
     public static User getUserByID(long userID) {
         for (User user : userList) {
@@ -69,7 +67,6 @@ public class UserRepository {
 
     /** Adds a new user to the database and userList */
     public static void addUser(long userID, String name, String password, String email, String role) {
-
         User newUser = UserFactory.createUser(userID, name, password, email, role);
 
         // Add user to the userList
@@ -117,15 +114,24 @@ public class UserRepository {
         return userList;
     }
 
-    public static ArrayList<Patient> getPatientList(){
+    public static ArrayList<Patient> getPatientList() {
+        if (patientList.isEmpty()) {
+            getAllUsers(); // Ensure the list is populated
+        }
         return patientList;
     }
 
-    public static ArrayList<Doctor> getDoctorList(){
+    public static ArrayList<Doctor> getDoctorList() {
+        if (doctorList.isEmpty()) {
+            getAllUsers(); // Ensure the list is populated
+        }
         return doctorList;
     }
 
-    public static ArrayList<Secretary> getSecretaryList(){
+    public static ArrayList<Secretary> getSecretaryList() {
+        if (secretaryList.isEmpty()) {
+            getAllUsers(); // Ensure the list is populated
+        }
         return secretaryList;
     }
 }

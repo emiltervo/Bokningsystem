@@ -2,6 +2,9 @@ package controllers;
 
 /** Controller for the CalendarView */
 
+import models.Patient;
+import models.PatientRepository;
+import models.UserRepository;
 import views.CalendarPopupView;
 import views.CalendarView;
 
@@ -10,6 +13,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -106,23 +110,33 @@ public class CalendarController {
 
     private void handleSlotClick(JPanel slot) {
         // Determine the row and column of the slot
-        int row = -1;
-        int col = -1;
+        final int row;
+        final int col;
         JPanel scheduleGrid = calendarView.getScheduleGrid();
+        int slotIndex = -1;
         for (int i = 0; i < scheduleGrid.getComponentCount(); i++) {
             if (scheduleGrid.getComponent(i) == slot) {
-                row = i / 5;
-                col = i % 5;
+                slotIndex = i;
                 break;
             }
         }
+        row = slotIndex / 5;
+        col = slotIndex % 5;
 
-        // Generate the booking key
-        String key = generateBookingKey(currentDate, row, col);
-        boolean isBooked = bookings.getOrDefault(key, false);
+        // Get the selected doctor from the dropdown
+        JComboBox<String> doctorDropdown = calendarView.getDoctorDropdown();
+        String selectedDoctor = (String) doctorDropdown.getSelectedItem();
 
-        // Show the CalendarPopupView with the current booking state
-        CalendarPopupView popup = new CalendarPopupView(isBooked);
+        // Generate the slot text
+        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        String[] times = {"8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"};
+        String slotText = days[col] + " " + times[row];
+
+        // Get the list of patients
+        ArrayList<Patient> patients = UserRepository.getPatientList();
+
+        // Show the CalendarPopupView with the selected doctor, slot text, and patients
+        CalendarPopupView popup = new CalendarPopupView(calendarView.getFrame(), selectedDoctor, slotText, patients);
         popup.setVisible(true);
 
         // Wait for the popup to close
@@ -131,8 +145,11 @@ public class CalendarController {
             public void windowClosed(java.awt.event.WindowEvent e) {
                 // Check if the booking was confirmed
                 if (popup.isConfirmed()) {
+                    // Generate the booking key
+                    String key = generateBookingKey(currentDate, row, col);
+                    boolean isBooked = bookings.getOrDefault(key, false);
                     // Toggle the booking state
-                    boolean newBookingState = !isBooked;
+                    boolean newBookingState = popup.isBooked();
                     bookings.put(key, newBookingState);
                     slot.setBackground(getSlotColor(newBookingState));
                 }
