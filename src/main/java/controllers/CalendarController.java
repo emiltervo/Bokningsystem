@@ -55,23 +55,17 @@ public class CalendarController {
     private void initializeData() {
         // Fetch all appointments from the repository
         ArrayList<Appointment> appointments = AppointmentRepository.getAllAppointments();
-
-        // Initialize the bookings grid (10 rows x 5 columns for simplicity)
-        for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 5; col++) {
-                String key = generateBookingKey(currentDate, row, col);
-                bookings.put(key, false); // Default status is available
-            }
-        }
-
         // Mark slots as booked based on the fetched appointments
         for (Appointment appointment : appointments) {
             LocalDate appointmentDate = LocalDate.parse(appointment.getDate().substring(0, 10));
+            Doctor doctor = UserRepository.getDoctorList().stream()
+                    .filter(user -> user.getUserID() == appointment.getDocuserID())
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Doctor not found for appointment ID: " + appointment.getDocuserID()));
             if (isDateInCurrentWeek(appointmentDate)) {
-                int row = getTimeSlotIndex(appointment.getStartTime());
-                int col = getDayIndex(appointmentDate.getDayOfWeek().getValue());
-                String key = generateBookingKey(appointmentDate, row, col);
+                String key = generateBookingKey(appointmentDate, appointment.getStartTime(), doctor.getUserID());
                 bookings.put(key, true);
+                System.out.println("Booking: " + key);
             }
         }
 
@@ -90,13 +84,18 @@ public class CalendarController {
         JPanel scheduleGrid = calendarView.getScheduleGrid();
         int row = 0;
         int col = 0;
+        String selectedDoctor = (String) calendarView.getDoctorDropdown().getSelectedItem();
+        long doctorId = getUserIdByName(selectedDoctor);
+        String[] times = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
         for (Component component : scheduleGrid.getComponents()) {
             if (component instanceof JPanel slot) {
-                String key = generateBookingKey(currentDate, row, col);
+                LocalDate startOfWeek = currentDate.with(WeekFields.of(Locale.forLanguageTag("sv-SE")).dayOfWeek(), 1); // Monday
+                LocalDate specificDate = startOfWeek.plusDays(col);
+                String key = generateBookingKey(specificDate, times[row], doctorId);
                 boolean isBooked = bookings.getOrDefault(key, false);
                 slot.setBackground(getSlotColor(isBooked));
                 col++;
-                if (col == 5) {
+                if (col == 7) {
                     col = 0;
                     row++;
                 }
@@ -147,13 +146,18 @@ public class CalendarController {
         JPanel scheduleGrid = calendarView.getScheduleGrid();
         int row = 0;
         int col = 0;
+        String selectedDoctor = (String) calendarView.getDoctorDropdown().getSelectedItem();
+        long doctorId = getUserIdByName(selectedDoctor);
+        String[] times = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
         for (Component component : scheduleGrid.getComponents()) {
             if (component instanceof JPanel slot) {
-                String key = generateBookingKey(currentDate, row, col);
+                LocalDate startOfWeek = currentDate.with(WeekFields.of(Locale.forLanguageTag("sv-SE")).dayOfWeek(), 1); // Monday
+                LocalDate specificDate = startOfWeek.plusDays(col);
+                String key = generateBookingKey(specificDate, times[row], doctorId);
                 boolean isBooked = bookings.getOrDefault(key, false);
                 slot.setBackground(getSlotColor(isBooked));
                 col++;
-                if (col == 5) {
+                if (col == 7) {
                     col = 0;
                     row++;
                 }
@@ -179,6 +183,7 @@ public class CalendarController {
         // Get the selected doctor from the dropdown
         JComboBox<String> doctorDropdown = calendarView.getDoctorDropdown();
         String selectedDoctor = (String) doctorDropdown.getSelectedItem();
+        long doctorId = getUserIdByName(selectedDoctor);
 
         // Generate the slot date
         String[] times = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
@@ -202,7 +207,7 @@ public class CalendarController {
                 // Check if the booking was confirmed
                 if (popup.isConfirmed()) {
                     // Generate the booking key
-                    String key = generateBookingKey(currentDate, row, col);
+                    String key = generateBookingKey(currentDate, time, doctorId);
                     boolean isBooked = bookings.getOrDefault(key, false);
                     // Toggle the booking state
                     boolean newBookingState = popup.isBooked();
@@ -213,11 +218,6 @@ public class CalendarController {
         });
     }
 
-    private String generateBookingKey(LocalDate date, int row, int col) {
-        // Generate a unique key for each slot based on the date, row, and column
-        return date.toString() + "-R" + row + "-C" + col;
-    }
-
     private Color getSlotColor(boolean isBooked) {
         // Determine the color based on the booking state
         if (isBooked) {
@@ -225,5 +225,57 @@ public class CalendarController {
         } else {
             return Color.GREEN; // Available to book
         }
+    }
+
+    private long getUserIdByName(String doctorName) {
+        ArrayList<Doctor> doctors = UserRepository.getDoctorList();
+        for (Doctor doctor : doctors) {
+            if (doctor.getName().equals(doctorName)) {
+                return doctor.getUserID();
+            }
+        }
+        return -1; // Return -1 if the doctor is not found
+    }
+
+    private void initializeData(String selectedDoctor) {
+        long doctorId = getUserIdByName(selectedDoctor);
+        if (doctorId == -1) {
+            // Handle the case where the doctor is not found
+            JOptionPane.showMessageDialog(calendarView.getFrame(), "Doctor not found!");
+            return;
+        }
+
+        // Fetch all appointments for the selected doctor from the repository
+        ArrayList<Appointment> appointments = AppointmentRepository.getAllAppointmentsByUserID(doctorId);
+
+        // Initialize the bookings grid (10 rows x 7 columns for the full week)
+        bookings.clear();
+        LocalDate startOfWeek = currentDate.with(WeekFields.of(Locale.forLanguageTag("sv-SE")).dayOfWeek(), 1); // Monday
+        String[] times = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 7; col++) {
+                LocalDate specificDate = startOfWeek.plusDays(col);
+                String key = generateBookingKey(specificDate, times[row], doctorId);
+                bookings.put(key, false); // Default status is available
+            }
+        }
+
+        // Mark slots as booked based on the fetched appointments
+        for (Appointment appointment : appointments) {
+            LocalDate appointmentDate = LocalDate.parse(appointment.getDate().substring(0, 10));
+            if (isDateInCurrentWeek(appointmentDate)) {
+                int row = getTimeSlotIndex(appointment.getStartTime());
+                String key = generateBookingKey(appointmentDate, appointment.getStartTime(), doctorId);
+                bookings.put(key, true);
+            }
+        }
+
+        // Update the calendar view
+        updateCalendarView();
+    }
+
+    private String generateBookingKey(LocalDate date, String time, long doctorId) {
+        // Generate a unique key for each slot based on the date, time, and doctor ID
+        return date.toString() + " " + time + " - " + doctorId;
     }
 }

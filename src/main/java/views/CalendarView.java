@@ -6,8 +6,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import controllers.CalendarController;
@@ -152,7 +154,8 @@ public class CalendarView {
         JPanel placeholderPanel = createDatePanel();
         JPanel daysHeader = createDaysHeader();
         JPanel timeSlots = createTimeSlots();
-        JPanel grid = createScheduleGrid();
+        LocalDate startOfWeek = currentDate.with(WeekFields.of(Locale.forLanguageTag("sv-SE")).dayOfWeek(), 1); // Monday
+        JPanel grid = createScheduleGrid(startOfWeek);
 
         JPanel timeAndGrid = new JPanel(new BorderLayout());
         timeAndGrid.add(timeSlots, BorderLayout.WEST);
@@ -247,18 +250,14 @@ public class CalendarView {
         return placeholderPanel;
     }
 
-    public JPanel createScheduleGrid() {
-        scheduleGrid = new JPanel(new GridLayout(10, 7)); // Change to 7 columns
+    private JPanel createScheduleGrid(LocalDate startOfWeek) {
+        scheduleGrid = new JPanel(new GridLayout(10, 7)); // 7 columns for each day of the week
         scheduleGrid.setPreferredSize(new Dimension(800, 400));
 
         for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 7; col++) { // Change to 7 columns
+            for (int col = 0; col < 7; col++) { // Iterate through each day of the week
                 JPanel slot = new JPanel();
                 slot.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-
-                String key = generateBookingKey(currentDate, row, col);
-                boolean isBooked = bookings.getOrDefault(key, false);
-                slot.setBackground(getSlotColor(isBooked));
 
                 slot.setName("Slot: Row " + row + ", Col " + col);
 
@@ -266,14 +265,6 @@ public class CalendarView {
             }
         }
         return scheduleGrid;
-    }
-
-    private Color getSlotColor(boolean isBooked) {
-        return isBooked ? Color.RED : Color.GREEN;
-    }
-
-    private String generateBookingKey(LocalDate date, int row, int col) {
-        return date.toString() + "-" + row + "-" + col;
     }
 
     public static void main(String[] args) {
