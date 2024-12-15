@@ -1,16 +1,13 @@
 package controllers;
 
-/** Controller for the CalendarView */
-
-import models.Patient;
-import models.PatientRepository;
-import models.UserRepository;
+import models.*;
 import views.CalendarPopupView;
 import views.CalendarView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
@@ -56,14 +53,70 @@ public class CalendarController {
     }
 
     private void initializeData() {
-        // Example: Initialize the bookings grid (10 rows x 5 columns for simplicity)
-        // Example: holds booking statuses for the grid
+        // Fetch all appointments from the repository
+        ArrayList<Appointment> appointments = AppointmentRepository.getAllAppointments();
+
+        // Initialize the bookings grid (10 rows x 5 columns for simplicity)
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 5; col++) {
                 String key = generateBookingKey(currentDate, row, col);
                 bookings.put(key, false); // Default status is available
             }
         }
+
+        // Mark slots as booked based on the fetched appointments
+        for (Appointment appointment : appointments) {
+            LocalDate appointmentDate = LocalDate.parse(appointment.getDate().substring(0, 10));
+            if (isDateInCurrentWeek(appointmentDate)) {
+                int row = getTimeSlotIndex(appointment.getStartTime());
+                int col = getDayIndex(appointmentDate.getDayOfWeek().getValue());
+                String key = generateBookingKey(appointmentDate, row, col);
+                bookings.put(key, true);
+            }
+        }
+
+        // Update the calendar view
+        updateCalendarView();
+    }
+
+    private boolean isDateInCurrentWeek(LocalDate date) {
+        WeekFields weekFields = WeekFields.of(Locale.forLanguageTag("sv-SE"));
+        LocalDate startOfWeek = currentDate.with(weekFields.dayOfWeek(), 1); // Monday
+        LocalDate endOfWeek = currentDate.with(weekFields.dayOfWeek(), 7);   // Sunday
+        return !date.isBefore(startOfWeek) && !date.isAfter(endOfWeek);
+    }
+
+    private void updateCalendarView() {
+        JPanel scheduleGrid = calendarView.getScheduleGrid();
+        int row = 0;
+        int col = 0;
+        for (Component component : scheduleGrid.getComponents()) {
+            if (component instanceof JPanel slot) {
+                String key = generateBookingKey(currentDate, row, col);
+                boolean isBooked = bookings.getOrDefault(key, false);
+                slot.setBackground(getSlotColor(isBooked));
+                col++;
+                if (col == 5) {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+    }
+
+    private int getTimeSlotIndex(String time) {
+        String[] times = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
+        for (int i = 0; i < times.length; i++) {
+            if (times[i].equals(time)) {
+                return i;
+            }
+        }
+        return -1; // Not found
+    }
+
+    private int getDayIndex(int dayOfWeek) {
+        // Map Monday (1) to 0, Tuesday (2) to 1, ..., Friday (5) to 4
+        return dayOfWeek - 1;
     }
 
     private void addListeners() {
@@ -120,23 +173,26 @@ public class CalendarController {
                 break;
             }
         }
-        row = slotIndex / 5;
-        col = slotIndex % 5;
+        row = slotIndex / 7; // Adjust for 7 columns
+        col = slotIndex % 7; // Adjust for 7 columns
 
         // Get the selected doctor from the dropdown
         JComboBox<String> doctorDropdown = calendarView.getDoctorDropdown();
         String selectedDoctor = (String) doctorDropdown.getSelectedItem();
 
-        // Generate the slot text
-        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
-        String[] times = {"8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"};
-        String slotText = days[col] + " " + times[row];
+        // Generate the slot date
+        String[] times = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
+        String time = times[row];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.forLanguageTag("sv-SE"));
+        LocalDate slotDate = currentDate.with(WeekFields.of(Locale.forLanguageTag("sv-SE")).dayOfWeek(), col + 1); // Adjust for correct day
+        String slotDateTimeString = slotDate.toString() + " " + time;
+        LocalDateTime slotDateTime = LocalDateTime.parse(slotDateTimeString, formatter);
 
         // Get the list of patients
         ArrayList<Patient> patients = UserRepository.getPatientList();
 
-        // Show the CalendarPopupView with the selected doctor, slot text, and patients
-        CalendarPopupView popup = new CalendarPopupView(calendarView.getFrame(), selectedDoctor, slotText, patients);
+        // Show the CalendarPopupView with the selected doctor, slot date, and patients
+        CalendarPopupView popup = new CalendarPopupView(calendarView.getFrame(), selectedDoctor, java.sql.Timestamp.valueOf(slotDateTime), patients, false);
         popup.setVisible(true);
 
         // Wait for the popup to close

@@ -5,7 +5,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import controllers.CalendarController;
 import models.*;
@@ -21,6 +24,9 @@ public class CalendarView {
     private JComboBox<String> patientDropdown;
     private List<Patient> patients;
     JComboBox<String> doctorDropdown;
+
+    private LocalDate currentDate = LocalDate.now();
+    private Map<String, Boolean> bookings = new HashMap<>();
 
     public CalendarView() {
         calendarFrame = new JFrame("Calendar Page");
@@ -147,12 +153,10 @@ public class CalendarView {
         JPanel daysHeader = createDaysHeader();
         JPanel timeSlots = createTimeSlots();
         JPanel grid = createScheduleGrid();
-        JPanel bookingsPanel = createBookingsPanel();
 
         JPanel timeAndGrid = new JPanel(new BorderLayout());
         timeAndGrid.add(timeSlots, BorderLayout.WEST);
         timeAndGrid.add(grid, BorderLayout.CENTER);
-        timeAndGrid.add(bookingsPanel, BorderLayout.EAST);
 
         scheduleWrapper.add(placeholderPanel, BorderLayout.NORTH);
         scheduleWrapper.add(daysHeader, BorderLayout.CENTER);
@@ -161,56 +165,15 @@ public class CalendarView {
         calendarFrame.add(scheduleWrapper, BorderLayout.SOUTH);
     }
 
-    private JPanel createBookingsPanel() {
-        JPanel bookingsPanel = new JPanel();
-        bookingsPanel.setPreferredSize(new Dimension(160, 0));
-        bookingsPanel.setLayout(new BoxLayout(bookingsPanel, BoxLayout.Y_AXIS));
-        bookingsPanel.setBackground(Color.LIGHT_GRAY);
-        bookingsPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-
-        JLabel bookingsTitle = new JLabel("Bookings", JLabel.CENTER);
-        bookingsTitle.setFont(new Font("Arial", Font.BOLD, 16));
-        bookingsTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        bookingsTitle.setBorder(new EmptyBorder(10, 0, 5, 0));
-
-        JPanel availablePanel = createStatusPanel("Available", Color.GREEN);
-        JPanel bookedPanel = createStatusPanel("Booked", Color.RED);
-
-        bookingsPanel.add(bookingsTitle);
-        bookingsPanel.add(Box.createVerticalStrut(5));
-        bookingsPanel.add(availablePanel);
-        bookingsPanel.add(bookedPanel);
-
-        return bookingsPanel;
-    }
-
-    private JPanel createStatusPanel(String text, Color color) {
-        JPanel statusPanel = new JPanel();
-        statusPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
-
-        JLabel colorBox = new JLabel();
-        colorBox.setOpaque(true);
-        colorBox.setBackground(color);
-        colorBox.setPreferredSize(new Dimension(15, 15));
-
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.PLAIN, 14));
-
-        statusPanel.add(colorBox);
-        statusPanel.add(label);
-
-        return statusPanel;
-    }
-
     private JPanel createDaysHeader() {
         JPanel daysHeader = new JPanel(new BorderLayout());
         daysHeader.setPreferredSize(new Dimension(800, 30));
         daysHeader.setBackground(Color.WHITE);
 
-        JPanel daysPanel = new JPanel(new GridLayout(1, 5));
+        JPanel daysPanel = new JPanel(new GridLayout(1, 7)); // Change to 7 columns
         daysPanel.setBackground(Color.WHITE);
 
-        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri"};
+        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}; // Include Saturday and Sunday
         for (String day : days) {
             JLabel dayLabel = new JLabel(day, JLabel.CENTER);
             dayLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -221,7 +184,6 @@ public class CalendarView {
 
         daysHeader.add(Box.createRigidArea(new Dimension(80, 0)), BorderLayout.WEST);
         daysHeader.add(daysPanel, BorderLayout.CENTER);
-        daysHeader.add(Box.createRigidArea(new Dimension(160, 0)), BorderLayout.EAST);
 
         return daysHeader;
     }
@@ -286,14 +248,17 @@ public class CalendarView {
     }
 
     public JPanel createScheduleGrid() {
-        scheduleGrid = new JPanel(new GridLayout(10, 5));
+        scheduleGrid = new JPanel(new GridLayout(10, 7)); // Change to 7 columns
         scheduleGrid.setPreferredSize(new Dimension(800, 400));
 
         for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 5; col++) {
+            for (int col = 0; col < 7; col++) { // Change to 7 columns
                 JPanel slot = new JPanel();
                 slot.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-                slot.setBackground(Color.green);
+
+                String key = generateBookingKey(currentDate, row, col);
+                boolean isBooked = bookings.getOrDefault(key, false);
+                slot.setBackground(getSlotColor(isBooked));
 
                 slot.setName("Slot: Row " + row + ", Col " + col);
 
@@ -301,6 +266,14 @@ public class CalendarView {
             }
         }
         return scheduleGrid;
+    }
+
+    private Color getSlotColor(boolean isBooked) {
+        return isBooked ? Color.RED : Color.GREEN;
+    }
+
+    private String generateBookingKey(LocalDate date, int row, int col) {
+        return date.toString() + "-" + row + "-" + col;
     }
 
     public static void main(String[] args) {

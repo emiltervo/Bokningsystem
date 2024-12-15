@@ -1,23 +1,34 @@
 package views;
 
-import models.Patient;
+import models.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class CalendarPopupView extends JDialog {
-    private boolean isBooked;
     private boolean confirmed;
-    private JLabel doctorLabel;
-    private JComboBox<Patient> patientComboBox;
-    private JTextField searchField;
+    private final JLabel doctorLabel;
+    private final JComboBox<Patient> patientComboBox;
+    private final JTextField searchField;
+    private final Date slotDate;
+    private final String doctor;
+    private final BookingState bookingState;
 
-    public CalendarPopupView(JFrame parent, String doctor, String slotText, List<Patient> patients) {
+    private static class BookingState {
+        boolean isBooked;
+    }
+
+    public CalendarPopupView(JFrame parent, String doctor, Date slotDate, List<Patient> patients, boolean isBooked) {
         super(parent, "Room Booking", true);
-        isBooked = false; // Default initial state
+        this.doctor = doctor;
+        this.slotDate = slotDate;
+        this.bookingState = new BookingState();
+        this.bookingState.isBooked = isBooked;
 
         setTitle("Room Booking");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -38,7 +49,8 @@ public class CalendarPopupView extends JDialog {
         doctorLabel = new JLabel("Doctor: " + doctor);
         doctorLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-        JLabel slotLabel = new JLabel(slotText);
+        SimpleDateFormat slotFormat = new SimpleDateFormat("EEEE, yyyy-MM-dd HH:mm");
+        JLabel slotLabel = new JLabel(slotFormat.format(slotDate));
         slotLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
         searchField = new JTextField(20);
@@ -51,22 +63,17 @@ public class CalendarPopupView extends JDialog {
 
         JButton bookButton = createRoundButton("Book", Color.GREEN, Color.BLACK);
         JButton unbookButton = createRoundButton("Unbook", Color.RED, Color.WHITE);
-        
-        if (isBooked) {
-            bookButton.setVisible(false);
-        }
-        else {
-            unbookButton.setVisible(false);
-        }
+
         bookButton.addActionListener(e -> {
             confirmed = true;
-            isBooked = true;
+            bookingState.isBooked = true;
+            makeAppointment();
             dispose();
         });
 
         unbookButton.addActionListener(e -> {
             confirmed = true;
-            isBooked = false;
+            bookingState.isBooked = false;
             dispose();
         });
 
@@ -86,12 +93,39 @@ public class CalendarPopupView extends JDialog {
 
         gbc.gridy = 4;
         gbc.gridwidth = 1;
-        mainPanel.add(unbookButton, gbc);
-
-        gbc.gridx = 1;
+        if (isBooked) {
+            mainPanel.add(unbookButton, gbc);
+            gbc.gridx = 1;
+        }
         mainPanel.add(bookButton, gbc);
 
         add(mainPanel);
+    }
+
+    private void makeAppointment() {
+        Doctor doctor = null;
+        List<Doctor> doctors = UserRepository.getDoctorList();
+        for (Doctor d : doctors) {
+            if (d.getName().equals(this.doctor)) {
+                doctor = d;
+                break;
+            }
+        }
+        if (doctor == null) {
+            throw new IllegalStateException("Doctor not found");
+        }
+        Patient patient = (Patient) patientComboBox.getSelectedItem();
+        assert patient != null;
+
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = outputFormat.format(slotDate);
+
+        // Extract the time part from slotDate
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String startTime = timeFormat.format(slotDate);
+
+        Appointment appointment = AppointmentFactory.createAppointment(startTime, formattedDate, patient.getUserID(), doctor.getUserID(), 60, 1);
+        AppointmentRepository.insertAppointment(appointment);
     }
 
     private JButton createRoundButton(String text, Color background, Color foreground) {
@@ -126,10 +160,18 @@ public class CalendarPopupView extends JDialog {
     }
 
     public boolean isBooked() {
-        return isBooked;
+        return bookingState.isBooked;
     }
 
     public Patient getSelectedPatient() {
         return (Patient) patientComboBox.getSelectedItem();
+    }
+
+    public Date getSlotDate() {
+        return slotDate;
+    }
+
+    public String getDoctor() {
+        return doctor;
     }
 }
