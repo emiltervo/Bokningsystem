@@ -50,8 +50,6 @@ public class AppointmentRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Appointment list:");
-        System.out.println(appointmentList);
         return appointmentList;
     }
 
@@ -80,5 +78,22 @@ public class AppointmentRepository {
             e.printStackTrace();
         }
         return appointmentListByUserID;
+    }
+
+    public static void deleteAppointment(String startTime, String formattedDate, long userID, long userID1) {
+        String sql = "DELETE FROM appointments WHERE startTime = ? AND date = ? AND patuserID = ? AND docuserID = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, startTime);
+            pstmt.setString(2, formattedDate);
+            pstmt.setLong(3, userID);
+            pstmt.setLong(4, userID1);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

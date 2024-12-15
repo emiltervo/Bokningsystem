@@ -56,10 +56,15 @@ public class CalendarPopupView extends JDialog {
         for (Patient patient : patients) {
             patientComboBox.addItem(patient);
         }
-
         JButton bookButton = createRoundButton("Book", Color.GREEN, Color.BLACK);
         JButton unbookButton = createRoundButton("Unbook", Color.RED, Color.WHITE);
-
+        // Show the button depending on the booking state
+        if (isBooked) {
+            bookButton.setVisible(false);
+            patientComboBox.setEnabled(false);
+        } else {
+            unbookButton.setVisible(false);
+        }
         bookButton.addActionListener(e -> {
             confirmed = true;
             bookingState.isBooked = true;
@@ -70,6 +75,7 @@ public class CalendarPopupView extends JDialog {
         unbookButton.addActionListener(e -> {
             confirmed = true;
             bookingState.isBooked = false;
+            unBookPatient();
             dispose();
         });
 
@@ -93,6 +99,31 @@ public class CalendarPopupView extends JDialog {
         mainPanel.add(bookButton, gbc);
 
         add(mainPanel);
+    }
+
+    private void unBookPatient() {
+        Doctor doctor = null;
+        List<Doctor> doctors = UserRepository.getDoctorList();
+        for (Doctor d : doctors) {
+            if (d.getName().equals(this.doctor)) {
+                doctor = d;
+                break;
+            }
+        }
+        if (doctor == null) {
+            throw new IllegalStateException("Doctor not found");
+        }
+        Patient patient = (Patient) patientComboBox.getSelectedItem();
+        assert patient != null;
+
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = outputFormat.format(slotDate);
+
+        // Extract the time part from slotDate
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String startTime = timeFormat.format(slotDate);
+
+        AppointmentRepository.deleteAppointment(startTime, formattedDate, patient.getUserID(), doctor.getUserID());
     }
 
     private void makeAppointment() {

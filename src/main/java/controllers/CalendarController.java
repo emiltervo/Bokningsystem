@@ -65,7 +65,6 @@ public class CalendarController {
             if (isDateInCurrentWeek(appointmentDate)) {
                 String key = generateBookingKey(appointmentDate, appointment.getStartTime(), doctor.getUserID());
                 bookings.put(key, true);
-                System.out.println("Booking: " + key);
             }
         }
 
@@ -148,27 +147,14 @@ public class CalendarController {
         currentDate = currentDate.plusWeeks(delta);
         updateWeekDisplay();
 
-        // Update the background color of all slots based on the booking data
-        JPanel scheduleGrid = calendarView.getScheduleGrid();
-        int row = 0;
-        int col = 0;
+        // Get the selected doctor from the dropdown
         String selectedDoctor = (String) calendarView.getDoctorDropdown().getSelectedItem();
-        long doctorId = getUserIdByName(selectedDoctor);
-        String[] times = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
-        for (Component component : scheduleGrid.getComponents()) {
-            if (component instanceof JPanel slot) {
-                LocalDate startOfWeek = currentDate.with(WeekFields.of(Locale.forLanguageTag("sv-SE")).dayOfWeek(), 1); // Monday
-                LocalDate specificDate = startOfWeek.plusDays(col);
-                String key = generateBookingKey(specificDate, times[row], doctorId);
-                boolean isBooked = bookings.getOrDefault(key, false);
-                slot.setBackground(getSlotColor(isBooked));
-                col++;
-                if (col == 7) {
-                    col = 0;
-                    row++;
-                }
-            }
-        }
+
+        // Initialize data for the selected doctor
+        initializeData(selectedDoctor);
+
+        // Update the calendar view
+        updateCalendarView();
     }
 
     private void handleSlotClick(JPanel slot) {
@@ -189,6 +175,10 @@ public class CalendarController {
         // Get the selected doctor from the dropdown
         JComboBox<String> doctorDropdown = calendarView.getDoctorDropdown();
         String selectedDoctor = (String) doctorDropdown.getSelectedItem();
+
+        // Initialize data for the selected doctor
+        initializeData(selectedDoctor);
+
         long doctorId = getUserIdByName(selectedDoctor);
 
         // Generate the slot date
@@ -196,13 +186,11 @@ public class CalendarController {
         String time = times[row];
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.forLanguageTag("sv-SE"));
         LocalDate slotDate = currentDate.with(WeekFields.of(Locale.forLanguageTag("sv-SE")).dayOfWeek(), col + 1); // Adjust for correct day
-        String slotDateTimeString = slotDate.toString() + " " + time;
+        String slotDateTimeString = slotDate + " " + time;
         LocalDateTime slotDateTime = LocalDateTime.parse(slotDateTimeString, formatter);
 
         // Get the list of patients
         ArrayList<Patient> patients = UserRepository.getPatientList();
-
-        // Show the CalendarPopupView with the selected doctor, slot date, and patients
 
         // Get the booking status for the slot
         Boolean isBooked = bookings.get(generateBookingKey(slotDate, time, doctorId));
