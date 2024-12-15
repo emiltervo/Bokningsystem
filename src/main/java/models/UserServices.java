@@ -42,13 +42,12 @@ public class UserServices {
         return nameAndId;
     }
     // Method for getting patient details
-    public User getPatientDetails(String selectedItem) {
+    public User getPatientDetails(long userID) {
         ArrayList<User> users = UserRepository.getUserList();
-        String[] parts = selectedItem.split(" ");
-        String selectedID = parts[parts.length - 1];
-        for(User who : users) {
-            if (String.valueOf(who.getUserID()).equals(selectedID)) {
-               return who;
+
+        for (User who : users) {
+            if (who.getUserID() == userID) {
+                return who;
             }
         }
         return null;

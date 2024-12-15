@@ -2,14 +2,10 @@ package views;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import models.*;
-import static models.UserRepository.*;
 import controllers.*;
 
 public class PatientView {
@@ -36,19 +32,25 @@ public class PatientView {
     private JTextField surnameField;
     private JTextField userIDField;
     private JTextField emailField;
-    private PatientViewController patientController;
-    private UserServices userServices;
+    private final PatientViewController patientController;
+    private final UserServices userServices;
+
+    private JLabel email;
+    private JLabel name;
+    private JLabel personnr;
+    private JLabel role;
 
     public PatientView() {
 
         userServices = new UserServices();
-
         initializeAll();
         addUserInterface();
         startListeners();
+        createUserInfoPanel();
+
+
 
         patientController = new PatientViewController(this);
-
         patientController.populateComboBox();
 
     }
@@ -78,6 +80,17 @@ public class PatientView {
         passwordField = new JTextField(15);
         emailField = new JTextField(15);
         submitButton = new JButton("Submit");
+        email = new JLabel("Email: ");
+        name = new JLabel("Name: ");
+        personnr = new JLabel("Personnummer: ");
+        role = new JLabel("Role: ");
+
+        name.setVisible(false);
+        personnr.setVisible(false);
+        email.setVisible(false);
+        role.setVisible(false);
+
+
 
 
     }
@@ -98,7 +111,9 @@ public class PatientView {
             }
         });
         button.addActionListener(abc -> {
-            populatePatient(comboBox.getSelectedItem().toString());
+            String selectedItem = comboBox.getSelectedItem().toString();
+            System.out.println("Selected Item: " + selectedItem); // Debug line
+            patientController.populatePatientDetails(selectedItem);
         });
         newUser.addActionListener(abc -> {
             createPopup(frame);
@@ -129,20 +144,17 @@ public class PatientView {
 
     }
 
-    private void populatePatient(String selectedItem) {
-        User user = userServices.getPatientDetails(selectedItem);
-
+    public void updatePatientDetails(User user) {
         if (user != null) {
             nameLabel.setText(user.getName());
-            userIDLabel.setText(String.valueOf(user.getUserID())); //Shit solution
+            userIDLabel.setText(String.valueOf(user.getUserID())); // Display user ID
             emailLabel.setText(user.getEmail());
             roleLabel.setText(user.getRole());
+
+            showLabels();
         } else {
-            //Hi
+            showErrorMessage("User details not found.");
         }
-
-
-
     }
 
 
@@ -333,10 +345,16 @@ public class PatientView {
         createHeader();
         createBreadcrumbs();
         createSearchPanel();
-        createUserPanel();
 
         frame.setVisible(true);
 
+    }
+
+    private void showLabels() {
+        role.setVisible(true);
+        name.setVisible(true);
+        personnr.setVisible(true);
+        email.setVisible(true);
     }
 
 
@@ -382,47 +400,53 @@ public class PatientView {
         frame.setVisible(visible);
     }
 
-    private JPanel createUserPanel() {
-        JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(1200, 120));
-        panel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10);
+    private void createUserInfoPanel() {
+        JPanel userInfoPanel = new JPanel();
+        userInfoPanel.setPreferredSize(new Dimension(1200, 150));
+        userInfoPanel.setLayout(new GridBagLayout());
+        userInfoPanel.setBackground(Color.WHITE); // Set background color
 
-        // Create the big labels (first name+surname)
-        nameLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Padding around components
+        gbc.anchor = GridBagConstraints.WEST;
+
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(nameLabel, gbc);
+        userInfoPanel.add(name, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        userInfoPanel.add(nameLabel, gbc);
 
-        userIDLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        userIDLabel.setForeground(Color.BLACK);
-        userIDLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        userIDLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(userIDLabel, gbc);
+        userInfoPanel.add(personnr,gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        userInfoPanel.add(userIDLabel, gbc);
 
-        emailLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        gbc.gridx = 0;
+        emailLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        gbc.gridx = 0; // Column 0
+        gbc.gridy = 2; // Row 2
+        userInfoPanel.add(email, gbc);
+        gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(emailLabel, gbc);
+        userInfoPanel.add(emailLabel, gbc);
 
-        roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        // Configure and add roleLabel
+        roleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(roleLabel, gbc);
+        userInfoPanel.add(role, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        userInfoPanel.add(roleLabel, gbc);
 
-        panel.setMaximumSize(new Dimension(1200, 100));
+        frame.add(userInfoPanel, BorderLayout.CENTER);
+        frame.setVisible(true);
 
-
-        return panel;
     }
 
 

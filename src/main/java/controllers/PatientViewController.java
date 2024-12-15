@@ -1,10 +1,12 @@
 package controllers;
 
+import models.User;
 import models.UserValidator;
 import models.UserServices;
 import views.PatientView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 //** Controller for the PatientView */
 
@@ -41,4 +43,16 @@ public class PatientViewController {
         view.populateComboBox(patients);
     }
 
+    public void populatePatientDetails(String selectedItem) {
+
+        String[] parts = selectedItem.split(" ");
+        String selectedID = parts[parts.length-1];
+        long userID = Long.parseLong(selectedID);
+
+        User user = userServices.getPatientDetails(userID);
+
+        if (user!=null) {
+            view.updatePatientDetails(user);
+        }
+    }
 }
