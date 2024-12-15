@@ -203,7 +203,13 @@ public class CalendarController {
         ArrayList<Patient> patients = UserRepository.getPatientList();
 
         // Show the CalendarPopupView with the selected doctor, slot date, and patients
-        CalendarPopupView popup = new CalendarPopupView(calendarView.getFrame(), selectedDoctor, java.sql.Timestamp.valueOf(slotDateTime), patients, false);
+
+        // Get the booking status for the slot
+        Boolean isBooked = bookings.get(generateBookingKey(slotDate, time, doctorId));
+        if (isBooked == null) {
+            isBooked = false; // Default to false if not found
+        }
+        CalendarPopupView popup = new CalendarPopupView(calendarView.getFrame(), selectedDoctor, java.sql.Timestamp.valueOf(slotDateTime), patients, isBooked);
         popup.setVisible(true);
 
         // Wait for the popup to close

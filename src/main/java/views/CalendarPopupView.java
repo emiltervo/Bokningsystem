@@ -14,7 +14,6 @@ public class CalendarPopupView extends JDialog {
     private boolean confirmed;
     private final JLabel doctorLabel;
     private final JComboBox<Patient> patientComboBox;
-    private final JTextField searchField;
     private final Date slotDate;
     private final String doctor;
     private final BookingState bookingState;
@@ -53,9 +52,6 @@ public class CalendarPopupView extends JDialog {
         JLabel slotLabel = new JLabel(slotFormat.format(slotDate));
         slotLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-        searchField = new JTextField(20);
-        searchField.setToolTipText("Search for patients");
-
         patientComboBox = new JComboBox<>();
         for (Patient patient : patients) {
             patientComboBox.addItem(patient);
@@ -84,9 +80,6 @@ public class CalendarPopupView extends JDialog {
 
         gbc.gridy = 1;
         mainPanel.add(slotLabel, gbc);
-
-        gbc.gridy = 2;
-        mainPanel.add(searchField, gbc);
 
         gbc.gridy = 3;
         mainPanel.add(patientComboBox, gbc);
