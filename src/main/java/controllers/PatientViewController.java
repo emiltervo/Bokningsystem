@@ -59,7 +59,6 @@ public class PatientViewController {
 
     public void handleInput(String input) {
         ArrayList<String> results = userValidator.checkInput(input);
-
         // Pings view to update with results
         view.updateComboBox(results);
     }

@@ -8,6 +8,8 @@ import javax.swing.event.DocumentListener;
 import models.*;
 import controllers.*;
 
+/** PatientView is responsible for displaying all patients. */
+
 public class PatientView {
     private JComboBox<String> comboBox;
     private JDialog popup;
@@ -40,6 +42,7 @@ public class PatientView {
     private JLabel personnr;
     private JLabel role;
 
+    // Constructor for PatientView
     public PatientView() {
 
         userServices = new UserServices();
@@ -48,13 +51,12 @@ public class PatientView {
         startListeners();
         createUserInfoPanel();
 
-
-
         patientController = new PatientViewController(this);
         patientController.populateComboBox();
 
     }
 
+    // Initializes everything.
     private void initializeAll() {
 
         comboBox = new JComboBox<>();
@@ -95,6 +97,8 @@ public class PatientView {
 
     }
 
+
+    // Starts listeners for buttons, fields etc & then pings the controller.
     private void startListeners() {
         searchText.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -159,7 +163,6 @@ public class PatientView {
             showErrorMessage("User details not found.");
         }
     }
-
     // Improved & connected to controller now.
     public void populateComboBox(ArrayList<String> patients) {
         comboBox.removeAllItems();
@@ -170,7 +173,7 @@ public class PatientView {
 
     public void showErrorMessage(String errorMessage) {
         this.errorMessage.setText(errorMessage);
-        this.errorMessage.setFont(new Font("Arial", Font.PLAIN, 15));
+        this.errorMessage.setFont(new Font("Arial", Font.PLAIN, 14));
         this.errorMessage.setVisible(true);
     }
     private void initializeFrame() {
@@ -314,7 +317,7 @@ public class PatientView {
         buttonPanel.add(submitButton);
         buttonPanel.add(cancelButton);
 
-        // Logic for checking before shipping user to database.
+        // Error message if some field are incorrectly entered.
 
         gbc.gridx = 0; gbc.gridy = 8;
         gbc.gridwidth = 2; // Span across both columns
@@ -332,7 +335,6 @@ public class PatientView {
 
         popup.setVisible(true);
     }
-
     private void setRoleBox() {
 
         roleBox.addItem("patient");
@@ -349,14 +351,12 @@ public class PatientView {
         frame.setVisible(true);
 
     }
-
     private void showLabels() {
         role.setVisible(true);
         name.setVisible(true);
         personnr.setVisible(true);
         email.setVisible(true);
     }
-
     private void createSearchPanel() {
         searchPanel.setPreferredSize(new Dimension(1200, 100));
         searchPanel.setBackground(Color.white);
@@ -394,11 +394,9 @@ public class PatientView {
 
         frame.add(searchPanel, BorderLayout.CENTER);
     }
-
     public void setVisible(boolean visible) {
         frame.setVisible(visible);
     }
-
     private void createUserInfoPanel() {
         JPanel userInfoPanel = new JPanel();
         userInfoPanel.setPreferredSize(new Dimension(1200, 150));
@@ -447,7 +445,6 @@ public class PatientView {
         frame.setVisible(true);
 
     }
-
     public void updateComboBox(ArrayList<String> matching) {
 
         comboBox.removeAllItems();

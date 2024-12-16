@@ -13,9 +13,14 @@ public class UserValidator {
 
     private final UserServices userServices;
 
+
+    // Dependency injection
     public UserValidator(UserServices userServices) {
         this.userServices = userServices;
     }
+
+    // Checks all text fields when creating a new user.
+    // Will notify the user which fields are invalid - (if any).
 
     public String isValid(String name, String surname, String personnummer, String password, String email, String role) {
 
@@ -66,6 +71,9 @@ public class UserValidator {
         System.out.println("Ready to add to database:" + " " + fullName);
     }
 
+    // Checks search box input from user & then redirects the responsibility.
+    // Either 1) letters & numbers, 2) letters, 3) numbers, 4) empty input.
+
     public ArrayList<String> checkInput(String input) {
         ArrayList<String> searchMatches = new ArrayList<>();
 
@@ -85,6 +93,8 @@ public class UserValidator {
 
     }
 
+
+    // Searches through names and numbers in database.
     private ArrayList<String> letterCheck(String input) {
         ArrayList<String> matches = new ArrayList<>();
         ArrayList<String> nameAndId = userServices.extractBoth();
@@ -98,6 +108,8 @@ public class UserValidator {
         }
         return matches;
     }
+
+    // Searches through numbers only in database (personnummer) for quick searches.
 
     private ArrayList<String> numberCheck(String input) {
         ArrayList<String> matches = new ArrayList<>();

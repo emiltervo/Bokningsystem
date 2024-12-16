@@ -22,7 +22,7 @@ public class UserServices {
             fullNamePlusID.add(fullName + " " + userID);
 
         }
-        // Shipping >>> view.
+
         return fullNamePlusID;
     }
 
@@ -38,10 +38,10 @@ public class UserServices {
 
             nameAndId.add(fullName + " " + userIDToString);
         }
-        // Shipping >>> view.
+
         return nameAndId;
     }
-    // Method for getting patient details
+    // Method for getting a specific patient's details
     public User getPatientDetails(long userID) {
         ArrayList<User> users = UserRepository.getUserList();
 
