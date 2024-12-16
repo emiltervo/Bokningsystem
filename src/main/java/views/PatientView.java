@@ -99,15 +99,18 @@ public class PatientView {
         searchText.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                checkInput(searchText.getText());
+                patientController.handleInput(searchText.getText());
+
             }
             @Override
             public void removeUpdate(DocumentEvent e) {
-                checkInput(searchText.getText());
+                patientController.handleInput(searchText.getText());
+
             }
             @Override
             public void changedUpdate(DocumentEvent e) {
-                checkInput(searchText.getText());
+                patientController.handleInput(searchText.getText());
+
             }
         });
         button.addActionListener(abc -> {
@@ -157,7 +160,6 @@ public class PatientView {
         }
     }
 
-
     // Improved & connected to controller now.
     public void populateComboBox(ArrayList<String> patients) {
         comboBox.removeAllItems();
@@ -166,13 +168,11 @@ public class PatientView {
         }
     }
 
-
     public void showErrorMessage(String errorMessage) {
         this.errorMessage.setText(errorMessage);
         this.errorMessage.setFont(new Font("Arial", Font.PLAIN, 15));
         this.errorMessage.setVisible(true);
     }
-
     private void initializeFrame() {
         frame = new JFrame("Patient page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -328,7 +328,7 @@ public class PatientView {
 
         popup.add(contentPanel);
 
-        cancelButton.addActionListener(e -> popup.dispose());
+        cancelButton.addActionListener(e -> popup.setVisible(false));
 
         popup.setVisible(true);
     }
@@ -356,7 +356,6 @@ public class PatientView {
         personnr.setVisible(true);
         email.setVisible(true);
     }
-
 
     private void createSearchPanel() {
         searchPanel.setPreferredSize(new Dimension(1200, 100));
@@ -447,58 +446,6 @@ public class PatientView {
         frame.add(userInfoPanel, BorderLayout.CENTER);
         frame.setVisible(true);
 
-    }
-
-
-    public void checkInput(String input) {
-
-
-        if (input.matches(".*[a-zA-Z].*") && (input.matches(".*\\d.*"))) {
-
-            letterCheck(input);
-
-        } else if (input.matches(".*[a-zA-Z]")) {
-
-            letterCheck(input);
-
-        } else if (input.matches(".*\\d.*")) {
-
-            numberCheck(input);
-
-        } else if (input.matches("")) {
-            patientController.populateComboBox();
-            comboBox.hidePopup();
-        }
-    }
-
-    public void letterCheck(String input) {
-
-        ArrayList<String> matches = new ArrayList<>();
-        ArrayList<String> nameAndId = userServices.extractBoth();
-
-        for (int abc = 0; abc < nameAndId.size(); abc++) {
-            String fullNameAndId = nameAndId.get(abc);
-            if (fullNameAndId.toLowerCase().contains(input.toLowerCase())) {
-                matches.add(fullNameAndId);
-            }
-        }
-        updateComboBox(matches);
-    }
-
-    public void numberCheck(String input) {
-
-        ArrayList<String> matches = new ArrayList<>();
-        ArrayList<String> nameAndId = userServices.extractBoth();
-
-        for (String fullNameAndId : nameAndId) {
-            String[] iWantTheID = fullNameAndId.split(" ");
-            String userID = iWantTheID[iWantTheID.length - 1];
-
-            if (userID.contains(input)) {
-                matches.add(fullNameAndId);
-            }
-        }
-        updateComboBox(matches);
     }
 
     public void updateComboBox(ArrayList<String> matching) {

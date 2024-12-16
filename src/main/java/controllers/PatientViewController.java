@@ -18,8 +18,9 @@ public class PatientViewController {
     //Constructor
     public PatientViewController(PatientView view) {
         this.view = view;
-        this.userValidator = new UserValidator();
         this.userServices = new UserServices();
+        this.userValidator = new UserValidator(userServices);
+
     }
 
     // Method send input from user to UserValidator in models
@@ -28,7 +29,7 @@ public class PatientViewController {
 
         if (validationMessage.equals("Valid")) {
 
-            userValidator.shipNewUser(Long.valueOf(name), surname, personnummer, password, email, role);
+            userValidator.shipNewUser(Long.valueOf(personnummer), name, surname, password, email, role);
         } else {
 
             view.showErrorMessage(validationMessage);
@@ -54,5 +55,12 @@ public class PatientViewController {
         if (user!=null) {
             view.updatePatientDetails(user);
         }
+    }
+
+    public void handleInput(String input) {
+        ArrayList<String> results = userValidator.checkInput(input);
+
+        // Pings view to update with results
+        view.updateComboBox(results);
     }
 }
