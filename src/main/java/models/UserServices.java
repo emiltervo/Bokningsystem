@@ -12,7 +12,7 @@ public class UserServices {
     // Method for populating a box with user names and IDs
     public ArrayList<String> populateBox() {
 
-        ArrayList<User> users = UserRepository.getUserList();
+        ArrayList<Patient> users = UserRepository.getPatientList();
         ArrayList<String> fullNamePlusID = new ArrayList<>();
 
         for (User user : users) {
