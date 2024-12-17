@@ -34,8 +34,5 @@ public class Patient extends User {
         this.prescriptions.remove(prescription);
     }
 
-    @Override
-    public String toString() {
-        return this.getName() + " (" + this.getUserID() + ")";
-    }
+
 }

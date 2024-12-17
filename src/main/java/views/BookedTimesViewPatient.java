@@ -1,33 +1,30 @@
 package views;
 
-import controllers.HomeViewPatientController;
-import models.User;
-import models.UserRepository;
-import models.Secretary;
-
+import controllers.HomeViewController;
+import models.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class HomeViewPatient {
+public class BookedTimesViewPatient {
     private JFrame frame;
     private JPanel headPanel;
     private JPanel columnPanel;
     private JPanel contentPanel;
-    private HomeViewPatientController controller;
+    private HomeViewController controller;
+    ArrayList<Appointment> appointmentListByCurrentUser = new ArrayList<>();
 
-    public HomeViewPatient() {
+    public BookedTimesViewPatient() {
         initializeFrame();
         createHeader();
         this.columnPanel = createBreadcrumbs();
         createMainContent();
-        createContactInformationBox();
         frame.setVisible(true);
     }
 
-    private void initializeFrame() {
-        frame = new JFrame("HomeViewPatient");
+    public void initializeFrame() {
+        frame = new JFrame("BookedTimesPatientPage");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout());
@@ -36,7 +33,7 @@ public class HomeViewPatient {
     }
 
     private void createHeader() {
-        headPanel = new JPanel(null);
+        JPanel headPanel = new JPanel(null);
         headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
         frame.add(headPanel, BorderLayout.NORTH);
 
@@ -98,41 +95,57 @@ public class HomeViewPatient {
         headPanel.add(profileButton);
     }
 
-
-        private JPanel createBreadcrumbs() {
-            return ViewUtils.createBreadcrumbs(frame);
-        }
-
+    private JPanel createBreadcrumbs() {
+        return ViewUtils.createBreadcrumbs(frame);
+    }
 
     private void createMainContent() {
+        // Skapa huvudpanelen
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setPreferredSize(new Dimension(1200, 525));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 0, 200));
         contentPanel.setBackground(Color.WHITE);
 
-        // Example of a green panel for content
-        JPanel greenPanel = new JPanel();
-        greenPanel.setPreferredSize(new Dimension(1100, 150)); // Adjust width to fit content
-        greenPanel.setBackground(Color.DARK_GRAY);
-        contentPanel.add(greenPanel);
+        JPanel grayPanel = new JPanel();
+        grayPanel.setPreferredSize(new Dimension(1100, 150));
+        grayPanel.setBackground(Color.WHITE);
+        grayPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
 
-        frame.add(contentPanel, BorderLayout.SOUTH);
-    }
+        JLabel test = new JLabel("" + "PRESS TO SEE BOOKED TIMES");
+        test.setFont(new Font("Arial", Font.BOLD, 24));
+        test.setForeground(Color.BLACK);
+        grayPanel.add(test);
 
-    private void createContactInformationBox() {
-        JPanel contactInfoPanel = new JPanel();
-        contactInfoPanel.setLayout(new BoxLayout(contactInfoPanel, BoxLayout.Y_AXIS));
-        contactInfoPanel.setBorder(BorderFactory.createTitledBorder("Kontaktinformation"));
-        contactInfoPanel.setBackground(Color.WHITE);
+        // Add submit button
+        JButton submitButton = new JButton("Get Booked Times");
+        grayPanel.add(submitButton);
 
-        ArrayList<Secretary> secretaries = UserRepository.getSecretaryList();
-        for (Secretary secretary : secretaries) {
-            JLabel emailLabel = new JLabel(secretary.getEmail());
-            contactInfoPanel.add(emailLabel);
+        StringBuilder message = new StringBuilder();
+        for (Appointment appointment : appointmentListByCurrentUser) {
+            message.append(appointment.toString()).append("\n");
         }
 
-        contentPanel.add(contactInfoPanel);
+
+        // Add action listener to the button
+        submitButton.addActionListener(e -> {
+            appointmentListByCurrentUser.clear();
+            appointmentListByCurrentUser = AppointmentRepository.getAllAppointmentsByUserID(LoginView.getCurrentUser());
+            for (Appointment appointment : appointmentListByCurrentUser) {
+                message.append(appointment.toString()).append("\n");
+            }
+            if (appointmentListByCurrentUser != null) {
+                JOptionPane.showMessageDialog(frame,"Your Booked times:\n" + message);
+                }
+            else {
+                JOptionPane.showMessageDialog(frame, "Recipe not found!\nPlease enter a valid personal number.");
+            }
+
+        });
+
+        contentPanel.add(grayPanel);
+
+        frame.add(contentPanel, BorderLayout.SOUTH);
     }
 
     public void setVisible(boolean visible) {

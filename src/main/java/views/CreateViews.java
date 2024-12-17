@@ -6,6 +6,7 @@ import controllers.HomeViewPatientController;
 
 public class CreateViews {
     private static CreateViews instance;
+    private BookedTimesViewPatient bookedTimesViewPatient;
     private HomeView homeView;
     private HomeViewPatient homeViewPatient;
     private LoginView loginView;
@@ -35,6 +36,13 @@ public class CreateViews {
         return homeView;
     }
 
+    public BookedTimesViewPatient getBookedTimesViewPatient() {
+        if (bookedTimesViewPatient == null) {
+            bookedTimesViewPatient = new BookedTimesViewPatient();
+        }
+        return bookedTimesViewPatient;
+    }
+
     public RecipeViewPatient getRecipeViewPatient() {
         if (recipeViewPatient == null) {
             recipeViewPatient = new RecipeViewPatient();
@@ -54,8 +62,6 @@ public class CreateViews {
     public HomeViewPatient getHomeViewPatient() {
         if (homeViewPatient == null) {
             homeViewPatient = new HomeViewPatient();
-            HomeViewPatientController controller = new HomeViewPatientController(homeViewPatient);
-            homeViewPatient.setController(controller);
         }
         return homeViewPatient;
     }
@@ -68,13 +74,6 @@ public class CreateViews {
     }
 
 
-    public PatientView getPatientView() {
-        if (patientView == null) {
-            patientView = new PatientView();
-        }
-        return patientView;
-    }
-
     public CalendarView getCalendarView() {
         if (calendarView == null) {
             calendarView = new CalendarView();
@@ -82,6 +81,8 @@ public class CreateViews {
         }
         return calendarView;
     }
+
+
     public PatientView getSearchLogicView() {
         if (patientView == null) {
             patientView = new PatientView();

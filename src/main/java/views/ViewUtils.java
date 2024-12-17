@@ -36,6 +36,9 @@ public class ViewUtils {
         } else if(frame.getTitle().equals("Recipe Patient Page")){
             createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitlesPatient, "Journal");
         }
+        else if(frame.getTitle().equals("BookedTimesPatientPage")){
+            createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitlesPatient, "Booked Times");
+        }
 
 
 
@@ -69,7 +72,7 @@ public class ViewUtils {
                 CreateViews.getInstance().getRecipeViewPatient().setVisible(true);
                 frame.setVisible(false);
             } else if (title == "Booked Times") {
-                //CreateViews.getInstance().getBookedTimesView().setVisible(true);
+                CreateViews.getInstance().getBookedTimesViewPatient().setVisible(true);
                 frame.setVisible(false);
             } else if (title == "Home Page") {
                 CreateViews.getInstance().getHomeViewPatient().setVisible(true);
