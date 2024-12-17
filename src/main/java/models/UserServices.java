@@ -1,8 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import static models.UserRepository.getUserList;
 
 /** UserServices class that contains methods for populating a box with user names and extracting user names and IDs */

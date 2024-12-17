@@ -12,6 +12,7 @@ public class CreateViews {
     private PatientView patientView;
     private CalendarView calendarView;
     private RecipeView recipeView;
+    private RecipeViewPatient recipeViewPatient;
     private CalendarPopupView calendarPopupView;
 
     private CreateViews() {
@@ -33,6 +34,14 @@ public class CreateViews {
         }
         return homeView;
     }
+
+    public RecipeViewPatient getRecipeViewPatient() {
+        if (recipeViewPatient == null) {
+            recipeViewPatient = new RecipeViewPatient();
+        }
+        return recipeViewPatient;
+    }
+
 
     public RecipeView getRecipeView() {
         if (recipeView == null) {

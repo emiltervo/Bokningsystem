@@ -21,6 +21,7 @@ public class ViewUtils {
         gbc.anchor = GridBagConstraints.CENTER;
 
         String[] breadcrumbTitles = {"Home", "Calendar", "Recipes", "Patients"};
+        String [] breadcrumbTitlesPatient = {"Home Page", "Booked Times", "Journal"};
 
         if (frame.getTitle().equals("Home Page")) {
             createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Home");
@@ -30,10 +31,18 @@ public class ViewUtils {
             createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Recipes");
         } else if (frame.getTitle().equals("Patient page")) {
             createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitles, "Patients");
-
+        } else if(frame.getTitle().equals("HomeViewPatient")){
+            createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitlesPatient, "Home Page");
+        } else if(frame.getTitle().equals("Recipe Patient Page")){
+            createBreadCrumbsForViews(frame, columnPanel, breadcrumbPanel, gbc, breadcrumbTitlesPatient, "Journal");
         }
+
+
+
+
         return columnPanel;
     }
+
 
     static void SetBreadcrumbButton(JPanel breadcrumbPanel, GridBagConstraints gbc, String title, JFrame frame) {
         JButton breadcrumb = new JButton(title);
@@ -55,6 +64,15 @@ public class ViewUtils {
                 frame.setVisible(false);
             } else if (title == "Patients") {
                 CreateViews.getInstance().getSearchLogicView().setVisible(true);
+                frame.setVisible(false);
+            } else if (title == "Journal") {
+                CreateViews.getInstance().getRecipeViewPatient().setVisible(true);
+                frame.setVisible(false);
+            } else if (title == "Booked Times") {
+                //CreateViews.getInstance().getBookedTimesView().setVisible(true);
+                frame.setVisible(false);
+            } else if (title == "Home Page") {
+                CreateViews.getInstance().getHomeViewPatient().setVisible(true);
                 frame.setVisible(false);
             }
         });
