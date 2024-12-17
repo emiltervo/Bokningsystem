@@ -122,21 +122,22 @@ public class BookedTimesViewPatient {
         grayPanel.add(submitButton);
 
         StringBuilder message = new StringBuilder();
-        for (Appointment appointment : appointmentListByCurrentUser) {
-            message.append(appointment.toString()).append("\n");
-        }
-
 
         // Add action listener to the button
         submitButton.addActionListener(e -> {
+            // Clear the message
             appointmentListByCurrentUser.clear();
+            message.setLength(0);
+            // Get all appointments by the current user
             appointmentListByCurrentUser = AppointmentRepository.getAllAppointmentsByUserID(LoginView.getCurrentUser());
             for (Appointment appointment : appointmentListByCurrentUser) {
+                // Append the appointment to the message
                 message.append(appointment.toString()).append("\n");
             }
+            // Show the message in a dialog
             if (appointmentListByCurrentUser != null) {
                 JOptionPane.showMessageDialog(frame,"Your Booked times:\n" + message);
-                }
+            }
             else {
                 JOptionPane.showMessageDialog(frame, "Recipe not found!\nPlease enter a valid personal number.");
             }
