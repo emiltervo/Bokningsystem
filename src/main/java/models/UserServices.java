@@ -43,7 +43,7 @@ public class UserServices {
     }
     // Method for getting a specific patient's details
     public User getPatientDetails(long userID) {
-        ArrayList<User> users = UserRepository.getUserList();
+        ArrayList<Patient> users = UserRepository.getPatientList();
 
         for (User who : users) {
             if (who.getUserID() == userID) {
