@@ -96,4 +96,52 @@ public class AppointmentRepository {
             e.printStackTrace();
         }
     }
+
+    public static Appointment getAppointment(String startTime, String formattedDate, long userID, long userID1) {
+        Appointment appointment = null;
+        String sql = "SELECT startTime, date, patuserID, docuserID, lengthMinutes, room FROM appointments WHERE startTime = ? AND date = ? AND patuserID = ? AND docuserID = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, startTime);
+            pstmt.setString(2, formattedDate);
+            pstmt.setLong(3, userID);
+            pstmt.setLong(4, userID1);
+
+            ResultSet resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                String startTime1 = resultSet.getString("startTime");
+                String date = resultSet.getString("date");
+                long patuserID = resultSet.getLong("patuserID");
+                long docuserID = resultSet.getLong("docuserID");
+                long lengthMinutes = resultSet.getLong("lengthMinutes");
+                long room = resultSet.getLong("room");
+
+                appointment = AppointmentFactory.createAppointment(startTime1, date, patuserID, docuserID, lengthMinutes, room);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointment;
+    }
+
+    public static void deleteAppointment(Appointment appointment) {
+        String sql = "DELETE FROM appointments WHERE startTime = ? AND date = ? AND patuserID = ? AND docuserID = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, appointment.getStartTime());
+            pstmt.setString(2, appointment.getDate());
+            pstmt.setLong(3, appointment.getPatuserID());
+            pstmt.setLong(4, appointment.getDocuserID());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

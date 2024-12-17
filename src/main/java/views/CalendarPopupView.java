@@ -1,5 +1,6 @@
 package views;
 
+import controllers.CalendarPopupController;
 import models.*;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ public class CalendarPopupView extends JDialog {
     private final Date slotDate;
     private final String doctor;
     private final BookingState bookingState;
+    private final CalendarPopupController controller;
 
     private static class BookingState {
         boolean isBooked;
@@ -28,6 +30,7 @@ public class CalendarPopupView extends JDialog {
         this.slotDate = slotDate;
         this.bookingState = new BookingState();
         this.bookingState.isBooked = isBooked;
+        this.controller = new CalendarPopupController(this, doctor, slotDate, patients);
 
         setTitle("Room Booking");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -58,7 +61,6 @@ public class CalendarPopupView extends JDialog {
         }
         JButton bookButton = createRoundButton("Book", Color.GREEN, Color.BLACK);
         JButton unbookButton = createRoundButton("Unbook", Color.RED, Color.WHITE);
-        // Show the button depending on the booking state
         if (isBooked) {
             bookButton.setVisible(false);
             patientComboBox.setEnabled(false);
@@ -68,14 +70,14 @@ public class CalendarPopupView extends JDialog {
         bookButton.addActionListener(e -> {
             confirmed = true;
             bookingState.isBooked = true;
-            makeAppointment();
+            controller.makeAppointment();
             dispose();
         });
 
         unbookButton.addActionListener(e -> {
             confirmed = true;
             bookingState.isBooked = false;
-            unBookPatient();
+            controller.unBookPatient();
             dispose();
         });
 
@@ -99,57 +101,6 @@ public class CalendarPopupView extends JDialog {
         mainPanel.add(bookButton, gbc);
 
         add(mainPanel);
-    }
-
-    private void unBookPatient() {
-        Doctor doctor = null;
-        List<Doctor> doctors = UserRepository.getDoctorList();
-        for (Doctor d : doctors) {
-            if (d.getName().equals(this.doctor)) {
-                doctor = d;
-                break;
-            }
-        }
-        if (doctor == null) {
-            throw new IllegalStateException("Doctor not found");
-        }
-        Patient patient = (Patient) patientComboBox.getSelectedItem();
-        assert patient != null;
-
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = outputFormat.format(slotDate);
-
-        // Extract the time part from slotDate
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String startTime = timeFormat.format(slotDate);
-
-        AppointmentRepository.deleteAppointment(startTime, formattedDate, patient.getUserID(), doctor.getUserID());
-    }
-
-    private void makeAppointment() {
-        Doctor doctor = null;
-        List<Doctor> doctors = UserRepository.getDoctorList();
-        for (Doctor d : doctors) {
-            if (d.getName().equals(this.doctor)) {
-                doctor = d;
-                break;
-            }
-        }
-        if (doctor == null) {
-            throw new IllegalStateException("Doctor not found");
-        }
-        Patient patient = (Patient) patientComboBox.getSelectedItem();
-        assert patient != null;
-
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = outputFormat.format(slotDate);
-
-        // Extract the time part from slotDate
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String startTime = timeFormat.format(slotDate);
-
-        Appointment appointment = AppointmentFactory.createAppointment(startTime, formattedDate, patient.getUserID(), doctor.getUserID(), 60, 1);
-        AppointmentRepository.insertAppointment(appointment);
     }
 
     private JButton createRoundButton(String text, Color background, Color foreground) {
