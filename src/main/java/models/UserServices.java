@@ -10,7 +10,7 @@ public class UserServices {
     // Method for populating a box with user names and IDs
     public ArrayList<String> populateBox() {
 
-        ArrayList<User> users = UserRepository.getUserList();
+        ArrayList<Patient> users = UserRepository.getPatientList();
         ArrayList<String> fullNamePlusID = new ArrayList<>();
 
         for (User user : users) {
@@ -20,7 +20,7 @@ public class UserServices {
             fullNamePlusID.add(fullName + " " + userID);
 
         }
-        // Shipping >>> view.
+
         return fullNamePlusID;
     }
 
@@ -36,17 +36,16 @@ public class UserServices {
 
             nameAndId.add(fullName + " " + userIDToString);
         }
-        // Shipping >>> view.
+
         return nameAndId;
     }
-    // Method for getting patient details
-    public User getPatientDetails(String selectedItem) {
-        ArrayList<User> users = UserRepository.getUserList();
-        String[] parts = selectedItem.split(" ");
-        String selectedID = parts[parts.length - 1];
-        for(User who : users) {
-            if (String.valueOf(who.getUserID()).equals(selectedID)) {
-               return who;
+    // Method for getting a specific patient's details
+    public User getPatientDetails(long userID) {
+        ArrayList<Patient> users = UserRepository.getPatientList();
+
+        for (User who : users) {
+            if (who.getUserID() == userID) {
+                return who;
             }
         }
         return null;

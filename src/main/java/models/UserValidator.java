@@ -2,9 +2,25 @@ package models;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import models.*;
+import views.PatientView;
+import models.*;
+
 /** UserValidator class that validates user input */
 public class UserValidator {
+
+    private final UserServices userServices;
+
+
+    // Dependency injection
+    public UserValidator(UserServices userServices) {
+        this.userServices = userServices;
+    }
+
+    // Checks all text fields when creating a new user.
+    // Will notify the user which fields are invalid - (if any).
 
     public String isValid(String name, String surname, String personnummer, String password, String email, String role) {
 
@@ -23,7 +39,7 @@ public class UserValidator {
             allErrors.append("Personnummer, ");
         }
 
-        if (!email.contains("@") || (!email.contains(".")) ) {
+        if (!email.contains("@") || (!email.contains("."))) {
             allErrors.append("Email, ");
         }
 
@@ -42,14 +58,73 @@ public class UserValidator {
 
         return "Valid";
     }
-    /** Method to ship new user to database */
-    public void shipNewUser(Long personnummer, String name, String surname, String password, String email, String role) {
 
+    /**
+     * Method to ship new user to database
+     */
+    public void shipNewUser(Long personnummer, String name, String surname, String password, String email, String role) {
 
 
         String fullName = name + " " + surname;
 
         UserRepository.addUser(personnummer, fullName, password, email, role);
-        System.out.println("Ready to add to database:" + " " + name);
+        System.out.println("Ready to add to database:" + " " + fullName);
     }
+
+    // Checks search box input from user & then redirects the responsibility.
+    // Either 1) letters & numbers, 2) letters, 3) numbers, 4) empty input.
+
+    public ArrayList<String> checkInput(String input) {
+        ArrayList<String> searchMatches = new ArrayList<>();
+
+        if (input.matches(".*[a-zA-Z].*") && (input.matches(".*\\d.*"))) {
+            searchMatches = letterCheck(input);
+
+        } else if ((input.matches(".*[a-zA-Z]"))) {
+            searchMatches = letterCheck(input);
+
+        } else if (input.matches(".*\\d.*")) {
+            searchMatches = numberCheck(input);
+        } else if (input.isEmpty()) {
+            searchMatches = userServices.populateBox();
+        }
+
+        return searchMatches;
+
+    }
+
+
+    // Searches through names and numbers in database.
+    private ArrayList<String> letterCheck(String input) {
+        ArrayList<String> matches = new ArrayList<>();
+        ArrayList<String> nameAndId = userServices.extractBoth();
+
+        for (int abc = 0; abc < nameAndId.size(); abc++) {
+            String fullNameAndId = nameAndId.get(abc);
+            if (fullNameAndId.toLowerCase().contains(input.toLowerCase())) {
+                matches.add(fullNameAndId);
+
+            }
+        }
+        return matches;
+    }
+
+    // Searches through numbers only in database (personnummer) for quick searches.
+
+    private ArrayList<String> numberCheck(String input) {
+        ArrayList<String> matches = new ArrayList<>();
+        ArrayList<String> nameAndId = userServices.extractBoth();
+
+        for (String fullNameAndId : nameAndId) {
+
+            String[] iWantTheID = fullNameAndId.split(" ");
+            String userID = iWantTheID[iWantTheID.length - 1];
+
+            if (userID.contains(input)) {
+                matches.add(fullNameAndId);
+            }
+        }
+        return matches;
+    }
+
 }

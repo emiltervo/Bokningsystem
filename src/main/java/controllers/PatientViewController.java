@@ -1,10 +1,12 @@
 package controllers;
 
+import models.User;
 import models.UserValidator;
 import models.UserServices;
 import views.PatientView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 //** Controller for the PatientView */
 
@@ -16,8 +18,9 @@ public class PatientViewController {
     //Constructor
     public PatientViewController(PatientView view) {
         this.view = view;
-        this.userValidator = new UserValidator();
         this.userServices = new UserServices();
+        this.userValidator = new UserValidator(userServices);
+
     }
 
     // Method send input from user to UserValidator in models
@@ -26,7 +29,7 @@ public class PatientViewController {
 
         if (validationMessage.equals("Valid")) {
 
-            userValidator.shipNewUser(Long.valueOf(name), surname, personnummer, password, email, role);
+            userValidator.shipNewUser(Long.valueOf(personnummer), name, surname, password, email, role);
         } else {
 
             view.showErrorMessage(validationMessage);
@@ -41,4 +44,22 @@ public class PatientViewController {
         view.populateComboBox(patients);
     }
 
+    public void populatePatientDetails(String selectedItem) {
+
+        String[] parts = selectedItem.split(" ");
+        String selectedID = parts[parts.length-1];
+        long userID = Long.parseLong(selectedID);
+
+        User user = userServices.getPatientDetails(userID);
+
+        if (user!=null) {
+            view.updatePatientDetails(user);
+        }
+    }
+
+    public void handleInput(String input) {
+        ArrayList<String> results = userValidator.checkInput(input);
+        // Pings view to update with results
+        view.updateComboBox(results);
+    }
 }
