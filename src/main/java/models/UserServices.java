@@ -1,8 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import static models.UserRepository.getUserList;
 
 /** UserServices class that contains methods for populating a box with user names and extracting user names and IDs */
@@ -12,7 +10,7 @@ public class UserServices {
     // Method for populating a box with user names and IDs
     public ArrayList<String> populateBox() {
 
-        ArrayList<User> users = UserRepository.getUserList();
+        ArrayList<Patient> users = UserRepository.getPatientList();
         ArrayList<String> fullNamePlusID = new ArrayList<>();
 
         for (User user : users) {
@@ -43,7 +41,7 @@ public class UserServices {
     }
     // Method for getting a specific patient's details
     public User getPatientDetails(long userID) {
-        ArrayList<User> users = UserRepository.getUserList();
+        ArrayList<Patient> users = UserRepository.getPatientList();
 
         for (User who : users) {
             if (who.getUserID() == userID) {

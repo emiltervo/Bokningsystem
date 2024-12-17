@@ -1,32 +1,31 @@
 package views;
 
-import controllers.HomeViewPatientController;
+import controllers.HomeViewController;
+import models.Recipe;
+import models.RecipeRepository;
+import models.User;
 import models.UserRepository;
-import models.Secretary;
-
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
-public class HomeViewPatient {
+public class RecipeViewPatient {
     private JFrame frame;
     private JPanel headPanel;
     private JPanel columnPanel;
     private JPanel contentPanel;
-    private HomeViewPatientController controller;
+    private HomeViewController controller;
 
-    public HomeViewPatient() {
+    public RecipeViewPatient() {
         initializeFrame();
         createHeader();
         this.columnPanel = createBreadcrumbs();
         createMainContent();
-        createContactInformationBox();
         frame.setVisible(true);
     }
 
-    private void initializeFrame() {
-        frame = new JFrame("HomeViewPatient");
+    public void initializeFrame() {
+        frame = new JFrame("Recipe Patient Page");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 750);
         frame.setLayout(new BorderLayout());
@@ -35,7 +34,7 @@ public class HomeViewPatient {
     }
 
     private void createHeader() {
-        headPanel = new JPanel(null);
+        JPanel headPanel = new JPanel(null);
         headPanel.setPreferredSize(new Dimension(frame.getWidth(), 125));
         frame.add(headPanel, BorderLayout.NORTH);
 
@@ -72,7 +71,15 @@ public class HomeViewPatient {
         profileMenu.add(myAccount);
         profileMenu.add(logout);
 
-        myAccount.addActionListener(e -> JOptionPane.showMessageDialog(frame, "My Account clicked!"));
+        myAccount.addActionListener(e -> {
+            long userID = LoginView.getCurrentUser();
+            User user = UserRepository.getUserByID(userID);
+            if (user != null) {
+                JOptionPane.showMessageDialog(frame, "User Info: " + user.toString());
+            } else {
+                JOptionPane.showMessageDialog(frame, "User not found!");
+            }
+        });
         logout.addActionListener(e -> {
             // Clear the current user session
             CreateViews.getInstance().getLoginView().logoutCurrentUser();
@@ -89,48 +96,52 @@ public class HomeViewPatient {
         headPanel.add(profileButton);
     }
 
-
-        private JPanel createBreadcrumbs() {
-            return ViewUtils.createBreadcrumbs(frame);
-        }
-
+    private JPanel createBreadcrumbs() {
+        return ViewUtils.createBreadcrumbs(frame);
+    }
 
     private void createMainContent() {
+        // Skapa huvudpanelen
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setPreferredSize(new Dimension(1200, 525));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 0, 200));
         contentPanel.setBackground(Color.WHITE);
 
-        // Example of a green panel for content
-        JPanel greenPanel = new JPanel();
-        greenPanel.setPreferredSize(new Dimension(1100, 150)); // Adjust width to fit content
-        greenPanel.setBackground(Color.DARK_GRAY);
-        contentPanel.add(greenPanel);
+        JPanel grayPanel = new JPanel();
+        grayPanel.setPreferredSize(new Dimension(1100, 150));
+        grayPanel.setBackground(Color.WHITE);
+        grayPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
+
+        JLabel test = new JLabel("" + "PRESS RETRIEVE JOURNAL");
+        test.setFont(new Font("Arial", Font.BOLD, 24));
+        test.setForeground(Color.BLACK);
+        grayPanel.add(test);
+
+        // Add submit button
+        JButton submitButton = new JButton("Get Journal");
+        grayPanel.add(submitButton);
+
+        // Add user input field
+
+        // Add action listener to the button
+        submitButton.addActionListener(e -> {
+            Recipe recipe = RecipeRepository.getRecipeByUserID(LoginView.getCurrentUser());
+            if (recipe != null) {
+                JOptionPane.showMessageDialog(frame,"Your Journal/ Recipes\n" + recipe.toString());
+            } else {
+                JOptionPane.showMessageDialog(frame, "Recipe not found!\nPlease enter a valid personal number.");
+            }
+
+        });
+
+        contentPanel.add(grayPanel);
 
         frame.add(contentPanel, BorderLayout.SOUTH);
-    }
-
-    private void createContactInformationBox() {
-        JPanel contactInfoPanel = new JPanel();
-        contactInfoPanel.setLayout(new BoxLayout(contactInfoPanel, BoxLayout.Y_AXIS));
-        contactInfoPanel.setBorder(BorderFactory.createTitledBorder("Kontaktinformation"));
-        contactInfoPanel.setBackground(Color.WHITE);
-
-        ArrayList<Secretary> secretaries = UserRepository.getSecretaryList();
-        for (Secretary secretary : secretaries) {
-            JLabel emailLabel = new JLabel(secretary.getEmail());
-            contactInfoPanel.add(emailLabel);
-        }
-
-        contentPanel.add(contactInfoPanel);
-    }
-
-    public void setController(HomeViewPatientController controller) {
-        this.controller = controller;
     }
 
     public void setVisible(boolean visible) {
         frame.setVisible(visible);
     }
 }
+

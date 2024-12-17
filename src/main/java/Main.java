@@ -1,8 +1,10 @@
 
 import models.*;
+import views.CalendarView;
 import views.CreateViews;
 import views.LoginView;
 import controllers.LoginController;
+import views.PatientView;
 
 
 public class Main {
@@ -14,7 +16,6 @@ public class Main {
         LoginView loginView = createviews.getLoginView();
         LoginController loginController = new LoginController(loginView);
         loginView.createUI();
-
 
     }
 }

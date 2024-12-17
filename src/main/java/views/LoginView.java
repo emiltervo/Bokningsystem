@@ -1,6 +1,4 @@
 package views;
-
-import views.IHandleLogin;
 import javax.swing.*;
 import java.awt.*;
 
