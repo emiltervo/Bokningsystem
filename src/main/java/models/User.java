@@ -1,22 +1,29 @@
 package models;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/** Abstract superclass for users */
-
+/**
+ * Abstract superclass for users.
+ */
 abstract public class User implements AuthInterface {
-    // userID is personal number
     private long userID;
     private String name;
     private String password;
     private String email;
     private String role;
 
-    // Constructor
+    /**
+     * Constructs a User with the specified details.
+     *
+     * @param userID the ID of the user
+     * @param name the name of the user
+     * @param password the password of the user
+     * @param email the email of the user
+     * @param role the role of the user
+     */
     public User(long userID, String name, String password, String email, String role) {
         this.userID = userID;
         this.name = name;
@@ -24,7 +31,14 @@ abstract public class User implements AuthInterface {
         this.email = email;
         this.role = role;
     }
-    /** Login functionality for users that conntects to the database */
+
+    /**
+     * Login functionality for users that connects to the database.
+     *
+     * @param userID the ID of the user
+     * @param password the password of the user
+     * @return true if login is successful, false otherwise
+     */
     @Override
     public boolean login(long userID, String password) {
         String sql = "SELECT * FROM users WHERE userID = ? AND password = ?";
@@ -70,6 +84,10 @@ abstract public class User implements AuthInterface {
         email = input;
     }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     // Getters
     public long getUserID() {
         return userID;
@@ -91,12 +109,13 @@ abstract public class User implements AuthInterface {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-    // toString method for User
+    /**
+     * Returns a string representation of the User.
+     *
+     * @return a string representation of the User
+     */
     @Override
     public String toString() {
-        return "Username: " + userID + "\nName: " + name + "\nPassword: " + password + "\nEmail: " + email + "\nRole: " + role + "";
+        return "Username: " + userID + "\nName: " + name + "\nPassword: " + password + "\nEmail: " + email + "\nRole: " + role;
     }
 }

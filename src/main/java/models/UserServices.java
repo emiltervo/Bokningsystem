@@ -3,28 +3,34 @@ package models;
 import java.util.ArrayList;
 import static models.UserRepository.getUserList;
 
-/** UserServices class that contains methods for populating a box with user names and extracting user names and IDs */
-
+/**
+ * The UserServices class contains methods for populating a box with usernames and extracting usernames and IDs.
+ */
 public class UserServices {
 
-    // Method for populating a box with user names and IDs
+    /**
+     * Populates a list with usernames and IDs.
+     *
+     * @return an ArrayList of strings containing usernames and their corresponding IDs
+     */
     public ArrayList<String> populateBox() {
-
         ArrayList<Patient> users = UserRepository.getPatientList();
         ArrayList<String> fullNamePlusID = new ArrayList<>();
 
         for (User user : users) {
-
             String fullName = user.getName();
             long userID = user.getUserID();
             fullNamePlusID.add(fullName + " " + userID);
-
         }
 
         return fullNamePlusID;
     }
 
-    // Method for extracting user names and IDs
+    /**
+     * Extracts usernames and IDs.
+     *
+     * @return an ArrayList of strings containing usernames and their corresponding IDs
+     */
     public ArrayList<String> extractBoth() {
         ArrayList<User> users = getUserList();
         ArrayList<String> nameAndId = new ArrayList<>();
@@ -33,13 +39,18 @@ public class UserServices {
             String fullName = user.getName();
             long userID = user.getUserID();
             String userIDToString = Long.toString(userID);
-
             nameAndId.add(fullName + " " + userIDToString);
         }
 
         return nameAndId;
     }
-    // Method for getting a specific patient's details
+
+    /**
+     * Gets the details of a specific patient.
+     *
+     * @param userID the ID of the patient
+     * @return the User object containing the patient's details, or null if not found
+     */
     public User getPatientDetails(long userID) {
         ArrayList<Patient> users = UserRepository.getPatientList();
 

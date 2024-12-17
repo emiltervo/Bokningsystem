@@ -117,7 +117,7 @@ public class CalendarView {
         headPanel.add(profileButton);
 
         // Add patient dropdown
-        patients = PatientRepository.getAllPatients();
+        patients = UserRepository.getPatientList();
         patientDropdown = new JComboBox<>();
         for (Patient patient : patients) {
             patientDropdown.addItem(patient.getName() + " - " + patient.getUserID());
