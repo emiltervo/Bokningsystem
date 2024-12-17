@@ -6,9 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Repository class for managing Appointment objects in the database.
+ */
 public class AppointmentRepository {
 
-    /** Inserts appointments into database based on values of the appointment object */
+    /**
+     * Inserts an appointment into the database.
+     *
+     * @param appointment the appointment to insert
+     */
     public static void insertAppointment(Appointment appointment) {
         String sql = "INSERT INTO appointments (startTime, date, patuserID, docuserID, lengthMinutes, room) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -28,7 +35,11 @@ public class AppointmentRepository {
         }
     }
 
-    /** Retrieves appointment information from the database and creates objects of type Appointments. */
+    /**
+     * Retrieves all appointments from the database.
+     *
+     * @return a list of all appointments
+     */
     public static ArrayList<Appointment> getAllAppointments() {
         ArrayList<Appointment> appointmentList = new ArrayList<>();
 
@@ -53,7 +64,12 @@ public class AppointmentRepository {
         return appointmentList;
     }
 
-    // Retrieves appointment information from the database and creates objects of type Appointments based on the user ID.
+    /**
+     * Retrieves all appointments for a specific user ID from the database.
+     *
+     * @param userID the user ID to filter appointments by
+     * @return a list of appointments for the specified user ID
+     */
     public static ArrayList<Appointment> getAllAppointmentsByUserID(long userID) {
         ArrayList<Appointment> appointmentListByUserID = new ArrayList<>();
 
@@ -80,6 +96,14 @@ public class AppointmentRepository {
         return appointmentListByUserID;
     }
 
+    /**
+     * Deletes an appointment from the database based on the specified parameters.
+     *
+     * @param startTime the start time of the appointment
+     * @param formattedDate the date of the appointment
+     * @param userID the user ID of the patient
+     * @param userID1 the user ID of the doctor
+     */
     public static void deleteAppointment(String startTime, String formattedDate, long userID, long userID1) {
         String sql = "DELETE FROM appointments WHERE startTime = ? AND date = ? AND patuserID = ? AND docuserID = ?";
 
@@ -90,54 +114,6 @@ public class AppointmentRepository {
             pstmt.setString(2, formattedDate);
             pstmt.setLong(3, userID);
             pstmt.setLong(4, userID1);
-
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Appointment getAppointment(String startTime, String formattedDate, long userID, long userID1) {
-        Appointment appointment = null;
-        String sql = "SELECT startTime, date, patuserID, docuserID, lengthMinutes, room FROM appointments WHERE startTime = ? AND date = ? AND patuserID = ? AND docuserID = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, startTime);
-            pstmt.setString(2, formattedDate);
-            pstmt.setLong(3, userID);
-            pstmt.setLong(4, userID1);
-
-            ResultSet resultSet = pstmt.executeQuery();
-
-            if (resultSet.next()) {
-                String startTime1 = resultSet.getString("startTime");
-                String date = resultSet.getString("date");
-                long patuserID = resultSet.getLong("patuserID");
-                long docuserID = resultSet.getLong("docuserID");
-                long lengthMinutes = resultSet.getLong("lengthMinutes");
-                long room = resultSet.getLong("room");
-
-                appointment = AppointmentFactory.createAppointment(startTime1, date, patuserID, docuserID, lengthMinutes, room);
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return appointment;
-    }
-
-    public static void deleteAppointment(Appointment appointment) {
-        String sql = "DELETE FROM appointments WHERE startTime = ? AND date = ? AND patuserID = ? AND docuserID = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, appointment.getStartTime());
-            pstmt.setString(2, appointment.getDate());
-            pstmt.setLong(3, appointment.getPatuserID());
-            pstmt.setLong(4, appointment.getDocuserID());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

@@ -7,8 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repository class for managing Patient objects in the database.
+ */
 public class PatientRepository {
 
+    /**
+     * Retrieves all patients from the database.
+     *
+     * @return a list of all patients
+     */
     public static List<Patient> getAllPatients() {
         List<Patient> patients = new ArrayList<>();
         String sql = "SELECT userid, name, password, email, role FROM users WHERE role = 'patient'";
