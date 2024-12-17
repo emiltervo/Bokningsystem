@@ -145,6 +145,10 @@ public class Appointment {
      */
     @Override
     public String toString() {
-        return "[" + startTime + " " + date + " " + patuserID + " " + docuserID + " " + lengthMinutes + " " + room + "]";
+        User patient = UserRepository.getUserByID(patuserID);
+        User doctor = UserRepository.getUserByID(docuserID);
+        String patientName = patient != null ? patient.getName() : "Unknown Patient";
+        String doctorName = doctor != null ? doctor.getName() : "Unknown Doctor";
+        return "Date: " + date + ", Patient: " + patientName + ", Doctor: " + doctorName;
     }
 }
