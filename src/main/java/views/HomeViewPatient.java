@@ -1,9 +1,13 @@
 package views;
 
 import controllers.HomeViewPatientController;
+import models.UserRepository;
+import models.Secretary;
+
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class HomeViewPatient {
     private JFrame frame;
@@ -17,6 +21,7 @@ public class HomeViewPatient {
         createHeader();
         this.columnPanel = createBreadcrumbs();
         createMainContent();
+        createContactInformationBox();
         frame.setVisible(true);
     }
 
@@ -104,6 +109,21 @@ public class HomeViewPatient {
         contentPanel.add(greenPanel);
 
         frame.add(contentPanel, BorderLayout.SOUTH);
+    }
+
+    private void createContactInformationBox() {
+        JPanel contactInfoPanel = new JPanel();
+        contactInfoPanel.setLayout(new BoxLayout(contactInfoPanel, BoxLayout.Y_AXIS));
+        contactInfoPanel.setBorder(BorderFactory.createTitledBorder("Kontaktinformation"));
+        contactInfoPanel.setBackground(Color.WHITE);
+
+        ArrayList<Secretary> secretaries = UserRepository.getSecretaryList();
+        for (Secretary secretary : secretaries) {
+            JLabel emailLabel = new JLabel(secretary.getEmail());
+            contactInfoPanel.add(emailLabel);
+        }
+
+        contentPanel.add(contactInfoPanel);
     }
 
     public void setController(HomeViewPatientController controller) {
