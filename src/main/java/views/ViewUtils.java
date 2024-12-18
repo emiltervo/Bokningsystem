@@ -20,7 +20,7 @@ public class ViewUtils {
         gbc.insets = new Insets(0, 10, 0, 10);
         gbc.anchor = GridBagConstraints.CENTER;
 
-        String[] breadcrumbTitles = {"Home", "Calendar", "Recipes", "Patients"};
+        String[] breadcrumbTitles = {"Home", "Calendar", "Journal", "Patients"};
         String [] breadcrumbTitlesPatient = {"Home Page", "Booked Times", "Journal"};
 
         if (frame.getTitle().equals("Home Page")) {
