@@ -206,6 +206,7 @@ public class CalendarController {
      *
      * @param slot the clicked slot
      */
+    // src/main/java/controllers/CalendarController.java
     private void handleSlotClick(JPanel slot) {
         // Determine the row and column of the slot
         final int row;
@@ -246,7 +247,12 @@ public class CalendarController {
         if (isBooked == null) {
             isBooked = false; // Default to false if not found
         }
-        CalendarPopupView popup = new CalendarPopupView(calendarView.getFrame(), selectedDoctor, java.sql.Timestamp.valueOf(slotDateTime), patients, isBooked);
+        Patient bookedPatient = null;
+        if (isBooked) {
+            bookedPatient = AppointmentRepository.getBookedPatient(selectedDoctor, slotDateTime);
+            System.out.println("Booked patient: " + bookedPatient);
+        }
+        CalendarPopupView popup = new CalendarPopupView(calendarView.getFrame(), selectedDoctor, java.sql.Timestamp.valueOf(slotDateTime), patients, isBooked, bookedPatient);
         popup.setVisible(true);
 
         // Wait for the popup to close

@@ -1,9 +1,11 @@
 package models;
-
+import models.Patient;
+import java.time.LocalDateTime;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -120,4 +122,47 @@ public class AppointmentRepository {
             e.printStackTrace();
         }
     }
-}
+    // src/main/java/repositories/AppointmentRepository.java
+
+    // src/main/java/repositories/AppointmentRepository.java
+        public static Patient getBookedPatient(String doctor, LocalDateTime slotDateTime) {
+            String sql = "SELECT p.* FROM appointments a " +
+                    "JOIN patient p ON a.patuserID = p.userID " +
+                    "JOIN doctor d ON a.docuserID = d.userID " +
+                    "WHERE d.name = ? AND a.startTime = ? AND a.date LIKE ?";
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+                String startTime = slotDateTime.toLocalTime().format(timeFormatter);
+                String date = slotDateTime.toLocalDate().format(dateFormatter) + "%";
+
+                pstmt.setString(1, doctor);
+                pstmt.setString(2, startTime);
+                pstmt.setString(3, date);
+
+                // Print the SQL query and parameters for debugging
+                System.out.println("Executing query: " + sql);
+                System.out.println("Parameters: doctor=" + doctor + ", startTime=" + startTime + ", date=" + date);
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    long userID = rs.getLong("userID");
+                    String name = rs.getString("name");
+                    String email = rs.getString("email");
+                    String password = rs.getString("password");
+
+                    // Add other patient fields as needed
+                    return new Patient(userID, name, password, email, "patient");
+                } else {
+                    System.out.println("No patient found for the given parameters.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null; // Return null if no patient is found
+        }
+    }

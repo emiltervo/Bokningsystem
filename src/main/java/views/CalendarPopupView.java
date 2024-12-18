@@ -24,13 +24,15 @@ public class CalendarPopupView extends JDialog {
         boolean isBooked;
     }
 
-    public CalendarPopupView(JFrame parent, String doctor, Date slotDate, List<Patient> patients, boolean isBooked) {
+    // src/main/java/views/CalendarPopupView.java
+    // src/main/java/views/CalendarPopupView.java
+    public CalendarPopupView(JFrame parent, String doctor, Date slotDate, List<Patient> patients, boolean isBooked, Patient bookedPatient) {
         super(parent, "Room Booking", true);
         this.doctor = doctor;
         this.slotDate = slotDate;
         this.bookingState = new BookingState();
         this.bookingState.isBooked = isBooked;
-        this.controller = new CalendarPopupController(this, doctor, slotDate, patients);
+        this.controller = new CalendarPopupController(this, doctor, slotDate, patients, bookedPatient);
 
         setTitle("Room Booking");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -59,11 +61,18 @@ public class CalendarPopupView extends JDialog {
         for (Patient patient : patients) {
             patientComboBox.addItem(patient);
         }
+        JLabel bookedPatientLabel = new JLabel();
+        if (isBooked && bookedPatient != null) {
+            patientComboBox.setSelectedItem(bookedPatient);
+            patientComboBox.setEnabled(false); // Disable the combo box if the slot is booked
+            bookedPatientLabel.setText("Booked Patient: " + bookedPatient.getName());
+        }
+
         JButton bookButton = createRoundButton("Book", Color.GREEN, Color.BLACK);
         JButton unbookButton = createRoundButton("Unbook", Color.RED, Color.WHITE);
         if (isBooked) {
             bookButton.setVisible(false);
-            patientComboBox.setEnabled(false);
+            patientComboBox.setVisible(false);
         } else {
             unbookButton.setVisible(false);
         }
@@ -88,6 +97,9 @@ public class CalendarPopupView extends JDialog {
 
         gbc.gridy = 1;
         mainPanel.add(slotLabel, gbc);
+
+        gbc.gridy = 2;
+        mainPanel.add(bookedPatientLabel, gbc);
 
         gbc.gridy = 3;
         mainPanel.add(patientComboBox, gbc);

@@ -1,3 +1,4 @@
+// src/main/java/controllers/CalendarPopupController.java
 package controllers;
 
 import models.*;
@@ -16,20 +17,23 @@ public class CalendarPopupController {
     private final String doctor;
     private final Date slotDate;
     private final List<Patient> patients;
+    private final Patient bookedPatient;
 
     /**
-     * Constructs a CalendarPopupController with the specified view, doctor, slot date, and list of patients.
+     * Constructs a CalendarPopupController with the specified view, doctor, slot date, list of patients, and booked patient.
      *
      * @param view the CalendarPopupView to be managed by this controller
      * @param doctor the name of the doctor
      * @param slotDate the date and time of the slot
      * @param patients the list of patients
+     * @param bookedPatient the patient who has booked the slot
      */
-    public CalendarPopupController(CalendarPopupView view, String doctor, Date slotDate, List<Patient> patients) {
+    public CalendarPopupController(CalendarPopupView view, String doctor, Date slotDate, List<Patient> patients, Patient bookedPatient) {
         this.view = view;
         this.doctor = doctor;
         this.slotDate = slotDate;
         this.patients = patients;
+        this.bookedPatient = bookedPatient;
     }
 
     /**
@@ -51,21 +55,21 @@ public class CalendarPopupController {
     }
 
     /**
-     * Cancels the appointment for the selected patient and doctor at the specified slot date and time.
+     * Cancels the appointment for the booked patient and doctor at the specified slot date and time.
      */
     public void unBookPatient() {
         Doctor doctor = findDoctorByName(this.doctor);
-        Patient patient = view.getSelectedPatient();
-        assert patient != null;
+        assert bookedPatient != null;
 
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = outputFormat.format(slotDate);
 
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         String startTime = timeFormat.format(slotDate);
-        // print the appointment details
-        System.out.println("Appointment details: " + startTime + " " + formattedDate + " " + patient.getUserID() + " " + doctor.getUserID());
-        AppointmentRepository.deleteAppointment(startTime, formattedDate, patient.getUserID(), doctor.getUserID());
+
+        // Print the appointment details
+        System.out.println("Appointment details: " + startTime + " " + formattedDate + " " + bookedPatient.getUserID() + " " + doctor.getUserID());
+        AppointmentRepository.deleteAppointment(startTime, formattedDate, bookedPatient.getUserID(), doctor.getUserID());
     }
 
     /**

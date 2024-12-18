@@ -112,7 +112,7 @@ public class BookedTimesViewPatient {
         grayPanel.setBackground(Color.WHITE);
         grayPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
 
-        JLabel test = new JLabel("" + "PRESS TO SEE BOOKED TIMES");
+        JLabel test = new JLabel("PRESS TO SEE BOOKED TIMES");
         test.setFont(new Font("Arial", Font.BOLD, 24));
         test.setForeground(Color.BLACK);
         grayPanel.add(test);
