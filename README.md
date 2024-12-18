@@ -16,9 +16,7 @@ Bokningsystem is a booking system designed to manage patient appointments at a m
 - **Data Storage**: PostgresSQL
 - **Frameworks and Libraries**: Swing, JUnit
 
-## Installation
-
-## Requirements
+## Installation Requirements
 1. **Java Development Kit (JDK)**: Install the latest version of the JDK from the [official website](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
 2. **Git**: Install Git from the [official website](https://git-scm.com/downloads).
 3. **PostgresSQL**: Install PostgresSQL from the [official website](https://www.postgresql.org/download/). To view the database, you can use a GUI tool like pgAdmin or DBeaver.
