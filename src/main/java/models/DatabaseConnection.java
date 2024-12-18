@@ -1,4 +1,5 @@
 package models;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,13 +8,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/** * Handles Database Connection,  */
-
- public class DatabaseConnection {
+/**
+ * Handles database connection.
+ */
+public class DatabaseConnection {
     private static Connection connection;
 
-
-    /** To get getConnection to work the user needs to insert the right credentials in the dbconfig.properties file.*/
+    /**
+     * Gets the database connection. If the connection is not established or is closed, it initializes a new connection
+     * using the credentials from the `dbconfig.properties` file.
+     *
+     * @return the database connection
+     * @throws SQLException if a database access error occurs
+     */
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             Properties props = new Properties();
@@ -34,6 +41,4 @@ import java.util.Properties;
 
         return connection;
     }
-    }
-
-
+}
