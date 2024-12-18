@@ -5,8 +5,8 @@ import models.User;
 import models.UserRepository;
 import models.Secretary;
 
-
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -22,7 +22,6 @@ public class HomeViewPatient {
         createHeader();
         this.columnPanel = createBreadcrumbs();
         createMainContent();
-        createContactInformationBox();
         frame.setVisible(true);
     }
 
@@ -98,11 +97,9 @@ public class HomeViewPatient {
         headPanel.add(profileButton);
     }
 
-
-        private JPanel createBreadcrumbs() {
-            return ViewUtils.createBreadcrumbs(frame);
-        }
-
+    private JPanel createBreadcrumbs() {
+        return ViewUtils.createBreadcrumbs(frame);
+    }
 
     private void createMainContent() {
         contentPanel = new JPanel();
@@ -111,27 +108,52 @@ public class HomeViewPatient {
         contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 200, 0, 200));
         contentPanel.setBackground(Color.WHITE);
 
-        // Example of a green panel for content
-        JPanel greenPanel = new JPanel();
-        greenPanel.setPreferredSize(new Dimension(1100, 150)); // Adjust width to fit content
-        greenPanel.setBackground(Color.DARK_GRAY);
-        contentPanel.add(greenPanel);
+        // Skapa grå panelen
+        JPanel grayPanel = new JPanel();
+        grayPanel.setPreferredSize(new Dimension(1100, 150));
+        grayPanel.setBackground(Color.DARK_GRAY);
+        grayPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
 
+        JLabel test = new JLabel("Welcome");
+        test.setFont(new Font("Arial", Font.BOLD, 24));
+        test.setForeground(Color.WHITE);
+        grayPanel.add(test);
+
+        contentPanel.add(grayPanel);
+        createContactInformationBox();
+
+        // Lägg till contentPanel i frame
         frame.add(contentPanel, BorderLayout.SOUTH);
     }
 
     private void createContactInformationBox() {
+        // Kontrollera att panelen inte redan finns
+        if (contentPanel.getComponentCount() > 1) return;
+
+        // Skapa kontaktinformationspanelen
         JPanel contactInfoPanel = new JPanel();
         contactInfoPanel.setLayout(new BoxLayout(contactInfoPanel, BoxLayout.Y_AXIS));
-        contactInfoPanel.setBorder(BorderFactory.createTitledBorder("Kontaktinformation"));
-        contactInfoPanel.setBackground(Color.WHITE);
+        contactInfoPanel.setBorder(BorderFactory.createTitledBorder(null, "Kontaktinformation",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
+                new Font("Arial", Font.PLAIN, 14), Color.WHITE));
+        contactInfoPanel.setBackground(Color.DARK_GRAY); // Sätt bakgrundsfärg till DARK_GRAY
 
+        // Lägg till sekreterarnas e-postadresser
         ArrayList<Secretary> secretaries = UserRepository.getSecretaryList();
         for (Secretary secretary : secretaries) {
             JLabel emailLabel = new JLabel(secretary.getEmail());
+            emailLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            emailLabel.setForeground(Color.WHITE); // Gör texten vit för bättre kontrast
+            emailLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             contactInfoPanel.add(emailLabel);
         }
 
+        // Anpassa panelens storlek och placering
+        contactInfoPanel.setPreferredSize(new Dimension(1100, 125)); // Bredd 1100 och höjd 125
+        contactInfoPanel.setMaximumSize(new Dimension(1100, 125));
+        contactInfoPanel.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrera horisontellt
+
+        // Lägg till kontaktinformationspanelen
         contentPanel.add(contactInfoPanel);
     }
 

@@ -5,12 +5,10 @@ import models.User;
 import models.UserRepository;
 
 import javax.swing.*;
-import javax.swing.text.View;
 import java.awt.*;
 
 public class HomeView {
     private JFrame frame;
-    private JPanel headPanel;
     private JPanel columnPanel;
     private JPanel contentPanel;
     private HomeViewController controller;
@@ -100,7 +98,6 @@ public class HomeView {
     }
 
     private void createMainContent() {
-        // Skapa huvudpanelen
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setPreferredSize(new Dimension(1200, 525));
@@ -112,7 +109,7 @@ public class HomeView {
         grayPanel.setBackground(Color.DARK_GRAY);
         grayPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
 
-        JLabel test = new JLabel("Välkommen");
+        JLabel test = new JLabel("Welcome");
         test.setFont(new Font("Arial", Font.BOLD, 24));
         test.setForeground(Color.WHITE);
         grayPanel.add(test);
