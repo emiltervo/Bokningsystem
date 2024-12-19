@@ -156,7 +156,6 @@ public class PatientView {
 
     }
 
-    //Java Swing fucking sucks
     public void updateJournalOnly(long user) {
         Recipe aRecipe = RecipeRepository.getRecipeByUserID(user);
 
