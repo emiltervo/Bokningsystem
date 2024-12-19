@@ -41,6 +41,8 @@ public class PatientView {
     private JLabel name;
     private JLabel personnr;
     private JLabel role;
+    private JLabel prescription;
+    private JLabel prescriptionLabel;
 
     // Constructor for PatientView
     public PatientView() {
@@ -86,11 +88,14 @@ public class PatientView {
         name = new JLabel("Name: ");
         personnr = new JLabel("Personnummer: ");
         role = new JLabel("Role: ");
+        prescription = new JLabel("Prescription: ");
+        prescriptionLabel = new JLabel("");
 
         name.setVisible(false);
         personnr.setVisible(false);
         email.setVisible(false);
         role.setVisible(false);
+        prescription.setVisible(false);
 
 
 
@@ -151,12 +156,25 @@ public class PatientView {
 
     }
 
+    //Java Swing fucking sucks
+    public void updateJournalOnly(long user) {
+        Recipe aRecipe = RecipeRepository.getRecipeByUserID(user);
+
+        if (aRecipe != null) {
+            prescriptionLabel.setText("Prescription ID: " + aRecipe.getRecipeID()+ "." + " " + aRecipe.getContent() + ".");
+        } else {
+            prescriptionLabel.setText("User has no prescriptions");
+        }
+    }
+
     public void updatePatientDetails(User user) {
         if (user != null) {
             nameLabel.setText(user.getName());
             userIDLabel.setText(String.valueOf(user.getUserID())); // Display user ID
             emailLabel.setText(user.getEmail());
             roleLabel.setText(user.getRole());
+
+            updateJournalOnly(user.getUserID());
 
             showLabels();
         } else {
@@ -356,6 +374,7 @@ public class PatientView {
         name.setVisible(true);
         personnr.setVisible(true);
         email.setVisible(true);
+        prescription.setVisible(true);
     }
     private void createSearchPanel() {
         searchPanel.setPreferredSize(new Dimension(1200, 100));
@@ -399,7 +418,7 @@ public class PatientView {
     }
     private void createUserInfoPanel() {
         JPanel userInfoPanel = new JPanel();
-        userInfoPanel.setPreferredSize(new Dimension(1200, 150));
+        userInfoPanel.setPreferredSize(new Dimension(1200, 250));
         userInfoPanel.setLayout(new GridBagLayout());
         userInfoPanel.setBackground(Color.WHITE); // Set background color
 
@@ -440,6 +459,22 @@ public class PatientView {
         gbc.gridx = 1;
         gbc.gridy = 3;
         userInfoPanel.add(roleLabel, gbc);
+
+        roleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        userInfoPanel.add(role, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        userInfoPanel.add(roleLabel, gbc);
+
+        prescriptionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        userInfoPanel.add(prescription, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        userInfoPanel.add(prescriptionLabel, gbc);
 
         frame.add(userInfoPanel, BorderLayout.CENTER);
         frame.setVisible(true);
