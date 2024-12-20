@@ -48,7 +48,7 @@ public class PatientView {
     private JLabel role;
     private JLabel prescription;
     private JLabel prescriptionLabel;
-    private JTextArea journalArea;
+
 
     // Constructor for PatientView
     public PatientView() {
@@ -96,7 +96,6 @@ public class PatientView {
         role = new JLabel("Role: ");
         prescription = new JLabel("Prescription: ");
         prescriptionLabel = new JLabel("");
-        journalArea = new JTextArea(); // 10 rows, 20 columns
 
         name.setVisible(false);
         personnr.setVisible(false);
@@ -158,49 +157,14 @@ public class PatientView {
         });
 
     }
-    public void displayJournal(String toSet) {
-        popup = new JDialog(frame, "Journal", true); // Use the field, not a local variable
-        popup.setSize(400, 300);
-        popup.setResizable(false);
-        popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        popup.setLocationRelativeTo(frame);
-
-        JTextArea journalArea = new JTextArea();
-
-
-        journalArea.setLineWrap(true);  // Wrap lines
-        journalArea.setWrapStyleWord(true); // Wrap at word boundaries
-
-
-        JScrollPane scrollPane = new JScrollPane(journalArea);
-
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(e -> popup.dispose()); // Close the dialog when clicked
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(cancelButton);
-
-
-        popup.setLayout(new BorderLayout());
-
-
-        popup.add(scrollPane, BorderLayout.CENTER);
-
-
-        popup.add(buttonPanel, BorderLayout.SOUTH);
-
-
-        popup.setVisible(true);
-    }
 
     public void updateJournalOnly(long user) {
         Recipe aRecipe = RecipeRepository.getRecipeByUserID(user);
 
         if (aRecipe != null) {
-            journalArea.setText("Prescription ID: " + aRecipe.getRecipeID()+ "." + " " + aRecipe.getContent() + ".");
+            prescriptionLabel.setText("Prescription ID: " + aRecipe.getRecipeID()+ "." + " " + aRecipe.getContent() + ".");
         } else {
-            journalArea.setText("User has no prescriptions");
+            prescriptionLabel.setText("User has no prescriptions");
         }
     }
 
@@ -455,7 +419,7 @@ public class PatientView {
     }
     private void createUserInfoPanel() {
         JPanel userInfoPanel = new JPanel();
-        userInfoPanel.setPreferredSize(new Dimension(1200, 250));
+        userInfoPanel.setPreferredSize(new Dimension(1200, 300));
         userInfoPanel.setLayout(new GridBagLayout());
         userInfoPanel.setBackground(Color.WHITE); // Set background color
 
@@ -512,11 +476,6 @@ public class PatientView {
         gbc.gridx = 1;
         gbc.gridy = 4;
         userInfoPanel.add(prescriptionLabel, gbc);
-
-
-        userInfoPanel.add(journalArea);
-
-        journalArea.setVisible(true);
 
         frame.add(userInfoPanel, BorderLayout.CENTER);
         frame.setVisible(true);
