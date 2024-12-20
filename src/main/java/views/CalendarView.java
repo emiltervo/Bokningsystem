@@ -13,7 +13,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import controllers.CalendarController;
-import models.*;
+import models.users.Doctor;
+import models.users.Patient;
+import models.users.User;
+import models.users.UserRepository;
 
 public class CalendarView {
 

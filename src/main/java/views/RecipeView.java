@@ -1,10 +1,10 @@
 package views;
 
 import controllers.HomeViewController;
-import models.RecipeRepository;
-import models.Recipe;
-import models.User;
-import models.UserRepository;
+import models.recipes.RecipeRepository;
+import models.recipes.Recipe;
+import models.users.User;
+import models.users.UserRepository;
 
 import javax.swing.*;
 import java.awt.*;

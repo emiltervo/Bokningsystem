@@ -2,7 +2,7 @@ package controllers;
 
 /** Controller for the HomeView */
 
-import views.CalendarView;
+
 import views.HomeView;
 
 public class HomeViewController {

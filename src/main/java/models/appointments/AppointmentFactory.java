@@ -1,4 +1,5 @@
-package models;
+package models.appointments;
+
 
 /**
  * Factory class for creating Appointment objects.

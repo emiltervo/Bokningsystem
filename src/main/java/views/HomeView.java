@@ -1,8 +1,8 @@
 package views;
 
 import controllers.HomeViewController;
-import models.User;
-import models.UserRepository;
+import models.users.User;
+import models.users.UserRepository;
 
 import javax.swing.*;
 import java.awt.*;

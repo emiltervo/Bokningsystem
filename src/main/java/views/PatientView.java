@@ -5,8 +5,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import models.*;
+
 import controllers.*;
+import models.recipes.Recipe;
+import models.recipes.RecipeRepository;
+import models.users.User;
+import models.users.UserRepository;
+import models.users.UserServices;
 
 /** PatientView is responsible for displaying all patients. */
 

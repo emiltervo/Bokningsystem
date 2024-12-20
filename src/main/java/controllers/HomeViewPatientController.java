@@ -1,6 +1,5 @@
 package controllers;
 
-import views.CalendarView;
 import views.HomeViewPatient;
 
 /** Controller for HomeViewPatientContoller */

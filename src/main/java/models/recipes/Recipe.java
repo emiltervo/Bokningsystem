@@ -1,4 +1,4 @@
-package models;
+package models.recipes;
 
 /**
  * The Recipe class represents a recipe with an ID, user ID, and content.

@@ -1,4 +1,4 @@
-package models;
+package models.users;
 
 /**
  * The UserFactory class provides a method to create User objects based on the specified role.

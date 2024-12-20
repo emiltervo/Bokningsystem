@@ -1,12 +1,11 @@
 package controllers;
 
-import models.User;
-import models.UserValidator;
-import models.UserServices;
+import models.users.User;
+import models.users.UserValidator;
+import models.users.UserServices;
 import views.PatientView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 //** Controller for the PatientView */
 

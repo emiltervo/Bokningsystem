@@ -1,6 +1,10 @@
 package controllers;
 
-import models.*;
+import models.appointments.Appointment;
+import models.appointments.AppointmentRepository;
+import models.users.Doctor;
+import models.users.Patient;
+import models.users.UserRepository;
 import views.CalendarPopupView;
 import views.CalendarView;
 

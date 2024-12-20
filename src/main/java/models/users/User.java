@@ -1,4 +1,7 @@
-package models;
+package models.users;
+
+import models.AuthInterface;
+import models.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

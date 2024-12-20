@@ -1,4 +1,4 @@
-package models;
+package models.users;
 
 /**
  * Represents a patient in the system.

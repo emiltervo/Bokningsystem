@@ -1,7 +1,8 @@
-package models;
+package models.users;
+
 
 import java.util.ArrayList;
-import static models.UserRepository.getUserList;
+import static models.users.UserRepository.getUserList;
 
 /**
  * The UserServices class contains methods for populating a box with usernames and extracting usernames and IDs.

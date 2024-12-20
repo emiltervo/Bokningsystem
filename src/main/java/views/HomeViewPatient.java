@@ -1,9 +1,9 @@
 package views;
 
 import controllers.HomeViewPatientController;
-import models.User;
-import models.UserRepository;
-import models.Secretary;
+import models.users.User;
+import models.users.UserRepository;
+import models.users.Secretary;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

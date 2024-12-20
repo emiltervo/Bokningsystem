@@ -1,7 +1,10 @@
 package views;
 
 import controllers.HomeViewController;
-import models.*;
+import models.appointments.Appointment;
+import models.appointments.AppointmentRepository;
+import models.users.User;
+import models.users.UserRepository;
 
 import javax.swing.*;
 import java.awt.*;

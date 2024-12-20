@@ -1,4 +1,6 @@
-package models;
+package models.recipes;
+
+import models.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

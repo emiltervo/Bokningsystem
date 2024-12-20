@@ -1,7 +1,7 @@
 package controllers;
 
-import models.User;
-import models.UserRepository;
+import models.users.User;
+import models.users.UserRepository;
 import views.IHandleLogin;
 import views.LoginView;
 

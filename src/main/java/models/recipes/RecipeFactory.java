@@ -1,4 +1,5 @@
-package models;
+package models.recipes;
+
 
 /**
  * The RecipeFactory class provides a method to create Recipe objects.

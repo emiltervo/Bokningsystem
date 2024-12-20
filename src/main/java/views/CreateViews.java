@@ -2,7 +2,6 @@ package views;
 
 import controllers.CalendarController;
 import controllers.HomeViewController;
-import controllers.HomeViewPatientController;
 
 public class CreateViews {
     private static CreateViews instance;

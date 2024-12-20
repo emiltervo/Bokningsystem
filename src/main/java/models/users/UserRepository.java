@@ -1,4 +1,6 @@
-package models;
+package models.users;
+
+import models.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;

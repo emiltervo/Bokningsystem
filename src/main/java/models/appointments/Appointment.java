@@ -1,4 +1,7 @@
-package models;
+package models.appointments;
+
+import models.users.User;
+import models.users.UserRepository;
 
 /**
  * Appointment class representing an appointment between a patient and a doctor.

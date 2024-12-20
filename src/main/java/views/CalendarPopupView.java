@@ -1,7 +1,7 @@
 package views;
 
 import controllers.CalendarPopupController;
-import models.*;
+import models.users.Patient;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

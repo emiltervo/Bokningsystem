@@ -1,4 +1,4 @@
-package models;
+package models.users;
 
 /**
  * Secretary class that extends User.

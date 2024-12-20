@@ -1,5 +1,7 @@
-package models;
-import models.Patient;
+package models.appointments;
+import models.DatabaseConnection;
+import models.users.Patient;
+
 import java.time.LocalDateTime;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
