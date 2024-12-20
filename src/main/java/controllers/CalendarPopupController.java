@@ -8,6 +8,7 @@ import models.users.Doctor;
 import models.users.Patient;
 import models.users.UserRepository;
 import views.CalendarPopupView;
+import views.IHandleAppointments;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +18,7 @@ import java.util.List;
  * The CalendarPopupController class manages the interactions between the CalendarPopupView and the underlying data models.
  * It handles the creation and deletion of appointments.
  */
-public class CalendarPopupController {
+public class CalendarPopupController implements IHandleAppointments {
     private final CalendarPopupView view;
     private final String doctor;
     private final Date slotDate;
@@ -44,6 +45,7 @@ public class CalendarPopupController {
     /**
      * Creates an appointment for the selected patient and doctor at the specified slot date and time.
      */
+    @Override
     public void makeAppointment() {
         Doctor doctor = findDoctorByName(this.doctor);
         Patient patient = view.getSelectedPatient();
@@ -62,6 +64,7 @@ public class CalendarPopupController {
     /**
      * Cancels the appointment for the booked patient and doctor at the specified slot date and time.
      */
+    @Override
     public void unBookPatient() {
         Doctor doctor = findDoctorByName(this.doctor);
         assert bookedPatient != null;

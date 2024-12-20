@@ -18,14 +18,12 @@ public class CalendarPopupView extends JDialog {
     private final Date slotDate;
     private final String doctor;
     private final BookingState bookingState;
-    private final CalendarPopupController controller;
+    private final IHandleAppointments controller;
 
     private static class BookingState {
         boolean isBooked;
     }
 
-    // src/main/java/views/CalendarPopupView.java
-    // src/main/java/views/CalendarPopupView.java
     public CalendarPopupView(JFrame parent, String doctor, Date slotDate, List<Patient> patients, boolean isBooked, Patient bookedPatient) {
         super(parent, "Room Booking", true);
         this.doctor = doctor;
